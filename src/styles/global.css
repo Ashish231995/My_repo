@@ -1,0 +1,25 @@
+@import './tokens.css';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
+  color: var(--colour-text);
+  background-color: var(--colour-surface);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+main {
+  display: block;
+  padding: var(--space-lg);
+}

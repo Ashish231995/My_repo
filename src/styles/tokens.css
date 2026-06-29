@@ -1,0 +1,25 @@
+:root {
+  /* Typography */
+  --font-family-base: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.25rem;
+  --font-size-xl: 1.5rem;
+  --line-height-base: 1.5;
+
+  /* Spacing */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+
+  /* Colour — health cues are secondary to text/icon labels (FR-027) */
+  --colour-text: #1a1a1a;
+  --colour-surface: #ffffff;
+  --colour-border: #c5c5c5;
+  --colour-healthy-secondary: #2e7d32;
+  --colour-at-risk-secondary: #ed6c02;
+  --colour-critical-secondary: #c62828;
+  --colour-unmeasured-secondary: #616161;
+}

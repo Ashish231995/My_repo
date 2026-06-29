@@ -15,6 +15,27 @@ Validation guide for proving the feature works end-to-end after implementation. 
 - Microsoft Edge or Chromium browser
 - Repository dependencies installed with **pinned versions** per [research.md](./research.md) ADR-001
 
+### Pinned dependency baseline (Phase 0 — `package.json`)
+
+| Package | Version | Section |
+|---------|---------|---------|
+| react | 19.2.7 | `dependencies` |
+| react-dom | 19.2.7 | `dependencies` |
+| typescript | 6.0.3 | `devDependencies` |
+| vite | 8.1.0 | `devDependencies` |
+| `@vitejs/plugin-react` | 6.0.3 | `devDependencies` |
+| `@types/react` | 19.2.7 | `devDependencies` |
+| `@types/react-dom` | 19.2.3 | `devDependencies` |
+| vitest | 4.1.9 | `devDependencies` |
+| `@vitest/coverage-v8` | 4.1.9 | `devDependencies` |
+| jsdom | 29.1.1 | `devDependencies` |
+| `@testing-library/react` | 16.3.2 | `devDependencies` |
+| `@testing-library/user-event` | 14.6.1 | `devDependencies` |
+| `@testing-library/jest-dom` | 6.9.1 | `devDependencies` |
+| vitest-axe | 0.1.0 | `devDependencies` |
+
+**Entry point note**: Phase 0 `typecheck` and `build` validate the existing starter entry (`index.html` → `/src/main.tsx`). Implementation task **T034** must align `index.html` to `/src/app/main.tsx` before the Phase 1 checkpoint.
+
 ---
 
 ## Setup (implementation phase)
