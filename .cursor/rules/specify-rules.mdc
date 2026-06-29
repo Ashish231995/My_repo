@@ -3,6 +3,20 @@ alwaysApply: true
 ---
 
 <!-- SPECKIT START -->
-For additional context about technologies to be used, project structure,
-shell commands, and other important information, read the current plan
+For additional context about technologies, project structure, shell commands, and
+implementation constraints, read:
+
+**Plan**: `specs/001-pm-copilot-demo/plan.md`
+
+**Supporting design artifacts**:
+- `specs/001-pm-copilot-demo/research.md` — ADRs, pinned versions, baseline validation
+- `specs/001-pm-copilot-demo/data-model.md` — domain entities and session lifecycle
+- `specs/001-pm-copilot-demo/contracts/` — **Demonstration Rule Catalog v1.0 (APPROVED)**, traceability, fixtures, scoring
+- `specs/001-pm-copilot-demo/contracts/implementation-traceability.md` — FR/BR/AS/SC → module → test mapping
+- `specs/001-pm-copilot-demo/quickstart.md` — validation scenarios and quality gates
+- `specs/001-pm-copilot-demo/spec.md` — requirements and Demonstration Policy v1.0
+
+**Stack**: React 19.2.7, TypeScript 6.0.3, Vite 8.1.0 — local SPA only; no backend/API/persistence/external runtime network.
+
+**Architecture**: Pure TypeScript domain in `src/domain/` (scoring includes composite; findings includes evidence assembly); React Context + useReducer session; CSS Modules + design tokens; Vitest + RTL for tests.
 <!-- SPECKIT END -->
