@@ -8,6 +8,11 @@
 
 **Input**: User description: "$ARGUMENTS"
 
+**Constitution**: Compliant with `.specify/memory/constitution.md` (PM Copilot).
+Every requirement below MUST trace to acceptance scenarios. Privacy, determinism,
+methodology-agnostic core logic, persona-safe presentation, and accessibility
+constraints from the constitution apply unless explicitly exempted via amendment.
+
 ## User Scenarios & Testing *(mandatory)*
 
 <!--
@@ -87,16 +92,16 @@
 
 ### Functional Requirements
 
-- **FR-001**: System MUST [specific capability, e.g., "allow users to create accounts"]
-- **FR-002**: System MUST [specific capability, e.g., "validate email addresses"]
-- **FR-003**: Users MUST be able to [key interaction, e.g., "reset their password"]
-- **FR-004**: System MUST [data requirement, e.g., "persist user preferences"]
-- **FR-005**: System MUST [behavior, e.g., "log all security events"]
+- **FR-001**: System MUST [specific capability, e.g., "load bundled sample project data locally"]
+- **FR-002**: System MUST [specific capability, e.g., "keep project information in browser memory only"]
+- **FR-003**: Users MUST be able to [key interaction, e.g., "reset the session and clear all project data"]
+- **FR-004**: System MUST [data requirement, e.g., "mark missing evidence as Unmeasured"]
+- **FR-005**: System MUST [behavior, e.g., "expose supporting evidence for every health score"]
 
 *Example of marking unclear requirements:*
 
-- **FR-006**: System MUST authenticate users via [NEEDS CLARIFICATION: auth method not specified - email/password, SSO, OAuth?]
-- **FR-007**: System MUST retain user data for [NEEDS CLARIFICATION: retention period not specified]
+- **FR-006**: System MUST support [NEEDS CLARIFICATION: persona mode behavior not specified]
+- **FR-007**: System MUST handle [NEEDS CLARIFICATION: partial data scenario not specified]
 
 ### Key Entities *(include if feature involves data)*
 
@@ -112,10 +117,10 @@
 
 ### Measurable Outcomes
 
-- **SC-001**: [Measurable metric, e.g., "Users can complete account creation in under 2 minutes"]
-- **SC-002**: [Measurable metric, e.g., "System handles 1000 concurrent users without degradation"]
-- **SC-003**: [User satisfaction metric, e.g., "90% of users successfully complete primary task on first attempt"]
-- **SC-004**: [Business metric, e.g., "Reduce support tickets related to [X] by 50%"]
+- **SC-001**: [Measurable metric, e.g., "User completes primary coaching flow in under 3 minutes"]
+- **SC-002**: [Measurable metric, e.g., "Health scores remain identical across persona modes for the same input"]
+- **SC-003**: [User satisfaction metric, e.g., "90% of evaluators understand score evidence on first review"]
+- **SC-004**: [Business metric, e.g., "Demonstration completes without external network requests at runtime"]
 
 ## Assumptions
 
@@ -125,7 +130,7 @@
   chosen when the feature description did not specify certain details.
 -->
 
-- [Assumption about target users, e.g., "Users have stable internet connectivity"]
+- [Assumption about execution, e.g., "Application runs locally via dev server with bundled assets only"]
 - [Assumption about scope boundaries, e.g., "Mobile support is out of scope for v1"]
-- [Assumption about data/environment, e.g., "Existing authentication system will be reused"]
-- [Dependency on existing system/service, e.g., "Requires access to the existing user profile API"]
+- [Assumption about data/environment, e.g., "Sample project data is bundled locally; no external data sources"]
+- [Assumption about session state, e.g., "Project information exists only in browser memory until reset or reload"]

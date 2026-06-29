@@ -18,29 +18,48 @@
   the iteration process.
 -->
 
-**Language/Version**: [e.g., Python 3.11, Swift 5.9, Rust 1.75 or NEEDS CLARIFICATION]
+**Language/Version**: [e.g., TypeScript 5.x — or NEEDS CLARIFICATION]
 
-**Primary Dependencies**: [e.g., FastAPI, UIKit, LLVM or NEEDS CLARIFICATION]
+**Primary Dependencies**: [e.g., React, Vite — bundled locally; or NEEDS CLARIFICATION]
 
-**Storage**: [if applicable, e.g., PostgreSQL, CoreData, files or N/A]
+**Storage**: Browser memory only for active session; no persistent storage (per
+Constitution Principle II)
 
-**Testing**: [e.g., pytest, XCTest, cargo test or NEEDS CLARIFICATION]
+**Testing**: [e.g., Vitest, React Testing Library — or NEEDS CLARIFICATION]
 
-**Target Platform**: [e.g., Linux server, iOS 15+, WASM or NEEDS CLARIFICATION]
+**Target Platform**: [e.g., Modern desktop browser, local dev server — or NEEDS
+CLARIFICATION]
 
-**Project Type**: [e.g., library/cli/web-service/mobile-app/compiler/desktop-app or NEEDS CLARIFICATION]
+**Project Type**: Local single-page React application (no backend, no external
+services)
 
-**Performance Goals**: [domain-specific, e.g., 1000 req/s, 10k lines/sec, 60 fps or NEEDS CLARIFICATION]
+**Performance Goals**: [domain-specific, e.g., interactive UI responsiveness —
+or NEEDS CLARIFICATION]
 
-**Constraints**: [domain-specific, e.g., <200ms p95, <100MB memory, offline-capable or NEEDS CLARIFICATION]
+**Constraints**: [domain-specific, e.g., no external runtime network requests,
+memory-only session, bundled assets only — or NEEDS CLARIFICATION]
 
-**Scale/Scope**: [domain-specific, e.g., 10k users, 1M LOC, 50 screens or NEEDS CLARIFICATION]
+**Scale/Scope**: [domain-specific, e.g., single-user local demonstration — or
+NEEDS CLARIFICATION]
 
 ## Constitution Check
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+Reference: `.specify/memory/constitution.md` (PM Copilot v1.0.0)
+
+| Principle | Gate Question | Pass Criteria |
+|-----------|---------------|---------------|
+| I. Specification-First | Does every planned capability map to spec requirements and acceptance scenarios? | Traceability matrix drafted; no orphan implementation |
+| II. Local-Only Privacy | Does the plan enforce no external runtime network calls, no remote assets, and no persistence? | Memory-only session; no APIs/backend; dev-server bundled assets only; reset/reload clears state |
+| III. Deterministic Decisions | Are scoring and recommendation rules documented with evidence exposure? | Rules documented; Unmeasured handling defined |
+| IV. Methodology-Agnostic | Do core calculations use normalized project signals only? | No methodology logic in core health calculations |
+| V. Persona-Safe Coaching | Do personas affect presentation only, not scores or priorities? | Cross-persona output parity confirmed in design |
+| VI. Simplicity | Are business rules separated from UI? Are new dependencies justified? | Domain logic isolated; Complexity Tracking if needed |
+| VII. Testability | Are automated tests planned for rules, journeys, and boundaries? | Test plan covers scoring, recommendations, critical paths |
+| VIII. UX & Accessibility | Are non-colour health indicators and all system states designed? | Empty, partial, unmeasured, error states specified |
+
+**Gate status**: [ ] PASS — proceed | [ ] FAIL — amend spec/plan or constitution first
 
 ## Project Structure
 
@@ -57,51 +76,22 @@ specs/[###-feature]/
 ```
 
 ### Source Code (repository root)
+
 <!--
-  ACTION REQUIRED: Replace the placeholder tree below with the concrete layout
-  for this feature. Delete unused options and expand the chosen structure with
-  real paths (e.g., apps/admin, packages/something). The delivered plan must
-  not include Option labels.
+  ACTION REQUIRED: During /speckit-plan, define the concrete source layout for
+  this local React and TypeScript application. Do not assume backends, APIs,
+  databases, or external services. Final folder structure is decided here, not
+  in the constitution or templates.
 -->
 
 ```text
-# [REMOVE IF UNUSED] Option 1: Single project (DEFAULT)
-src/
-├── models/
-├── services/
-├── cli/
-└── lib/
-
-tests/
-├── contract/
-├── integration/
-└── unit/
-
-# [REMOVE IF UNUSED] Option 2: Web application (when "frontend" + "backend" detected)
-backend/
-├── src/
-│   ├── models/
-│   ├── services/
-│   └── api/
-└── tests/
-
-frontend/
-├── src/
-│   ├── components/
-│   ├── pages/
-│   └── services/
-└── tests/
-
-# [REMOVE IF UNUSED] Option 3: Mobile + API (when "iOS/Android" detected)
-api/
-└── [same as backend above]
-
-ios/ or android/
-└── [platform-specific structure: feature modules, UI flows, platform tests]
+# Local React application — concrete layout to be defined in plan output
+[src/ — structure TBD during planning]
+[tests/ — structure TBD during planning]
 ```
 
-**Structure Decision**: [Document the selected structure and reference the real
-directories captured above]
+**Structure Decision**: [Document the selected local application structure when
+planning completes. Reference only paths chosen for this feature.]
 
 ## Complexity Tracking
 
@@ -109,5 +99,5 @@ directories captured above]
 
 | Violation | Why Needed | Simpler Alternative Rejected Because |
 |-----------|------------|-------------------------------------|
-| [e.g., 4th project] | [current need] | [why 3 projects insufficient] |
-| [e.g., Repository pattern] | [specific problem] | [why direct DB access insufficient] |
+| [e.g., additional dependency] | [current need] | [why minimal approach insufficient] |
+| [e.g., extra abstraction layer] | [specific problem] | [why direct approach insufficient] |
