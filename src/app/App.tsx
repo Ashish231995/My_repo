@@ -1,6 +1,7 @@
 import { PrivacyIndicator } from '../ui/PrivacyIndicator/PrivacyIndicator';
 import { EvaluateButton } from '../features/health-dashboard/EvaluateButton';
 import { HealthDashboard } from '../features/health-dashboard/HealthDashboard';
+import { IntegrationChecklist } from '../features/integration-checklist/IntegrationChecklist';
 import { ProjectSelector } from '../features/project-select/ProjectSelector';
 import { useSession } from '../session/sessionContext';
 import styles from './App.module.css';
@@ -28,6 +29,7 @@ export default function App() {
               Project context
             </h2>
             <ProjectSelector />
+            {state.selectedProjectId ? <IntegrationChecklist /> : null}
             <EvaluateButton />
           </section>
 

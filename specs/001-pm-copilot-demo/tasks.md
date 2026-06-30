@@ -165,17 +165,17 @@
 
 ### Tests
 
-- [ ] T080 [P] [US2] Create `tests/integration/integration-checklist.test.tsx` covering AS-006 checklist groups, AS-007 enable/disable clears evaluation, AS-008 incomplete warning. **Refs**: AS-006, AS-007, AS-008, FR-011, FR-012, FR-013 | **Evidence**: tests fail until T084
-- [ ] T081 [P] [US2] Create `tests/integration/health-dashboard.test.tsx` covering AS-008–AS-010 dashboard states, Partial labels and “Excluded from Composite” (AS-010, AS-035). **Refs**: AS-008, AS-010, AS-035, AS-036, FR-032, BR-004, BR-010 | **Evidence**: tests fail until T086
+- [X] T080 [P] [US2] Create `tests/integration/integration-checklist.test.tsx` covering AS-006 checklist groups, AS-007 enable/disable clears evaluation, AS-008 incomplete warning. **Refs**: AS-006, AS-007, AS-008, FR-011, FR-012, FR-013 | **Evidence**: tests fail until T084
+- [X] T081 [P] [US2] Create `tests/integration/health-dashboard.test.tsx` covering AS-008–AS-010 dashboard states, Partial labels and “Excluded from Composite” (AS-010, AS-035). **Refs**: AS-008, AS-010, AS-035, AS-036, FR-032, BR-004, BR-010 | **Evidence**: tests fail until T086
 
 ### Implementation
 
-- [ ] T082 [US2] Extend `sessionReducer.ts` TOGGLE_SIGNAL_GROUP clearing evaluation and presentation. **Refs**: AS-007, FR-012, FR-013 | **Evidence**: add `TOGGLE_SIGNAL_GROUP` cases to `tests/session/session-reducer.test.ts` first (observed failing); cases pass after reducer implementation; `integration-checklist.test.tsx` passes after T084
-- [ ] T083 [P] [US2] Create `src/features/integration-checklist/IntegrationChecklist.tsx` with representative source labels (no live connectivity). **Refs**: AS-006, FR-011, AS-063 | **Evidence**: checklist renders groups
-- [ ] T084 [US2] Wire checklist to session `enabledSignalGroupIds` from fixture defaults. **Refs**: AS-007, FR-012 | **Evidence**: `integration-checklist.test.tsx` passes
-- [ ] T085 [US2] Update `DimensionCard.tsx` for Partial provisional labels and Unmeasured no-score states. **Refs**: AS-010, AS-011, FR-018, FR-019 | **Evidence**: visual states match ui-states.md
-- [ ] T086 [US2] Update `CompositeHealthCard.tsx` for insufficient coverage (AS-012) and “Based on X of 4” (AS-037). **Refs**: AS-012, AS-037, FR-033, BR-011 | **Evidence**: `health-dashboard.test.tsx` passes
-- [ ] T087 [US2] Show incomplete checklist warning state (AS-008) in `IntegrationChecklist.tsx`. **Refs**: AS-008, FR-011 | **Evidence**: warning when groups disabled
+- [X] T082 [US2] Extend `sessionReducer.ts` TOGGLE_SIGNAL_GROUP clearing evaluation and presentation. **Refs**: AS-007, FR-012, FR-013 | **Evidence**: add `TOGGLE_SIGNAL_GROUP` cases to `tests/session/session-reducer.test.ts` first (observed failing); cases pass after reducer implementation; `integration-checklist.test.tsx` passes after T084
+- [X] T083 [P] [US2] Create `src/features/integration-checklist/IntegrationChecklist.tsx` with representative source labels (no live connectivity). **Refs**: AS-006, FR-011, AS-063 | **Evidence**: checklist renders groups
+- [X] T084 [US2] Wire checklist to session `enabledSignalGroupIds` from fixture defaults. **Refs**: AS-007, FR-012 | **Evidence**: `integration-checklist.test.tsx` passes
+- [X] T085 [US2] Update `DimensionCard.tsx` for Partial provisional labels and Unmeasured no-score states. **Refs**: AS-010, AS-011, FR-018, FR-019 | **Evidence**: visual states match ui-states.md
+- [X] T086 [US2] Update `CompositeHealthCard.tsx` for insufficient coverage (AS-012) and “Based on X of 4” (AS-037). **Refs**: AS-012, AS-037, FR-033, BR-011 | **Evidence**: `health-dashboard.test.tsx` passes
+- [X] T087 [US2] Show incomplete checklist warning state (AS-008) in `IntegrationChecklist.tsx`. **Refs**: AS-008, FR-011 | **Evidence**: warning when groups disabled
 
 **Checkpoint Phase 3 (US2)**: Toggle delivery group off → re-evaluate B → affected dimension Partial/Unmeasured; composite eligibility updates.
 

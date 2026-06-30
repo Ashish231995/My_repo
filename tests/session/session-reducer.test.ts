@@ -7,6 +7,7 @@ import {
   requestReset,
   selectProject,
   setPersona,
+  toggleSignalGroup,
 } from '../../src/session/sessionActions';
 import { sessionReducer } from '../../src/session/sessionReducer';
 
@@ -127,5 +128,39 @@ describe('sessionReducer (Phase 2C — EVALUATE)', () => {
     expect(afterPersona.evaluation).toBe(evaluated.evaluation);
     expect(afterPersona.evaluation?.composite.displayComposite).toBe(51);
     expect(afterPersona.presentation).toBeNull();
+  });
+});
+
+describe('sessionReducer (Phase 3 — TOGGLE_SIGNAL_GROUP)', () => {
+  it('toggles only the requested group in enabledSignalGroupIds', () => {
+    const ready = sessionReducer(createInitialSession(), selectProject('sample-b'));
+    const toggled = sessionReducer(ready, toggleSignalGroup('grp-delivery'));
+
+    expect(toggled.enabledSignalGroupIds).not.toContain('grp-delivery');
+    expect(toggled.enabledSignalGroupIds).toContain('grp-schedule');
+
+    const restored = sessionReducer(toggled, toggleSignalGroup('grp-delivery'));
+    expect(restored.enabledSignalGroupIds).toContain('grp-delivery');
+  });
+
+  it('clears evaluation and presentation while preserving project and persona', () => {
+    const ready = sessionReducer(createInitialSession(), selectProject('sample-b'));
+    const withPersona = sessionReducer(ready, setPersona('expert'));
+    const evaluated = sessionReducer(withPersona, evaluate());
+    const toggled = sessionReducer(evaluated, toggleSignalGroup('grp-delivery'));
+
+    expect(toggled.selectedProjectId).toBe('sample-b');
+    expect(toggled.persona).toBe('expert');
+    expect(toggled.evaluation).toBeNull();
+    expect(toggled.presentation).toBeNull();
+    expect(toggled.phase).toBe('project-ready');
+  });
+
+  it('does not automatically evaluate after toggling', () => {
+    const ready = sessionReducer(createInitialSession(), selectProject('sample-b'));
+    const toggled = sessionReducer(ready, toggleSignalGroup('grp-team'));
+
+    expect(toggled.evaluation).toBeNull();
+    expect(toggled.phase).toBe('project-ready');
   });
 });

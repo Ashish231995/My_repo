@@ -59,7 +59,7 @@ export function DimensionCard({ dimension }: DimensionCardProps) {
           <span className={styles.measurementIcon} aria-hidden="true" />
           {MEASUREMENT_LABELS[dimension.measurementStatus]}
         </span>
-        {dimension.displayScore !== null ? (
+        {dimension.measurementStatus === 'measured' && dimension.displayScore !== null ? (
           <span className={styles.score} aria-label={`Dimension score ${dimension.displayScore}`}>
             {dimension.displayScore}
           </span>
@@ -73,6 +73,39 @@ export function DimensionCard({ dimension }: DimensionCardProps) {
           </span>
         ) : null}
       </div>
+
+      {dimension.measurementStatus === 'partial' && dimension.displayScore !== null ? (
+        <div className={styles.scoreBlock}>
+          <span className={styles.provisionalScoreLabel}>Provisional score — Partial evidence</span>
+          <span
+            className={styles.score}
+            aria-label={`Provisional dimension score ${dimension.displayScore}`}
+          >
+            {dimension.displayScore}
+          </span>
+        </div>
+      ) : null}
+
+      {dimension.measurementStatus === 'unmeasured' ? (
+        <p className={styles.noScore} role="status">
+          No numeric score — Unmeasured
+        </p>
+      ) : null}
+
+      {dimension.measurementStatus === 'partial' ? (
+        <div className={styles.partialDetails}>
+          <p className={styles.coverage}>{dimension.coveragePercent}% evidence coverage</p>
+          {dimension.missingRequiredCanonicalTypes.length > 0 ? (
+            <p className={styles.missing}>
+              Missing required evidence: {dimension.missingRequiredCanonicalTypes.join(', ')}
+            </p>
+          ) : null}
+          <p className={styles.excluded} role="status">
+            Excluded from Composite
+          </p>
+        </div>
+      ) : null}
+
       <p className={styles.explanation}>{dimension.explanation}</p>
     </Card>
   );

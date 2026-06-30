@@ -96,6 +96,32 @@ export function sessionReducer(state: SessionState, action: SessionAction): Sess
       };
     }
 
+    case 'TOGGLE_SIGNAL_GROUP': {
+      if (!state.selectedProjectId) {
+        return state;
+      }
+
+      const project = SAMPLE_PROJECTS[state.selectedProjectId];
+      if (!project?.signalGroups.some((group) => group.id === action.groupId)) {
+        return state;
+      }
+
+      const enabled = new Set(state.enabledSignalGroupIds);
+      if (enabled.has(action.groupId)) {
+        enabled.delete(action.groupId);
+      } else {
+        enabled.add(action.groupId);
+      }
+
+      return {
+        ...state,
+        enabledSignalGroupIds: [...enabled],
+        evaluation: null,
+        presentation: null,
+        phase: 'project-ready',
+      };
+    }
+
     case 'SET_PERSONA':
       return {
         ...state,

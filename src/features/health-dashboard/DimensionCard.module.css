@@ -55,6 +55,45 @@
   color: var(--colour-unmeasured-secondary);
 }
 
+.scoreBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.provisionalScoreLabel {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--colour-unmeasured-secondary);
+}
+
+.noScore {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--colour-unmeasured-secondary);
+}
+
+.partialDetails {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.coverage,
+.missing {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--colour-unmeasured-secondary);
+}
+
+.excluded {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--colour-at-risk-secondary);
+}
+
 .explanation {
   margin: 0;
   font-size: var(--font-size-sm);

@@ -39,11 +39,16 @@ export function CompositeHealthCard({ composite }: CompositeHealthCardProps) {
             <StatusLabel classification={composite.classification!} />
           </>
         ) : (
-          <span className={styles.scoreUnavailable}>Insufficient measured coverage</span>
+          <span className={styles.scoreUnavailable} role="status">
+            Insufficient composite coverage
+          </span>
         )}
       </div>
       {composite.insufficientCoverage ? (
-        <p className={styles.insufficient}>{composite.insufficientCoverage.message}</p>
+        <p className={styles.insufficient} role="status">
+          {composite.insufficientCoverage.message} ({composite.insufficientCoverage.measuredCount} of 4
+          dimensions Measured)
+        </p>
       ) : null}
       <p className={styles.coverage}>{composite.coverageStatement}</p>
     </Card>
