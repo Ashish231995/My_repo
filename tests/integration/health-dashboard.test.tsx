@@ -2,6 +2,7 @@ import { render, screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import type { DimensionResult } from '../../src/domain/model/evaluation';
 import { runEvaluation } from '../../src/domain/evaluation/runEvaluation';
+import { projectForPersona } from '../../src/domain/persona/projectForPersona';
 import { CompositeHealthCard } from '../../src/features/health-dashboard/CompositeHealthCard';
 import { DimensionCard } from '../../src/features/health-dashboard/DimensionCard';
 import { HealthDashboard } from '../../src/features/health-dashboard/HealthDashboard';
@@ -48,8 +49,11 @@ describe('health dashboard measurement states (AS-008–AS-012)', () => {
     renderWithProviders(
       <HealthDashboard
         evaluation={output.result}
+        presentation={projectForPersona(output.result, 'intermediate')}
         expandedDimensionIds={new Set()}
+        expandedCoachSections={new Set()}
         onToggleDimensionExplain={() => undefined}
+        onToggleCoachSection={() => undefined}
       />,
     );
 
@@ -63,19 +67,45 @@ describe('health dashboard measurement states (AS-008–AS-012)', () => {
   });
 
   it('shows Partial dimension provisional score, coverage, missing evidence, and excluded-from-composite label', () => {
+    const dimension = partialScheduleDimension();
+    const presentation = projectForPersona(
+      {
+        projectId: 'sample-b',
+        snapshot: { asOfDate: '2026-06-01', label: 'test' },
+        evaluatedAtSnapshotDate: '2026-06-01',
+        dimensions: [dimension],
+        composite: {
+          eligible: true,
+          rawComposite: 65,
+          displayComposite: 65,
+          classification: 'at-risk',
+          contributingDimensionIds: [],
+          coverageStatement: 'test',
+          insufficientCoverage: null,
+        },
+        findings: [],
+        recommendations: [],
+        evidenceIndex: new Map(),
+      },
+      'intermediate',
+    ).dimensions[0]!;
+
     render(
       <DimensionCard
-        dimension={partialScheduleDimension()}
+        dimension={dimension}
+        presentation={presentation}
         findings={[]}
         explainOpen={false}
+        expandedCoachSections={new Set()}
         onToggleExplain={() => undefined}
+        onToggleCoachSection={() => undefined}
       />,
     );
 
     const card = screen.getByTestId('dimension-card-schedule');
     expect(within(card).getByText(/provisional score — partial evidence/i)).toBeInTheDocument();
     expect(within(card).getByText('65')).toBeInTheDocument();
-    expect(within(card).getByText(/50%/)).toBeInTheDocument();
+    expect(within(card).getByText(/50% evidence coverage/)).toBeInTheDocument();
     expect(within(card).getByText(/schedule\.baseline-health/)).toBeInTheDocument();
     expect(within(card).getByText(/excluded from composite/i)).toBeInTheDocument();
     expect(within(card).getByText(/provisional — at risk/i)).toBeInTheDocument();

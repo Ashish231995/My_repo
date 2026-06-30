@@ -1,0 +1,41 @@
+.fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+.legend {
+  margin: 0 0 var(--space-xs);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+}
+
+.options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.option,
+.optionActive {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-sm);
+  border: 1px solid var(--colour-border);
+  border-radius: 999px;
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+}
+
+.optionActive {
+  border-color: var(--colour-at-risk-secondary);
+  background: rgb(0 0 0 / 3%);
+}
+
+.activeBadge {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--colour-at-risk-secondary);
+}

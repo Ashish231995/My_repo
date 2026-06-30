@@ -1,0 +1,32 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.heading {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+}
+
+.toggle {
+  align-self: flex-start;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  text-align: left;
+  color: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.body {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--colour-unmeasured-secondary);
+  white-space: pre-wrap;
+}

@@ -239,6 +239,45 @@ Presentation-only projection; analytical fields copied verbatim from `Evaluation
 | `composite` | `CompositePresentation` |
 | `recommendations` | `RecommendationPresentation[]` |
 
+### DimensionPresentation
+
+| Field | Type | Notes |
+|-------|------|-------|
+| `dimensionId` | `DimensionId` | |
+| `conditionDefinition` | `string` | Persona-tier coaching copy |
+| `whyThisMatters` | `string` | |
+| `stepByStepGuidance` | `string \| null` | Novice |
+| `nextSteps` | `string \| null` | Intermediate |
+| `evidenceWalkthrough` | `string` | |
+| `evidenceSummary` | `string \| null` | Intermediate bullets |
+| `evidenceReferences` | `string \| null` | Expert compact refs |
+| `glossary` | `GlossaryEntry[] \| null` | Novice methodology-neutral terms |
+| `sections` | `CoachSectionMeta` map | Collapse defaults per persona |
+
+### RecommendationPresentation
+
+| Field | Type | Notes |
+|-------|------|-------|
+| `recommendationId` | `string` | Links to analytical `Recommendation.id` |
+| `title` | `string` | Coaching title (does not replace `action`) |
+| `coachingRationale` | `string` | Persona-depth rationale |
+| `whyThisMatters` | `string \| null` | Novice / Intermediate |
+| `stepByStepActions` | `string \| null` | Novice |
+| `nextSteps` | `string \| null` | Intermediate |
+| `evidenceSummary` | `string \| null` | |
+| `evidenceReferences` | `string` | Always available for expert refs |
+| `findingsBullets` | `string[] \| null` | Expert |
+| `glossary` | `GlossaryEntry[] \| null` | Novice |
+| `sections` | `CoachSectionMeta` map | Expert sections collapsed by default |
+
+### CompositePresentation
+
+| Field | Type |
+|-------|------|
+| `coverageStatement` | `string` | Copied from evaluation composite |
+| `coachingSummary` | `string` | Persona-tier summary |
+| `sections` | `CoachSectionMeta` map |
+
 ---
 
 ### InvalidProjectResult

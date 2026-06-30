@@ -2,9 +2,10 @@ import { PrivacyIndicator } from '../ui/PrivacyIndicator/PrivacyIndicator';
 import { EvaluateButton } from '../features/health-dashboard/EvaluateButton';
 import { HealthDashboard } from '../features/health-dashboard/HealthDashboard';
 import { IntegrationChecklist } from '../features/integration-checklist/IntegrationChecklist';
+import { PersonaSelector } from '../features/persona-selector/PersonaSelector';
 import { ProjectSelector } from '../features/project-select/ProjectSelector';
 import { useSession } from '../session/sessionContext';
-import { toggleEvidence } from '../session/sessionActions';
+import { toggleCoachSection, toggleEvidence } from '../session/sessionActions';
 import styles from './App.module.css';
 
 export default function App() {
@@ -21,6 +22,7 @@ export default function App() {
             </p>
           </div>
           <PrivacyIndicator />
+          <PersonaSelector />
         </div>
       </header>
       <main className={styles.main} id="main-content">
@@ -34,12 +36,17 @@ export default function App() {
             <EvaluateButton />
           </section>
 
-          {state.phase === 'evaluated' && state.evaluation ? (
+          {state.phase === 'evaluated' && state.evaluation && state.presentation ? (
             <HealthDashboard
               evaluation={state.evaluation}
+              presentation={state.presentation}
               expandedDimensionIds={state.ui.expandedEvidenceIds}
+              expandedCoachSections={state.ui.expandedCoachSections}
               onToggleDimensionExplain={(dimensionId) =>
                 dispatch(toggleEvidence(dimensionId))
+              }
+              onToggleCoachSection={(sectionId) =>
+                dispatch(toggleCoachSection(sectionId))
               }
             />
           ) : (

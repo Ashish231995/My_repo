@@ -154,19 +154,64 @@ export interface SampleProjectFixture {
   expectations?: Record<string, unknown>;
 }
 
+export interface CoachSectionMeta {
+  sectionId: string;
+  collapsedByDefault: boolean;
+}
+
+export interface GlossaryEntry {
+  term: string;
+  definition: string;
+}
+
 export interface DimensionPresentation {
   dimensionId: DimensionId;
-  coachingCopy: Record<string, string>;
+  conditionDefinition: string;
+  whyThisMatters: string;
+  stepByStepGuidance: string | null;
+  nextSteps: string | null;
+  evidenceWalkthrough: string;
+  evidenceSummary: string | null;
+  evidenceReferences: string | null;
+  glossary: GlossaryEntry[] | null;
+  sections: {
+    conditionDefinition: CoachSectionMeta;
+    whyThisMatters: CoachSectionMeta;
+    evidenceWalkthrough: CoachSectionMeta;
+    glossary: CoachSectionMeta | null;
+    stepByStepGuidance: CoachSectionMeta | null;
+    nextSteps: CoachSectionMeta | null;
+  };
 }
 
 export interface CompositePresentation {
   coverageStatement: string;
-  coachingCopy: Record<string, string>;
+  coachingSummary: string;
+  sections: {
+    coachingSummary: CoachSectionMeta;
+  };
 }
 
 export interface RecommendationPresentation {
   recommendationId: string;
-  coachingCopy: Record<string, string>;
+  title: string;
+  coachingRationale: string | null;
+  whyThisMatters: string | null;
+  stepByStepActions: string | null;
+  nextSteps: string | null;
+  evidenceSummary: string | null;
+  evidenceReferences: string;
+  findingsBullets: string[] | null;
+  glossary: GlossaryEntry[] | null;
+  sections: {
+    whyThisMatters: CoachSectionMeta | null;
+    coachingRationale: CoachSectionMeta | null;
+    evidenceWalkthrough: CoachSectionMeta | null;
+    stepByStepActions: CoachSectionMeta | null;
+    nextSteps: CoachSectionMeta | null;
+    glossary: CoachSectionMeta | null;
+    findingsBullets: CoachSectionMeta | null;
+  };
 }
 
 export interface PersonaPresentation {

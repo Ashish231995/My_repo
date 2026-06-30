@@ -213,18 +213,18 @@
 
 ### Tests
 
-- [ ] T096 [P] [US4] Implement `tests/domain/persona-projection.test.ts` for tier templates per FR-039. **Refs**: AS-055, AS-056, FR-009, FR-039, BR-006, BR-017 | **Evidence**: fails until T100 (`projectForPersona`)
-- [ ] T097 [P] [US4] Implement `tests/domain/persona-invariance.test.ts` — analytical fields identical across personas (SC-003). **Refs**: AS-020, AS-055, AS-058, FR-010, SC-003, BR-006 | **Evidence**: fails until T100 (`projectForPersona`)
-- [ ] T098 [P] [US4] Implement `tests/integration/persona-selector.test.tsx` for AS-044, AS-045. **Refs**: AS-044, AS-045, FR-008, FR-036 | **Evidence**: fails until T101
-- [ ] T099 [P] [US4] Implement `tests/integration/persona-coaching.test.tsx` for AS-056 depth tiers. **Refs**: AS-056, FR-023, FR-039 | **Evidence**: fails until T103
+- [X] T096 [P] [US4] Implement `tests/domain/persona-projection.test.ts` for tier templates per FR-039. **Refs**: AS-055, AS-056, FR-009, FR-039, BR-006, BR-017 | **Evidence**: fails until T100 (`projectForPersona`)
+- [X] T097 [P] [US4] Implement `tests/domain/persona-invariance.test.ts` — analytical fields identical across personas (SC-003). **Refs**: AS-020, AS-055, AS-058, FR-010, SC-003, BR-006 | **Evidence**: fails until T100 (`projectForPersona`)
+- [X] T098 [P] [US4] Implement `tests/integration/persona-selector.test.tsx` for AS-044, AS-045. **Refs**: AS-044, AS-045, FR-008, FR-036 | **Evidence**: fails until T101
+- [X] T099 [P] [US4] Implement `tests/integration/persona-coaching.test.tsx` for AS-056 depth tiers. **Refs**: AS-056, FR-023, FR-039 | **Evidence**: fails until T103
 
 ### Implementation
 
-- [ ] T100 [US4] Implement `projectForPersona` in `src/domain/persona/projectForPersona.ts` per persona coaching contract. **Refs**: AS-055–AS-058, FR-009, FR-010, FR-039, BR-006, BR-017 | **Evidence**: `persona-projection.test.ts` and `persona-invariance.test.ts` pass
-- [ ] T101 [P] [US4] Create `src/features/persona-selector/PersonaSelector.tsx` (Novice/Intermediate/Expert). **Refs**: FR-008, AS-044, AS-045 | **Evidence**: selector renders
-- [ ] T102 [US4] Wire SET_PERSONA to re-project presentation without re-running evaluation. **Refs**: AS-058, AS-020, FR-010, session-state.md | **Evidence**: `persona-invariance.test.ts` passes; `persona-coaching.test.tsx` pending T103
-- [ ] T103 [US4] Apply persona-projected copy in `RecommendationCard.tsx` and dimension explanations. **Refs**: AS-056, FR-023, FR-039 | **Evidence**: Novice expanded, Expert collapsed per ui-states.md; `persona-coaching.test.tsx` passes
-- [ ] T104 [US4] Implement Expert expand affordance for full evidence (AS-057). **Refs**: AS-057, FR-039 | **Evidence**: expanded sections reachable
+- [X] T100 [US4] Implement `projectForPersona` in `src/domain/persona/projectForPersona.ts` per persona coaching contract. **Refs**: AS-055–AS-058, FR-009, FR-010, FR-039, BR-006, BR-017 | **Evidence**: `persona-projection.test.ts` and `persona-invariance.test.ts` pass
+- [X] T101 [P] [US4] Create `src/features/persona-selector/PersonaSelector.tsx` (Novice/Intermediate/Expert). **Refs**: FR-008, AS-044, AS-045 | **Evidence**: selector renders
+- [X] T102 [US4] Wire SET_PERSONA to re-project presentation without re-running evaluation. **Refs**: AS-058, AS-020, FR-010, session-state.md | **Evidence**: `persona-invariance.test.ts` passes; `persona-coaching.test.tsx` pending T103
+- [X] T103 [US4] Apply persona-projected copy in `RecommendationCard.tsx` and dimension explanations. **Refs**: AS-056, FR-023, FR-039 | **Evidence**: Novice expanded, Expert collapsed per ui-states.md; `persona-coaching.test.tsx` passes
+- [X] T104 [US4] Implement Expert expand affordance for full evidence (AS-057). **Refs**: AS-057, FR-039 | **Evidence**: expanded sections reachable
 
 **Checkpoint Phase 5 (US4)**: Evaluate B as Intermediate, switch to Expert — same scores, same REC-002→REC-001 order, coaching layout changes only.
 

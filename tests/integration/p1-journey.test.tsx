@@ -26,7 +26,7 @@ describe('P1 leadership journey (AS-001, SC-001)', () => {
     expect(within(dimensionGrid).getByTestId('dimension-card-team')).toBeInTheDocument();
     expect(within(dimensionGrid).getByTestId('dimension-card-risk')).toBeInTheDocument();
 
-    const recommendations = screen.getAllByTestId(/^recommendation-/);
+    const recommendations = screen.getAllByTestId(/^recommendation-REC-/);
     expect(recommendations.length).toBeGreaterThanOrEqual(2);
     expect(recommendations[0]).toHaveAttribute('data-testid', 'recommendation-REC-002');
     expect(recommendations[1]).toHaveAttribute('data-testid', 'recommendation-REC-001');

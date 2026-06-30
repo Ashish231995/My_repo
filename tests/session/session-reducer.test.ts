@@ -118,6 +118,8 @@ describe('sessionReducer (Phase 2C — EVALUATE)', () => {
     expect(state.evaluation?.projectId).toBe('sample-b');
     expect(state.evaluation?.composite.displayComposite).toBe(51);
     expect(state.evaluation?.composite.classification).toBe('at-risk');
+    expect(state.presentation).not.toBeNull();
+    expect(state.presentation?.persona).toBe('intermediate');
   });
 
   it('keeps evaluation persona-independent when persona changes', () => {
@@ -127,7 +129,36 @@ describe('sessionReducer (Phase 2C — EVALUATE)', () => {
 
     expect(afterPersona.evaluation).toBe(evaluated.evaluation);
     expect(afterPersona.evaluation?.composite.displayComposite).toBe(51);
-    expect(afterPersona.presentation).toBeNull();
+    expect(afterPersona.presentation).not.toBeNull();
+    expect(afterPersona.presentation?.persona).toBe('expert');
+    expect(afterPersona.presentation).not.toBe(evaluated.presentation);
+  });
+});
+
+describe('sessionReducer (Phase 5 — SET_PERSONA / TOGGLE_COACH_SECTION)', () => {
+  it('re-projects presentation without re-running evaluation', () => {
+    const evaluated = sessionReducer(
+      sessionReducer(createInitialSession(), selectProject('sample-b')),
+      evaluate(),
+    );
+    const novice = sessionReducer(evaluated, setPersona('novice'));
+
+    expect(novice.evaluation).toBe(evaluated.evaluation);
+    expect(novice.presentation?.persona).toBe('novice');
+    expect(novice.presentation?.recommendations[0]?.stepByStepActions).toBeTruthy();
+  });
+
+  it('toggles expanded coach sections without affecting evaluation', () => {
+    const evaluated = sessionReducer(
+      sessionReducer(createInitialSession(), selectProject('sample-b')),
+      evaluate(),
+    );
+    const sectionId = evaluated.presentation?.recommendations[0]?.sections.nextSteps?.sectionId;
+    expect(sectionId).toBeTruthy();
+
+    const opened = sessionReducer(evaluated, { type: 'TOGGLE_COACH_SECTION', sectionId: sectionId! });
+    expect(opened.ui.expandedCoachSections.has(sectionId!)).toBe(true);
+    expect(opened.evaluation).toBe(evaluated.evaluation);
   });
 });
 

@@ -105,6 +105,12 @@
   margin-top: auto;
 }
 
+.coaching {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
 .neutral {
   border-left-color: var(--colour-border);
 }

@@ -1,7 +1,8 @@
-import type { DimensionResult, Finding } from '../../domain/model/evaluation';
+import type { DimensionPresentation, DimensionResult, Finding } from '../../domain/model/evaluation';
 import type { HealthClassification, MeasurementStatus } from '../../domain/model/enums';
 import { Button } from '../../ui/Button/Button';
 import { Card } from '../../ui/Card/Card';
+import { CoachSection } from '../../ui/CoachSection/CoachSection';
 import { StatusLabel } from '../../ui/StatusLabel/StatusLabel';
 import { DimensionDetail } from '../dimension-detail/DimensionDetail';
 import { DIMENSION_DISPLAY_NAMES } from './dimensionDisplayNames';
@@ -28,16 +29,22 @@ function classificationClass(classification: HealthClassification | null): strin
 
 export interface DimensionCardProps {
   dimension: DimensionResult;
+  presentation: DimensionPresentation;
   findings: Finding[];
   explainOpen: boolean;
+  expandedCoachSections: Set<string>;
   onToggleExplain: () => void;
+  onToggleCoachSection: (sectionId: string) => void;
 }
 
 export function DimensionCard({
   dimension,
+  presentation,
   findings,
   explainOpen,
+  expandedCoachSections,
   onToggleExplain,
+  onToggleCoachSection,
 }: DimensionCardProps) {
   const measurementClass =
     dimension.measurementStatus === 'partial'
@@ -118,6 +125,18 @@ export function DimensionCard({
 
       <p className={styles.explanation}>{dimension.explanation}</p>
 
+      <div className={styles.coaching} data-testid={`dimension-coaching-${dimension.dimensionId}`}>
+        <CoachSection
+          meta={presentation.sections.conditionDefinition}
+          title="Condition definition"
+          expanded={expandedCoachSections.has(presentation.sections.conditionDefinition.sectionId)}
+          onToggle={onToggleCoachSection}
+          testId={`dimension-coach-condition-${dimension.dimensionId}`}
+        >
+          {presentation.conditionDefinition}
+        </CoachSection>
+      </div>
+
       <Button
         type="button"
         className={styles.explainButton}
@@ -131,9 +150,12 @@ export function DimensionCard({
 
       <DimensionDetail
         dimension={dimension}
+        presentation={presentation}
         findings={findings}
         open={explainOpen}
+        expandedCoachSections={expandedCoachSections}
         onClose={onToggleExplain}
+        onToggleCoachSection={onToggleCoachSection}
       />
     </Card>
   );

@@ -1,5 +1,6 @@
 import { MAPPING_REGISTRY, SAMPLE_PROJECTS } from '../data/fixtures';
 import { runEvaluation } from '../domain/evaluation/runEvaluation';
+import { projectForPersona } from '../domain/persona/projectForPersona';
 import { RULE_CATALOGS } from '../domain/scoring/ruleCatalogs';
 import { validateProject } from '../domain/validation/validateProject';
 import type { SessionAction, SessionState } from '../domain/model/session';
@@ -91,7 +92,7 @@ export function sessionReducer(state: SessionState, action: SessionAction): Sess
         ...state,
         phase: 'evaluated',
         evaluation: output.result,
-        presentation: null,
+        presentation: projectForPersona(output.result, state.persona),
         ui: { ...state.ui, errorMessage: null },
       };
     }
@@ -126,6 +127,9 @@ export function sessionReducer(state: SessionState, action: SessionAction): Sess
       return {
         ...state,
         persona: action.persona,
+        presentation: state.evaluation
+          ? projectForPersona(state.evaluation, action.persona)
+          : null,
       };
 
     case 'REQUEST_RESET':
@@ -152,6 +156,22 @@ export function sessionReducer(state: SessionState, action: SessionAction): Sess
         ui: {
           ...state.ui,
           expandedEvidenceIds: expanded,
+        },
+      };
+    }
+
+    case 'TOGGLE_COACH_SECTION': {
+      const expanded = new Set(state.ui.expandedCoachSections);
+      if (expanded.has(action.sectionId)) {
+        expanded.delete(action.sectionId);
+      } else {
+        expanded.add(action.sectionId);
+      }
+      return {
+        ...state,
+        ui: {
+          ...state.ui,
+          expandedCoachSections: expanded,
         },
       };
     }
