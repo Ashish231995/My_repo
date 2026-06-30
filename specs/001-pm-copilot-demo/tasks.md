@@ -115,28 +115,28 @@
 
 ### Domain — validation and normalization
 
-- [ ] T055 [US1] Implement `validateProject` in `src/domain/validation/validateProject.ts`. **Refs**: FR-038, BR-016, AS-050, AS-051 | **Evidence**: `tests/domain/project-validation.test.ts` passes
-- [ ] T056 [US1] Implement `validateSignal` in `src/domain/validation/validateSignal.ts`. **Refs**: FR-035, BR-013, AS-042, AS-043 | **Evidence**: `tests/domain/signal-validation.test.ts` passes
-- [ ] T057 [US1] Implement `normalizeSignal` in `src/domain/normalization/normalizeSignal.ts`. **Refs**: FR-040, BR-002, BR-018, AS-060 | **Evidence**: `tests/domain/normalization.test.ts` passes
+- [X] T055 [US1] Implement `validateProject` in `src/domain/validation/validateProject.ts`. **Refs**: FR-038, BR-016, AS-050, AS-051 | **Evidence**: `tests/domain/project-validation.test.ts` passes
+- [X] T056 [US1] Implement `validateSignal` in `src/domain/validation/validateSignal.ts`. **Refs**: FR-035, BR-013, AS-042, AS-043 | **Evidence**: `tests/domain/signal-validation.test.ts` passes
+- [X] T057 [US1] Implement `normalizeSignal` in `src/domain/normalization/normalizeSignal.ts`. **Refs**: FR-040, BR-002, BR-018, AS-060 | **Evidence**: `tests/domain/normalization.test.ts` passes
 
 ### Domain — scoring (boundaries 6)
 
-- [ ] T058 [US1] Implement `mapSignalHealth` in `src/domain/scoring/signalHealth.ts` and create `src/domain/scoring/ruleCatalogs.ts` exposing approved static `DIMENSION_RULE_CATALOG` and `RULE_CATALOGS` (dimension + recommendation catalogs per `scoring-rules.md` and `recommendation-rules.md` — no new thresholds, weights, or rules). **Refs**: FR-020, BR-001, AS-061 | **Evidence**: `tests/domain/signal-health-mapping.test.ts` passes; `ruleCatalogs.ts` satisfies imports in `measurement-status.test.ts`, `dimension-scoring.test.ts`, `recommendation-rules.test.ts`, `evaluation-input.ts`
-- [ ] T059 [US1] Implement `aggregateCanonicalTypeHealth` in `src/domain/scoring/aggregateCanonicalTypeHealth.ts` per HD-07. **Refs**: FR-020, BR-001, AS-061, HD-07 | **Evidence**: `tests/domain/canonical-type-aggregation.test.ts` passes
-- [ ] T060 [US1] Implement `calculateDimension` in `src/domain/scoring/calculateDimension.ts` (status, raw, display, canonicalTypeHealth). **Refs**: AS-009–AS-011, FR-014–FR-019, BR-003, BR-004, BR-010 | **Evidence**: `tests/domain/dimension-scoring.test.ts`, `measurement-status.test.ts` pass
-- [ ] T061 [US1] Implement `calculateComposite` in `src/domain/scoring/calculateComposite.ts`. **Refs**: AS-012, AS-033–AS-039, FR-020, FR-031–FR-033, BR-009, BR-011 | **Evidence**: `tests/domain/composite.test.ts` passes
+- [X] T058 [US1] Implement `mapSignalHealth` in `src/domain/scoring/signalHealth.ts` and create `src/domain/scoring/ruleCatalogs.ts` exposing approved static `DIMENSION_RULE_CATALOG` and `RULE_CATALOGS` (dimension + recommendation catalogs per `scoring-rules.md` and `recommendation-rules.md` — no new thresholds, weights, or rules). **Refs**: FR-020, BR-001, AS-061 | **Evidence**: `tests/domain/signal-health-mapping.test.ts` passes; `ruleCatalogs.ts` satisfies imports in `measurement-status.test.ts`, `dimension-scoring.test.ts`, `recommendation-rules.test.ts`, `evaluation-input.ts`
+- [X] T059 [US1] Implement `aggregateCanonicalTypeHealth` in `src/domain/scoring/aggregateCanonicalTypeHealth.ts` per HD-07. **Refs**: FR-020, BR-001, AS-061, HD-07 | **Evidence**: `tests/domain/canonical-type-aggregation.test.ts` passes
+- [X] T060 [US1] Implement `calculateDimension` in `src/domain/scoring/calculateDimension.ts` (status, raw, display, canonicalTypeHealth). **Refs**: AS-009–AS-011, FR-014–FR-019, BR-003, BR-004, BR-010 | **Evidence**: `tests/domain/dimension-scoring.test.ts`, `measurement-status.test.ts` pass
+- [X] T061 [US1] Implement `calculateComposite` in `src/domain/scoring/calculateComposite.ts`. **Refs**: AS-012, AS-033–AS-039, FR-020, FR-031–FR-033, BR-009, BR-011 | **Evidence**: `tests/domain/composite.test.ts` passes
 
 ### Domain — findings, recommendations, evaluation (boundaries 7)
 
-- [ ] T062 [US1] Implement `assembleEvidence` in `src/domain/findings/assembleEvidence.ts` with provenance and inclusion flags. **Refs**: FR-013, FR-035, evaluation-pipeline.md | **Evidence**: evidence index populated in pipeline tests
-- [ ] T063 [US1] Implement `deriveFindings` in `src/domain/findings/deriveFindings.ts` per FND-* catalog. **Refs**: FR-021, recommendation-rules.md | **Evidence**: `tests/domain/findings.test.ts` passes
-- [ ] T064 [US1] Implement `generateRecommendations` in `src/domain/recommendations/generateRecommendations.ts` for REC-001–REC-007. **Refs**: FR-021, FR-022, BR-005, AS-004 | **Evidence**: `tests/domain/recommendation-rules.test.ts` passes
-- [ ] T065 [US1] Implement `orderRecommendations` in `src/domain/recommendations/orderRecommendations.ts`. **Refs**: AS-040, AS-041, FR-034, BR-012, HD-08 | **Evidence**: `tests/domain/order-recommendations.test.ts` passes
-- [ ] T066 [US1] Implement `runEvaluation` orchestrator in `src/domain/evaluation/runEvaluation.ts` per `contracts/evaluation-pipeline.md`. **Refs**: AS-001, FR-014, FR-020, FR-021, SC-002 | **Evidence**: `tests/domain/determinism.test.ts` passes; golden tests unblocked
+- [X] T062 [US1] Implement `assembleEvidence` in `src/domain/findings/assembleEvidence.ts` with provenance and inclusion flags. **Refs**: FR-013, FR-035, evaluation-pipeline.md | **Evidence**: evidence index populated in pipeline tests
+- [X] T063 [US1] Implement `deriveFindings` in `src/domain/findings/deriveFindings.ts` per FND-* catalog. **Refs**: FR-021, recommendation-rules.md | **Evidence**: `tests/domain/findings.test.ts` passes
+- [X] T064 [US1] Implement `generateRecommendations` in `src/domain/recommendations/generateRecommendations.ts` for REC-001–REC-007. **Refs**: FR-021, FR-022, BR-005, AS-004 | **Evidence**: `tests/domain/recommendation-rules.test.ts` passes
+- [X] T065 [US1] Implement `orderRecommendations` in `src/domain/recommendations/orderRecommendations.ts`. **Refs**: AS-040, AS-041, FR-034, BR-012, HD-08 | **Evidence**: `tests/domain/order-recommendations.test.ts` passes
+- [X] T066 [US1] Implement `runEvaluation` orchestrator in `src/domain/evaluation/runEvaluation.ts` per `contracts/evaluation-pipeline.md`. **Refs**: AS-001, FR-014, FR-020, FR-021, SC-002 | **Evidence**: `tests/domain/determinism.test.ts` passes; golden tests unblocked
 
 ### Golden validation
 
-- [ ] T067 [US1] Run and pass `npm run test:golden` (sample A, B, C). **Refs**: SC-006, golden-scenarios.md | **Evidence**: all golden tests green
+- [X] T067 [US1] Run and pass `npm run test:golden` (sample A, B, C). **Refs**: SC-006, golden-scenarios.md | **Evidence**: all golden tests green
 
 ### Session and features — P1 UI
 

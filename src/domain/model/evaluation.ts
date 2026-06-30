@@ -1,3 +1,4 @@
+import type { MappingRegistry } from '../../data/fixtures/mapping-registry';
 import type {
   CanonicalSignalType,
   DimensionId,
@@ -46,6 +47,10 @@ export interface EvidenceItem {
   mapping: MappingResult;
   snapshot: SnapshotMetadata;
   includedInScoring: boolean;
+  /** Mapped 0–100 health when valid; used for HD-07 aggregation and finding rules */
+  healthValue?: number | null;
+  /** Original signal payload for finding derivation (FND-*) */
+  sourcePayload?: Record<string, unknown>;
 }
 
 export interface TrendResult {
@@ -165,3 +170,66 @@ export interface PersonaPresentation {
   composite: CompositePresentation;
   recommendations: RecommendationPresentation[];
 }
+
+export type ValidatedProject = SampleProjectFixture;
+
+export interface InvalidProjectResult {
+  category: string;
+  message: string;
+}
+
+export type ProjectLoadResult =
+  | { ok: true; project: ValidatedProject }
+  | { ok: false; invalid: InvalidProjectResult };
+
+export interface ValidationContext {
+  enabledSignalGroupIds: ReadonlySet<string>;
+  snapshot: SampleProjectFixture['snapshot'];
+  mappingRegistry: MappingRegistry;
+}
+
+export interface SignalValidationResult {
+  valid: boolean;
+  includedInScoring: boolean;
+  exclusionReason: string | null;
+  resolvedAsOfDate: string;
+}
+
+export interface CanonicalSignal {
+  id: string;
+  canonicalType: CanonicalSignalType;
+  dimensionId: DimensionId;
+  healthValue: number | null;
+  sourcePayload: Record<string, unknown>;
+}
+
+export interface DimensionDefinition {
+  dimensionId: DimensionId;
+  requiredTypes: CanonicalSignalType[];
+}
+
+export interface DimensionRuleCatalog {
+  dimensions: Record<DimensionId, DimensionDefinition>;
+}
+
+export interface RecommendationRuleCatalog {
+  readonly version: '1.0';
+}
+
+export interface EvaluationInput {
+  project: ValidatedProject;
+  enabledSignalGroupIds: ReadonlySet<string>;
+  mappingRegistry: MappingRegistry;
+  ruleCatalogs: {
+    dimension: DimensionRuleCatalog;
+    recommendation: RecommendationRuleCatalog;
+  };
+}
+
+export interface EvaluationError {
+  message: string;
+}
+
+export type EvaluationOutput =
+  | { ok: true; result: EvaluationResult }
+  | { ok: false; error: EvaluationError };

@@ -25,6 +25,8 @@ function urgentBlockerEvidence(id = 'ev-blocker'): EvidenceItem {
     },
     snapshot: { asOfDate: snapshotDate, label: 'test' },
     includedInScoring: true,
+    healthValue: 20,
+    sourcePayload: { blockerState: 'urgent' },
   };
 }
 
@@ -51,6 +53,8 @@ function slipEvidence(
     },
     snapshot: { asOfDate: snapshotDate, label: 'test' },
     includedInScoring: true,
+    healthValue: 40,
+    sourcePayload: { slipDays, milestoneDueDate },
   };
 }
 
@@ -169,6 +173,7 @@ describe('recommendation rules — REC-001 through REC-007', () => {
       },
       snapshot: { asOfDate: snapshotDate, label: 'test' },
       includedInScoring: true,
+      sourcePayload: { gapPriority: 'important' },
     };
     const evidenceIndex = new Map([['ev-gov', evidence]]);
     const findings = deriveFindings([], evidenceIndex);

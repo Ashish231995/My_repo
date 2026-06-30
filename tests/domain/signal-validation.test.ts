@@ -22,7 +22,7 @@ describe('validateSignal — payload and inclusion rules', () => {
     expect(result.includedInScoring).toBe(true);
   });
 
-  it('excludes signals from disabled signal groups (AS-043)', () => {
+  it('marks disabled signal groups invalid and excluded from scoring (AS-043)', () => {
     const signal = SAMPLE_PROJECTS['sample-b'].sourceSignals[0]!;
 
     const result = validateSignal(signal, {
@@ -31,7 +31,61 @@ describe('validateSignal — payload and inclusion rules', () => {
       mappingRegistry: MAPPING_REGISTRY,
     });
 
+    expect(result.valid).toBe(false);
     expect(result.includedInScoring).toBe(false);
+    expect(result.exclusionReason).toMatch(/disabled/i);
+  });
+
+  it('rejects empty sourceTerm', () => {
+    const signal: SourceSignal = {
+      id: 'bad-term',
+      signalGroupId: 'grp-schedule',
+      sourceTerm: '',
+      mappingKey: 'milestone-slip',
+      payload: { slipDays: 0 },
+    };
+
+    const result = validateSignal(signal, {
+      enabledSignalGroupIds: enabledGroups,
+      snapshot,
+      mappingRegistry: MAPPING_REGISTRY,
+    });
+
+    expect(result.valid).toBe(false);
+    expect(result.includedInScoring).toBe(false);
+  });
+
+  it('rejects malformed signal asOfDate', () => {
+    const signal: SourceSignal = {
+      id: 'bad-date',
+      signalGroupId: 'grp-schedule',
+      sourceTerm: 'Milestone slip days',
+      mappingKey: 'milestone-slip',
+      payload: { slipDays: 0 },
+      asOfDate: 'not-a-date',
+    };
+
+    const result = validateSignal(signal, {
+      enabledSignalGroupIds: enabledGroups,
+      snapshot,
+      mappingRegistry: MAPPING_REGISTRY,
+    });
+
+    expect(result.valid).toBe(false);
+    expect(result.exclusionReason).toMatch(/asOfDate/i);
+  });
+
+  it('rejects missing project snapshot as-of date', () => {
+    const signal = SAMPLE_PROJECTS['sample-a'].sourceSignals[0]!;
+
+    const result = validateSignal(signal, {
+      enabledSignalGroupIds: enabledGroups,
+      snapshot: { asOfDate: 'not-a-date' },
+      mappingRegistry: MAPPING_REGISTRY,
+    });
+
+    expect(result.valid).toBe(false);
+    expect(result.exclusionReason).toMatch(/snapshot/i);
   });
 
   it('rejects signal with missing required payload fields', () => {
