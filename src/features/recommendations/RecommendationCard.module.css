@@ -1,0 +1,95 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  height: 100%;
+  min-width: 0;
+  border-left-width: 4px;
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+
+.id {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--colour-unmeasured-secondary);
+}
+
+.priority {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.priorityIcon {
+  width: 0.75rem;
+  height: 0.75rem;
+  flex-shrink: 0;
+}
+
+.urgent .priorityIcon {
+  fill: currentColor;
+}
+
+.important .priorityIcon {
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+}
+
+.advisory .priorityIcon {
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  box-sizing: border-box;
+}
+
+.urgent {
+  color: var(--colour-critical-secondary);
+  border-left-color: var(--colour-critical-secondary);
+}
+
+.important {
+  color: var(--colour-at-risk-secondary);
+  border-left-color: var(--colour-at-risk-secondary);
+}
+
+.advisory {
+  color: var(--colour-healthy-secondary);
+  border-left-color: var(--colour-healthy-secondary);
+}
+
+.action {
+  margin: 0;
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  line-height: var(--line-height-base);
+}
+
+.reasonLabel {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--colour-unmeasured-secondary);
+}
+
+.reason {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-base);
+}
+
+.evidence {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--colour-unmeasured-secondary);
+  word-break: break-word;
+}

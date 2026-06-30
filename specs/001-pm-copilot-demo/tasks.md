@@ -140,18 +140,18 @@
 
 ### Session and features — P1 UI
 
-- [ ] T068 [US1] Extend `sessionReducer.ts` with SELECT_PROJECT (validateProject) and EVALUATE (runEvaluation + store result). **Refs**: AS-001, AS-002, FR-001, FR-002 | **Evidence**: evaluation stored in session
-- [ ] T069 [P] [US1] Create `src/features/project-select/ProjectSelector.tsx` + CSS listing Sample A/B/C only. **Refs**: FR-002, AS-002, fixture-schema.md HD-04 | **Evidence**: invalid fixture not listed
-- [ ] T070 [P] [US1] Create `src/features/health-dashboard/CompositeHealthCard.tsx` showing composite, coverage statement, StatusLabel. **Refs**: AS-037, AS-038, FR-015, FR-020 | **Evidence**: renders numeric composite for B
-- [ ] T071 [P] [US1] Create `src/features/health-dashboard/DimensionCard.tsx` for four dimensions with measurement status and score. **Refs**: AS-009, AS-013–AS-015, FR-015, FR-016 | **Evidence**: four cards for Sample B
-- [ ] T072 [P] [US1] Create `src/features/health-dashboard/SnapshotBanner.tsx` showing bundled as-of date. **Refs**: AS-042, FR-002 | **Evidence**: displays 2026-06-01 for Sample B
-- [ ] T073 [US1] Create `src/features/health-dashboard/EvaluateButton.tsx` disabled until valid project selected. **Refs**: AS-002, FR-001 | **Evidence**: AS-002 integration behaviour
-- [ ] T074 [P] [US1] Implement `tests/integration/recommendations.test.tsx` for AS-022 recommendation rendering with evidence refs, AS-023 valid no-recommendations empty state (Sample A), and FR-022 UI integration. **Refs**: AS-022, AS-023, FR-022 | **Evidence**: tests fail until T075 (`RecommendationsList`)
-- [ ] T075 [US1] Create `src/features/recommendations/RecommendationsList.tsx` + `RecommendationCard.tsx` with priority and evidence refs. **Refs**: AS-001, AS-022, FR-021, FR-022 | **Evidence**: `tests/integration/recommendations.test.tsx` passes; shows REC-002 then REC-001 for B
-- [ ] T076 [US1] Compose `src/features/health-dashboard/HealthDashboard.tsx` wiring cards, composite, recommendations. **Refs**: FR-001, FR-014, FR-021 | **Evidence**: dashboard renders after evaluate
-- [ ] T077 [US1] Integrate features into `src/app/App.tsx` (project select → evaluate → results). **Refs**: AS-001, FR-001, SC-001 | **Evidence**: manual P1 path works
-- [ ] T078 [US1] Implement `tests/integration/p1-journey.test.tsx` — select B, evaluate, assert 4 dimensions + composite + ≥2 recommendations. **Refs**: AS-001, AS-004, SC-001, FR-004 | **Evidence**: integration test passes
-- [ ] T079 [US1] Implement `tests/integration/project-select.test.tsx` for AS-002 no-project guard. **Refs**: AS-002, FR-001 | **Evidence**: test passes
+- [X] T068 [US1] Extend `sessionReducer.ts` with SELECT_PROJECT (validateProject) and EVALUATE (runEvaluation + store result). **Refs**: AS-001, AS-002, FR-001, FR-002 | **Evidence**: evaluation stored in session
+- [X] T069 [P] [US1] Create `src/features/project-select/ProjectSelector.tsx` + CSS listing Sample A/B/C only. **Refs**: FR-002, AS-002, fixture-schema.md HD-04 | **Evidence**: invalid fixture not listed
+- [X] T070 [P] [US1] Create `src/features/health-dashboard/CompositeHealthCard.tsx` showing composite, coverage statement, StatusLabel. **Refs**: AS-037, AS-038, FR-015, FR-020 | **Evidence**: renders numeric composite for B
+- [X] T071 [P] [US1] Create `src/features/health-dashboard/DimensionCard.tsx` for four dimensions with measurement status and score. **Refs**: AS-009, AS-013–AS-015, FR-015, FR-016 | **Evidence**: four cards for Sample B
+- [X] T072 [P] [US1] Create `src/features/health-dashboard/SnapshotBanner.tsx` showing bundled as-of date. **Refs**: AS-042, FR-002 | **Evidence**: displays 2026-06-01 for Sample B
+- [X] T073 [US1] Create `src/features/health-dashboard/EvaluateButton.tsx` disabled until valid project selected. **Refs**: AS-002, FR-001 | **Evidence**: AS-002 integration behaviour
+- [X] T074 [P] [US1] Implement `tests/integration/recommendations.test.tsx` for AS-022 recommendation rendering with evidence refs, AS-023 valid no-recommendations empty state (Sample A), and FR-022 UI integration. **Refs**: AS-022, AS-023, FR-022 | **Evidence**: tests fail until T075 (`RecommendationsList`)
+- [X] T075 [US1] Create `src/features/recommendations/RecommendationsList.tsx` + `RecommendationCard.tsx` with priority and evidence refs. **Refs**: AS-001, AS-022, FR-021, FR-022 | **Evidence**: `tests/integration/recommendations.test.tsx` passes; shows REC-002 then REC-001 for B
+- [X] T076 [US1] Compose `src/features/health-dashboard/HealthDashboard.tsx` wiring cards, composite, recommendations. **Refs**: FR-001, FR-014, FR-021 | **Evidence**: dashboard renders after evaluate
+- [X] T077 [US1] Integrate features into `src/app/App.tsx` (project select → evaluate → results). **Refs**: AS-001, FR-001, SC-001 | **Evidence**: manual P1 path works
+- [X] T078 [US1] Implement `tests/integration/p1-journey.test.tsx` — select B, evaluate, assert 4 dimensions + composite + ≥2 recommendations. **Refs**: AS-001, AS-004, SC-001, FR-004 | **Evidence**: integration test passes
+- [X] T079 [US1] Implement `tests/integration/project-select.test.tsx` for AS-002 no-project guard. **Refs**: AS-002, FR-001 | **Evidence**: test passes
 
 **Checkpoint Phase 2 (US1)**: Leadership P1 demo path — Sample B → Evaluate → composite 51 At Risk → REC-002 then REC-001. Golden A/B/C pass.
 

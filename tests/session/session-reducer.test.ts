@@ -1,8 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import { createInitialSession } from '../../src/session/initialSession';
-import { sessionReducer } from '../../src/session/sessionReducer';
+import { SAMPLE_PROJECTS } from '../../src/data/fixtures';
 import type { SessionState } from '../../src/domain/model/session';
-import { setPersona, requestReset } from '../../src/session/sessionActions';
+import { createInitialSession } from '../../src/session/initialSession';
+import {
+  evaluate,
+  requestReset,
+  selectProject,
+  setPersona,
+} from '../../src/session/sessionActions';
+import { sessionReducer } from '../../src/session/sessionReducer';
 
 describe('sessionReducer (Phase 1)', () => {
   it('INIT returns Intermediate default session', () => {
@@ -53,5 +59,73 @@ describe('sessionReducer (Phase 1)', () => {
     const state = sessionReducer(withEvaluation, requestReset());
     expect(state.ui.resetConfirmOpen).toBe(true);
     expect(state.evaluation).not.toBeNull();
+  });
+});
+
+describe('sessionReducer (Phase 2C — SELECT_PROJECT)', () => {
+  it('validates bundled fixture and moves to project-ready', () => {
+    const state = sessionReducer(createInitialSession(), selectProject('sample-b'));
+
+    expect(state.phase).toBe('project-ready');
+    expect(state.selectedProjectId).toBe('sample-b');
+    expect(state.projectLoad?.ok).toBe(true);
+  });
+
+  it('loads default-enabled signal groups from fixture', () => {
+    const expected = SAMPLE_PROJECTS['sample-b'].signalGroups
+      .filter((group) => group.defaultEnabled)
+      .map((group) => group.id);
+
+    const state = sessionReducer(createInitialSession(), selectProject('sample-b'));
+
+    expect(state.enabledSignalGroupIds).toEqual(expected);
+  });
+
+  it('clears previous evaluation and presentation on project change', () => {
+    const ready = sessionReducer(createInitialSession(), selectProject('sample-a'));
+    const evaluated = sessionReducer(ready, evaluate());
+    const switched = sessionReducer(evaluated, selectProject('sample-b'));
+
+    expect(switched.evaluation).toBeNull();
+    expect(switched.presentation).toBeNull();
+    expect(switched.phase).toBe('project-ready');
+  });
+
+  it('marks unknown project ids invalid', () => {
+    const state = sessionReducer(createInitialSession(), selectProject('unknown-project'));
+
+    expect(state.phase).toBe('invalid-project');
+    expect(state.selectedProjectId).toBeNull();
+    expect(state.projectLoad?.ok).toBe(false);
+  });
+});
+
+describe('sessionReducer (Phase 2C — EVALUATE)', () => {
+  it('does not evaluate without a valid selected project', () => {
+    const state = sessionReducer(createInitialSession(), evaluate());
+
+    expect(state.evaluation).toBeNull();
+    expect(state.phase).toBe('initial');
+  });
+
+  it('runs runEvaluation for project-ready session and stores result', () => {
+    const ready = sessionReducer(createInitialSession(), selectProject('sample-b'));
+    const state = sessionReducer(ready, evaluate());
+
+    expect(state.phase).toBe('evaluated');
+    expect(state.evaluation).not.toBeNull();
+    expect(state.evaluation?.projectId).toBe('sample-b');
+    expect(state.evaluation?.composite.displayComposite).toBe(51);
+    expect(state.evaluation?.composite.classification).toBe('at-risk');
+  });
+
+  it('keeps evaluation persona-independent when persona changes', () => {
+    const ready = sessionReducer(createInitialSession(), selectProject('sample-b'));
+    const evaluated = sessionReducer(ready, evaluate());
+    const afterPersona = sessionReducer(evaluated, setPersona('expert'));
+
+    expect(afterPersona.evaluation).toBe(evaluated.evaluation);
+    expect(afterPersona.evaluation?.composite.displayComposite).toBe(51);
+    expect(afterPersona.presentation).toBeNull();
   });
 });

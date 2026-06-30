@@ -1,0 +1,78 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  height: 100%;
+  min-width: 0;
+  border-left-width: 4px;
+}
+
+.heading {
+  margin: 0;
+  font-size: var(--font-size-base);
+  font-weight: 600;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.score {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+}
+
+.measurement {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--colour-unmeasured-secondary);
+}
+
+.measurementIcon {
+  width: 0.75rem;
+  height: 0.75rem;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.partial .measurementIcon {
+  border-radius: 2px;
+}
+
+.unmeasured .measurementIcon {
+  border-style: dashed;
+}
+
+.provisional {
+  font-size: var(--font-size-sm);
+  color: var(--colour-unmeasured-secondary);
+}
+
+.explanation {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--colour-unmeasured-secondary);
+}
+
+.neutral {
+  border-left-color: var(--colour-border);
+}
+
+.healthy {
+  border-left-color: var(--colour-healthy-secondary);
+}
+
+.atRisk {
+  border-left-color: var(--colour-at-risk-secondary);
+}
+
+.critical {
+  border-left-color: var(--colour-critical-secondary);
+}

@@ -1,20 +1,51 @@
 import { PrivacyIndicator } from '../ui/PrivacyIndicator/PrivacyIndicator';
+import { EvaluateButton } from '../features/health-dashboard/EvaluateButton';
+import { HealthDashboard } from '../features/health-dashboard/HealthDashboard';
+import { ProjectSelector } from '../features/project-select/ProjectSelector';
+import { useSession } from '../session/sessionContext';
 import styles from './App.module.css';
 
 export default function App() {
+  const { state } = useSession();
+
   return (
     <div className={styles.appShell}>
       <header className={styles.header}>
-        <h1 className={styles.headerTitle}>PM Copilot Demonstration</h1>
-        <PrivacyIndicator />
+        <div className={styles.headerInner}>
+          <div className={styles.headerBrand}>
+            <h1 className={styles.headerTitle}>PM Copilot Demonstration</h1>
+            <p className={styles.headerSubtitle}>
+              Leadership health view from bundled representative signals — methodology-neutral and local only.
+            </p>
+          </div>
+          <PrivacyIndicator />
+        </div>
       </header>
       <main className={styles.main} id="main-content">
-        <p className={styles.placeholder}>
-          Select a sample project to begin the coaching journey (Phase 1 shell).
-        </p>
+        <div className={styles.journey}>
+          <section className={styles.contextSection} aria-labelledby="journey-context-heading">
+            <h2 id="journey-context-heading" className={styles.sectionHeading}>
+              Project context
+            </h2>
+            <ProjectSelector />
+            <EvaluateButton />
+          </section>
+
+          {state.phase === 'evaluated' && state.evaluation ? (
+            <HealthDashboard evaluation={state.evaluation} />
+          ) : (
+            <p className={styles.placeholder} data-testid="results-placeholder">
+              {state.selectedProjectId
+                ? 'Project loaded. Run evaluation to view composite health, dimensions, and recommendations.'
+                : 'Select a sample project to begin the leadership coaching journey.'}
+            </p>
+          )}
+        </div>
       </main>
       <footer className={styles.footer}>
-        <span>PM Copilot — local demonstration build</span>
+        <div className={styles.footerInner}>
+          <span>PM Copilot — local demonstration build</span>
+        </div>
       </footer>
     </div>
   );

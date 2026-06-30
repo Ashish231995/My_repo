@@ -1,0 +1,68 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: var(--space-lg);
+  border-left-width: 4px;
+  min-width: 0;
+}
+
+.heading {
+  margin: 0;
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+}
+
+.scoreRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.score {
+  font-size: 3.5rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.scoreUnavailable {
+  font-size: var(--font-size-lg);
+  color: var(--colour-unmeasured-secondary);
+}
+
+.coverage {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--colour-unmeasured-secondary);
+  max-width: 48rem;
+}
+
+.insufficient {
+  margin: 0;
+  font-weight: 600;
+  color: var(--colour-at-risk-secondary);
+}
+
+.neutral {
+  border-left-color: var(--colour-border);
+}
+
+.healthy {
+  border-left-color: var(--colour-healthy-secondary);
+}
+
+.atRisk {
+  border-left-color: var(--colour-at-risk-secondary);
+}
+
+.critical {
+  border-left-color: var(--colour-critical-secondary);
+}
+
+@media (min-width: 768px) {
+  .score {
+    font-size: 4rem;
+  }
+}

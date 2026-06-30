@@ -1,10 +1,100 @@
+import { MAPPING_REGISTRY, SAMPLE_PROJECTS } from '../data/fixtures';
+import { runEvaluation } from '../domain/evaluation/runEvaluation';
+import { RULE_CATALOGS } from '../domain/scoring/ruleCatalogs';
+import { validateProject } from '../domain/validation/validateProject';
 import type { SessionAction, SessionState } from '../domain/model/session';
 import { applyReset, createInitialSession } from './initialSession';
+
+function defaultEnabledGroupIds(projectId: string): string[] {
+  const project = SAMPLE_PROJECTS[projectId];
+  if (!project) {
+    return [];
+  }
+  return project.signalGroups.filter((group) => group.defaultEnabled).map((group) => group.id);
+}
 
 export function sessionReducer(state: SessionState, action: SessionAction): SessionState {
   switch (action.type) {
     case 'INIT':
       return createInitialSession();
+
+    case 'SELECT_PROJECT': {
+      const project = SAMPLE_PROJECTS[action.projectId];
+      if (!project) {
+        return {
+          ...state,
+          phase: 'invalid-project',
+          selectedProjectId: null,
+          enabledSignalGroupIds: [],
+          projectLoad: { ok: false, message: `Unknown project: ${action.projectId}` },
+          evaluation: null,
+          presentation: null,
+          ui: { ...state.ui, errorMessage: null },
+        };
+      }
+
+      const load = validateProjectSelection(action.projectId);
+      if (!load.ok) {
+        return {
+          ...state,
+          phase: 'invalid-project',
+          selectedProjectId: null,
+          enabledSignalGroupIds: [],
+          projectLoad: { ok: false, message: load.message },
+          evaluation: null,
+          presentation: null,
+          ui: { ...state.ui, errorMessage: null },
+        };
+      }
+
+      return {
+        ...state,
+        phase: 'project-ready',
+        selectedProjectId: action.projectId,
+        enabledSignalGroupIds: defaultEnabledGroupIds(action.projectId),
+        projectLoad: { ok: true, projectId: action.projectId },
+        evaluation: null,
+        presentation: null,
+        ui: { ...state.ui, errorMessage: null },
+      };
+    }
+
+    case 'EVALUATE': {
+      if (!state.selectedProjectId || state.phase === 'initial' || state.phase === 'invalid-project') {
+        return state;
+      }
+
+      const project = SAMPLE_PROJECTS[state.selectedProjectId];
+      if (!project) {
+        return state;
+      }
+
+      const output = runEvaluation({
+        project,
+        enabledSignalGroupIds: new Set(state.enabledSignalGroupIds),
+        mappingRegistry: MAPPING_REGISTRY,
+        ruleCatalogs: RULE_CATALOGS,
+      });
+
+      if (!output.ok) {
+        return {
+          ...state,
+          phase: 'error',
+          ui: {
+            ...state.ui,
+            errorMessage: output.error.message,
+          },
+        };
+      }
+
+      return {
+        ...state,
+        phase: 'evaluated',
+        evaluation: output.result,
+        presentation: null,
+        ui: { ...state.ui, errorMessage: null },
+      };
+    }
 
     case 'SET_PERSONA':
       return {
@@ -27,4 +117,16 @@ export function sessionReducer(state: SessionState, action: SessionAction): Sess
     default:
       return state;
   }
+}
+
+function validateProjectSelection(projectId: string): { ok: true } | { ok: false; message: string } {
+  const project = SAMPLE_PROJECTS[projectId];
+  if (!project) {
+    return { ok: false, message: `Unknown project: ${projectId}` };
+  }
+  const load = validateProject(project, MAPPING_REGISTRY);
+  if (!load.ok) {
+    return { ok: false, message: load.invalid.message };
+  }
+  return { ok: true };
 }

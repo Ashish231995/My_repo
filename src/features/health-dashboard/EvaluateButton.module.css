@@ -1,0 +1,28 @@
+.wrapper {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.primaryButton {
+  min-width: 12rem;
+  padding: var(--space-sm) var(--space-xl);
+  font-weight: 600;
+  color: var(--colour-surface);
+  background: var(--colour-text);
+  border-color: var(--colour-text);
+}
+
+.primaryButton:hover:not(:disabled) {
+  background: #000;
+  border-color: #000;
+}
+
+.primaryButton:focus-visible {
+  outline: 2px solid var(--colour-text);
+  outline-offset: 2px;
+}
+
+.primaryButton:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
