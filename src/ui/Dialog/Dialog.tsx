@@ -9,9 +9,10 @@ export interface DialogProps {
   footer?: ReactNode;
   className?: string;
   id?: string;
+  'data-testid'?: string;
 }
 
-export function Dialog({ open, title, onClose, children, footer, className, id }: DialogProps) {
+export function Dialog({ open, title, onClose, children, footer, className, id, 'data-testid': dataTestId }: DialogProps) {
   const titleId = useId();
   const dialogRef = useRef<HTMLDivElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
@@ -70,6 +71,7 @@ export function Dialog({ open, title, onClose, children, footer, className, id }
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
+        data-testid={dataTestId}
         onMouseDown={(event) => event.stopPropagation()}
       >
         <h2 id={titleId} className={styles.title}>

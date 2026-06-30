@@ -139,10 +139,23 @@ export function sessionReducer(state: SessionState, action: SessionAction): Sess
           ui: {
             ...state.ui,
             resetConfirmOpen: true,
+            lastFocusedElementId: action.triggerElementId ?? state.ui.lastFocusedElementId,
           },
         };
       }
       return applyReset();
+
+    case 'CONFIRM_RESET':
+      return applyReset();
+
+    case 'CANCEL_RESET':
+      return {
+        ...state,
+        ui: {
+          ...state.ui,
+          resetConfirmOpen: false,
+        },
+      };
 
     case 'TOGGLE_EVIDENCE': {
       const expanded = new Set(state.ui.expandedEvidenceIds);

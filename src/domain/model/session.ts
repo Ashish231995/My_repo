@@ -40,7 +40,7 @@ export type SessionAction =
   | { type: 'TOGGLE_SIGNAL_GROUP'; groupId: string }
   | { type: 'SET_PERSONA'; persona: Persona }
   | { type: 'EVALUATE' }
-  | { type: 'REQUEST_RESET' }
+  | { type: 'REQUEST_RESET'; triggerElementId?: string }
   | { type: 'CONFIRM_RESET' }
   | { type: 'CANCEL_RESET' }
   | { type: 'SET_ERROR'; message: string }

@@ -238,18 +238,18 @@
 
 ### Tests
 
-- [ ] T105 [P] [US5] Implement `tests/privacy/no-persistence.test.ts` mocking storage APIs (AS-025). **Refs**: AS-025, FR-006, FR-026, SC-004, BR-007 | **Evidence**: tests assert completed runtime behaviour (no storage API usage); pass after T113 privacy audit confirms no prohibited persistence
-- [ ] T106 [P] [US5] Implement `tests/privacy/no-network.test.ts` ensuring no fetch during evaluation (AS-024). **Refs**: AS-024, FR-025, SC-004 | **Evidence**: tests assert completed runtime behaviour (no fetch during evaluation); pass after T113 privacy audit confirms no network usage
-- [ ] T107 [P] [US5] Implement `tests/integration/reset-flow.test.tsx` for AS-026, AS-027, AS-048, AS-049. **Refs**: AS-026, AS-027, AS-048, AS-049, FR-007, BR-007 | **Evidence**: fails until T111 (`ResetButton` wiring)
-- [ ] T108 [P] [US5] Implement `tests/integration/reset-dialog.test.tsx` for AS-046, AS-047. **Refs**: AS-046, AS-047, FR-037, BR-015 | **Evidence**: tests fail until T109 (`ResetConfirmDialog`) and T110 (`CONFIRM_RESET`/`CANCEL_RESET` reducer); complete test passes only after both
+- [X] T105 [P] [US5] Implement `tests/privacy/no-persistence.test.ts` mocking storage APIs (AS-025). **Refs**: AS-025, FR-006, FR-026, SC-004, BR-007 | **Evidence**: tests assert completed runtime behaviour (no storage API usage); pass after T113 privacy audit confirms no prohibited persistence
+- [X] T106 [P] [US5] Implement `tests/privacy/no-network.test.ts` ensuring no fetch during evaluation (AS-024). **Refs**: AS-024, FR-025, SC-004 | **Evidence**: tests assert completed runtime behaviour (no fetch during evaluation); pass after T113 privacy audit confirms no network usage
+- [X] T107 [P] [US5] Implement `tests/integration/reset-flow.test.tsx` for AS-026, AS-027, AS-048, AS-049. **Refs**: AS-026, AS-027, AS-048, AS-049, FR-007, BR-007 | **Evidence**: fails until T111 (`ResetButton` wiring)
+- [X] T108 [P] [US5] Implement `tests/integration/reset-dialog.test.tsx` for AS-046, AS-047. **Refs**: AS-046, AS-047, FR-037, BR-015 | **Evidence**: tests fail until T109 (`ResetConfirmDialog`) and T110 (`CONFIRM_RESET`/`CANCEL_RESET` reducer); complete test passes only after both
 
 ### Implementation
 
-- [ ] T109 [US5] Create `src/features/reset-confirm/ResetConfirmDialog.tsx` using `Dialog` primitive (T027) with focus trap and Cancel default. **Refs**: AS-046, AS-047, FR-037, FR-028 | **Evidence**: component renders; focus management and Cancel default verified; `Dialog` integration works; full `reset-dialog.test.tsx` not yet complete (pending T110)
-- [ ] T110 [US5] Extend `sessionReducer.ts` with CONFIRM_RESET and CANCEL_RESET completing AS-046–AS-049 behaviour. **Refs**: AS-046–AS-049, FR-037, BR-015 | **Evidence**: `reset-dialog.test.tsx` and `session-reducer.test.ts` pass after reducer completion
-- [ ] T111 [US5] Create `src/features/reset-confirm/ResetButton.tsx` wiring REQUEST_RESET / CONFIRM_RESET. **Refs**: AS-026, AS-049, FR-007, FR-037 | **Evidence**: `reset-flow.test.tsx` passes
-- [ ] T112 [US5] Ensure page INIT on load always calls `createInitialSession()` (no restored state). **Refs**: AS-027, FR-007, SC-004 | **Evidence**: reload test in `reset-flow.test.tsx` passes
-- [ ] T113 [US5] Audit `src/` for `localStorage`, `sessionStorage`, `indexedDB`, `fetch` — none in runtime paths (negative-by-design; no enforcement wrapper code). **Refs**: FR-025, FR-026, BR-007, Constitution II | **Evidence**: `no-persistence.test.ts` and `no-network.test.ts` pass
+- [X] T109 [US5] Create `src/features/reset-confirm/ResetConfirmDialog.tsx` using `Dialog` primitive (T027) with focus trap and Cancel default. **Refs**: AS-046, AS-047, FR-037, FR-028 | **Evidence**: component renders; focus management and Cancel default verified; `Dialog` integration works; full `reset-dialog.test.tsx` not yet complete (pending T110)
+- [X] T110 [US5] Extend `sessionReducer.ts` with CONFIRM_RESET and CANCEL_RESET completing AS-046–AS-049 behaviour. **Refs**: AS-046–AS-049, FR-037, BR-015 | **Evidence**: `reset-dialog.test.tsx` and `session-reducer.test.ts` pass after reducer completion
+- [X] T111 [US5] Create `src/features/reset-confirm/ResetButton.tsx` wiring REQUEST_RESET / CONFIRM_RESET. **Refs**: AS-026, AS-049, FR-007, FR-037 | **Evidence**: `reset-flow.test.tsx` passes
+- [X] T112 [US5] Ensure page INIT on load always calls `createInitialSession()` (no restored state). **Refs**: AS-027, FR-007, SC-004 | **Evidence**: reload test in `reset-flow.test.tsx` passes
+- [X] T113 [US5] Audit `src/` for `localStorage`, `sessionStorage`, `indexedDB`, `fetch` — none in runtime paths (negative-by-design; no enforcement wrapper code). **Refs**: FR-025, FR-026, BR-007, Constitution II | **Evidence**: `no-persistence.test.ts` and `no-network.test.ts` pass
 
 **Checkpoint Phase 6 (US5)**: Complete B evaluation → Reset → confirm → empty session with Intermediate persona; privacy tests green.
 

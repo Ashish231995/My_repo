@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import {
   createContext,
   useContext,
@@ -6,6 +7,7 @@ import {
   type ReactNode,
 } from 'react';
 import type { SessionAction, SessionState } from '../domain/model/session';
+import { init } from './sessionActions';
 import { createInitialSession } from './initialSession';
 import { sessionReducer } from './sessionReducer';
 
@@ -18,6 +20,10 @@ const SessionContext = createContext<SessionContextValue | null>(null);
 
 export function SessionProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(sessionReducer, undefined, createInitialSession);
+
+  useEffect(() => {
+    dispatch(init());
+  }, []);
 
   return (
     <SessionContext.Provider value={{ state, dispatch }}>

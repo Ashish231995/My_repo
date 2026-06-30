@@ -21,8 +21,8 @@ export function evaluate(): SessionAction {
   return { type: 'EVALUATE' };
 }
 
-export function requestReset(): SessionAction {
-  return { type: 'REQUEST_RESET' };
+export function requestReset(triggerElementId?: string): SessionAction {
+  return { type: 'REQUEST_RESET', triggerElementId };
 }
 
 export function confirmReset(): SessionAction {

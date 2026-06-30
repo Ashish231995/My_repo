@@ -3,6 +3,8 @@ import { SAMPLE_PROJECTS } from '../../src/data/fixtures';
 import type { SessionState } from '../../src/domain/model/session';
 import { createInitialSession } from '../../src/session/initialSession';
 import {
+  cancelReset,
+  confirmReset,
   evaluate,
   requestReset,
   selectProject,
@@ -193,6 +195,43 @@ describe('sessionReducer (Phase 3 — TOGGLE_SIGNAL_GROUP)', () => {
 
     expect(toggled.evaluation).toBeNull();
     expect(toggled.phase).toBe('project-ready');
+  });
+});
+
+describe('sessionReducer (Phase 6 — reset confirmation)', () => {
+  const evaluated = () =>
+    sessionReducer(sessionReducer(createInitialSession(), selectProject('sample-b')), evaluate());
+
+  it('CONFIRM_RESET clears session to Intermediate initial state', () => {
+    const withDialog = sessionReducer(evaluated(), requestReset('reset-session-button'));
+    const reset = sessionReducer(withDialog, confirmReset());
+
+    expect(reset.persona).toBe('intermediate');
+    expect(reset.selectedProjectId).toBeNull();
+    expect(reset.evaluation).toBeNull();
+    expect(reset.presentation).toBeNull();
+    expect(reset.enabledSignalGroupIds).toEqual([]);
+    expect(reset.ui.resetConfirmOpen).toBe(false);
+    expect(reset.ui.expandedEvidenceIds.size).toBe(0);
+    expect(reset.ui.expandedCoachSections.size).toBe(0);
+  });
+
+  it('CANCEL_RESET closes dialog and preserves evaluated session', () => {
+    const base = sessionReducer(evaluated(), setPersona('expert'));
+    const withDialog = sessionReducer(base, requestReset('reset-session-button'));
+    const cancelled = sessionReducer(withDialog, cancelReset());
+
+    expect(cancelled.ui.resetConfirmOpen).toBe(false);
+    expect(cancelled.evaluation).toBe(base.evaluation);
+    expect(cancelled.presentation).toBe(base.presentation);
+    expect(cancelled.persona).toBe('expert');
+    expect(cancelled.selectedProjectId).toBe('sample-b');
+  });
+
+  it('REQUEST_RESET stores trigger element id for focus restoration', () => {
+    const state = sessionReducer(evaluated(), requestReset('reset-session-button'));
+    expect(state.ui.resetConfirmOpen).toBe(true);
+    expect(state.ui.lastFocusedElementId).toBe('reset-session-button');
   });
 });
 
