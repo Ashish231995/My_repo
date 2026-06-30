@@ -54,6 +54,14 @@
       "payload": { "slipDays": 2 }
     },
     {
+      "id": "sig-c-schedule-slip-waterfall",
+      "signalGroupId": "grp-schedule",
+      "sourceTerm": "Phase slip variance days",
+      "sourceField": "phaseSlip",
+      "mappingKey": "milestone-slip-waterfall",
+      "payload": { "slipDays": 2 }
+    },
+    {
       "id": "sig-c-schedule-baseline",
       "signalGroupId": "grp-schedule",
       "sourceTerm": "On-time percent",

@@ -4,10 +4,11 @@ import { HealthDashboard } from '../features/health-dashboard/HealthDashboard';
 import { IntegrationChecklist } from '../features/integration-checklist/IntegrationChecklist';
 import { ProjectSelector } from '../features/project-select/ProjectSelector';
 import { useSession } from '../session/sessionContext';
+import { toggleEvidence } from '../session/sessionActions';
 import styles from './App.module.css';
 
 export default function App() {
-  const { state } = useSession();
+  const { state, dispatch } = useSession();
 
   return (
     <div className={styles.appShell}>
@@ -34,7 +35,13 @@ export default function App() {
           </section>
 
           {state.phase === 'evaluated' && state.evaluation ? (
-            <HealthDashboard evaluation={state.evaluation} />
+            <HealthDashboard
+              evaluation={state.evaluation}
+              expandedDimensionIds={state.ui.expandedEvidenceIds}
+              onToggleDimensionExplain={(dimensionId) =>
+                dispatch(toggleEvidence(dimensionId))
+              }
+            />
           ) : (
             <p className={styles.placeholder} data-testid="results-placeholder">
               {state.selectedProjectId

@@ -189,17 +189,17 @@
 
 ### Tests
 
-- [ ] T088 [P] [US3] Implement `tests/domain/mapping-equivalence.test.ts` for AS-060 cross-methodology same canonical type. **Refs**: AS-060, FR-040, BR-002, BR-018 | **Evidence**: fails until T092
-- [ ] T089 [P] [US3] Implement `tests/domain/trend.test.ts` for AS-017/AS-018 trend gating. **Refs**: AS-017, AS-018, FR-017 | **Evidence**: fails until T091
-- [ ] T090 [P] [US3] Implement `tests/integration/evidence-drilldown.test.tsx` for AS-016, AS-059, AS-063. **Refs**: AS-016, AS-059, AS-062, AS-063, FR-040 | **Evidence**: fails until T094
+- [X] T088 [P] [US3] Implement `tests/domain/mapping-equivalence.test.ts` for AS-060 cross-methodology same canonical type. **Refs**: AS-060, FR-040, BR-002, BR-018 | **Evidence**: fails until T092
+- [X] T089 [P] [US3] Implement `tests/domain/trend.test.ts` for AS-017/AS-018 trend gating. **Refs**: AS-017, AS-018, FR-017 | **Evidence**: fails until T091
+- [X] T090 [P] [US3] Implement `tests/integration/evidence-drilldown.test.tsx` for AS-016, AS-059, AS-063. **Refs**: AS-016, AS-059, AS-062, AS-063, FR-040 | **Evidence**: fails until T094
 
 ### Implementation
 
-- [ ] T091 [US3] Implement trend helper in `src/domain/scoring/trend.ts` (≥2 dated points). **Refs**: AS-017, AS-018, FR-017 | **Evidence**: `tests/domain/trend.test.ts` passes
-- [ ] T092 [US3] Add equivalent-mapping sample signals across fixtures for AS-060 demonstration. **Refs**: AS-060, FR-040, fixture-schema.md | **Evidence**: `mapping-equivalence.test.ts` passes
-- [ ] T093 [P] [US3] Create `src/features/dimension-detail/DimensionDetail.tsx` panel with measurement status, coverage, findings. **Refs**: AS-016, FR-015 | **Evidence**: opens from DimensionCard
-- [ ] T094 [US3] Create `src/features/dimension-detail/EvidenceDrilldown.tsx` showing provenance per UD-011. **Refs**: AS-059, AS-062, AS-063, FR-040 | **Evidence**: `evidence-drilldown.test.tsx` passes
-- [ ] T095 [US3] Wire dimension detail expand/collapse to session `expandedEvidenceIds`. **Refs**: AS-016, session-state.md | **Evidence**: UI state preserved in session
+- [X] T091 [US3] Implement trend helper in `src/domain/scoring/trend.ts` (≥2 dated points). **Refs**: AS-017, AS-018, FR-017 | **Evidence**: `tests/domain/trend.test.ts` passes
+- [X] T092 [US3] Add equivalent-mapping sample signals across fixtures for AS-060 demonstration. **Refs**: AS-060, FR-040, fixture-schema.md | **Evidence**: `mapping-equivalence.test.ts` passes
+- [X] T093 [P] [US3] Create `src/features/dimension-detail/DimensionDetail.tsx` panel with measurement status, coverage, findings. **Refs**: AS-016, FR-015 | **Evidence**: opens from DimensionCard
+- [X] T094 [US3] Create `src/features/dimension-detail/EvidenceDrilldown.tsx` showing provenance per UD-011. **Refs**: AS-059, AS-062, AS-063, FR-040 | **Evidence**: `evidence-drilldown.test.tsx` passes
+- [X] T095 [US3] Wire dimension detail expand/collapse to session `expandedEvidenceIds`. **Refs**: AS-016, session-state.md | **Evidence**: UI state preserved in session
 
 **Checkpoint Phase 4 (US3)**: After B evaluation, open Delivery dimension → blocker evidence with mapping provenance visible.
 

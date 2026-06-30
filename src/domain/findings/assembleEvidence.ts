@@ -21,6 +21,9 @@ export function assembleEvidence(
     mapping,
     snapshot,
     includedInScoring: validation.includedInScoring && validation.valid && healthValue !== null,
+    resolvedAsOfDate: validation.resolvedAsOfDate,
+    sourceTerm: source.sourceTerm,
+    sourceField: source.sourceField,
     healthValue,
     sourcePayload: source.payload,
   };

@@ -30,6 +30,8 @@ export function makeScoringEvidence(
     },
     snapshot: { asOfDate: '2026-06-01', label: 'test snapshot' },
     includedInScoring,
+    resolvedAsOfDate: '2026-06-01',
+    sourceTerm: 'test-signal',
     healthValue,
   };
 }

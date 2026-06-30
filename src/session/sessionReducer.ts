@@ -140,6 +140,22 @@ export function sessionReducer(state: SessionState, action: SessionAction): Sess
       }
       return applyReset();
 
+    case 'TOGGLE_EVIDENCE': {
+      const expanded = new Set(state.ui.expandedEvidenceIds);
+      if (expanded.has(action.evidenceId)) {
+        expanded.delete(action.evidenceId);
+      } else {
+        expanded.add(action.evidenceId);
+      }
+      return {
+        ...state,
+        ui: {
+          ...state.ui,
+          expandedEvidenceIds: expanded,
+        },
+      };
+    }
+
     default:
       return state;
   }

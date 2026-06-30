@@ -1,0 +1,50 @@
+.drilldown {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.heading {
+  margin: 0;
+  font-size: var(--font-size-base);
+  font-weight: 600;
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.item {
+  padding: var(--space-sm);
+  border: 1px solid var(--colour-border);
+  border-radius: 6px;
+  font-size: var(--font-size-sm);
+}
+
+.failed {
+  border-color: var(--colour-at-risk-secondary);
+  background: rgb(0 0 0 / 2%);
+}
+
+.label {
+  font-weight: 600;
+}
+
+.sourceLabel {
+  margin: 0 0 var(--space-xs);
+}
+
+.field {
+  color: var(--colour-unmeasured-secondary);
+}
+
+.empty {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--colour-unmeasured-secondary);
+}

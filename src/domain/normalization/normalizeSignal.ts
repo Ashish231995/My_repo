@@ -11,14 +11,15 @@ export function normalizeSignal(
   };
 
   if (source.forceMappingFailure) {
+    const entry = mappingRegistry[source.mappingKey];
     return {
       status: 'failed',
       canonicalType: null,
       reason: 'Mapping forced to fail for adverse testing',
       provenance: {
-        representativeSourceLabel: 'Unknown',
-        canonicalSignalType: 'unknown',
-        ...provenanceBase,
+        representativeSourceLabel: entry?.representativeSourceLabel ?? 'Unknown',
+        originalSourceTerm: source.sourceTerm,
+        canonicalSignalType: entry?.canonicalType ?? 'unknown',
         mappingStatus: 'failed',
       },
       canonical: null,

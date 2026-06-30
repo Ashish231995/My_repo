@@ -133,8 +133,13 @@ Traceable unit for findings, scores, recommendations.
 | `validity` | `valid \| invalid` | Per Signal Validity policy |
 | `exclusionReason` | `string \| null` | Required when invalid or mapping failed |
 | `mapping` | `MappingResult` | |
-| `snapshot` | `SnapshotMetadata` | |
+| `snapshot` | `SnapshotMetadata` | Authoritative project snapshot for recommendations |
 | `includedInScoring` | `boolean` | |
+| `resolvedAsOfDate` | `string` | Signal-resolved as-of date from validation; used for trend only |
+| `sourceTerm` | `string` | Original representative source term |
+| `sourceField` | `string` (optional) | Original field name when distinct from term |
+| `healthValue` | `number \| null` (optional) | Mapped 0–100 health when valid |
+| `sourcePayload` | `object` (optional) | Internal finding derivation only — not exposed in UI drilldown |
 
 ---
 

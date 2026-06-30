@@ -100,6 +100,11 @@
   color: var(--colour-unmeasured-secondary);
 }
 
+.explainButton {
+  align-self: flex-start;
+  margin-top: auto;
+}
+
 .neutral {
   border-left-color: var(--colour-border);
 }

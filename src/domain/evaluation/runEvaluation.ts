@@ -7,6 +7,7 @@ import type {
   SnapshotMetadata,
 } from '../model/evaluation';
 import { assembleEvidence } from '../findings/assembleEvidence';
+import { collectDimensionEvidence } from './collectDimensionEvidence';
 import { deriveFindings } from '../findings/deriveFindings';
 import { normalizeSignal } from '../normalization/normalizeSignal';
 import { generateRecommendations } from '../recommendations/generateRecommendations';
@@ -59,10 +60,7 @@ export function runEvaluation(input: EvaluationInput): EvaluationOutput {
 
   const dimensions = DIMENSION_IDS.map((dimensionId) => {
     const dimensionDef = input.ruleCatalogs.dimension.dimensions[dimensionId];
-    const dimensionEvidence = allEvidence.filter((item) => {
-      const type = item.mapping.canonicalType;
-      return type && dimensionDef.requiredTypes.includes(type);
-    });
+    const dimensionEvidence = collectDimensionEvidence(dimensionId, project, allEvidence);
     return calculateDimension(
       dimensionId,
       dimensionEvidence,

@@ -9,9 +9,15 @@ const DIMENSION_ORDER = ['schedule', 'delivery', 'team', 'risk'] as const;
 
 export interface HealthDashboardProps {
   evaluation: EvaluationResult;
+  expandedDimensionIds: Set<string>;
+  onToggleDimensionExplain: (dimensionId: string) => void;
 }
 
-export function HealthDashboard({ evaluation }: HealthDashboardProps) {
+export function HealthDashboard({
+  evaluation,
+  expandedDimensionIds,
+  onToggleDimensionExplain,
+}: HealthDashboardProps) {
   const dimensions = DIMENSION_ORDER.map((dimensionId) =>
     evaluation.dimensions.find((dimension) => dimension.dimensionId === dimensionId),
   ).filter((dimension): dimension is NonNullable<typeof dimension> => dimension !== undefined);
@@ -31,7 +37,15 @@ export function HealthDashboard({ evaluation }: HealthDashboardProps) {
         </h2>
         <div className={styles.dimensions} data-testid="dimension-grid">
           {dimensions.map((dimension) => (
-            <DimensionCard key={dimension.dimensionId} dimension={dimension} />
+            <DimensionCard
+              key={dimension.dimensionId}
+              dimension={dimension}
+              findings={evaluation.findings.filter(
+                (finding) => finding.dimensionId === dimension.dimensionId,
+              )}
+              explainOpen={expandedDimensionIds.has(dimension.dimensionId)}
+              onToggleExplain={() => onToggleDimensionExplain(dimension.dimensionId)}
+            />
           ))}
         </div>
       </section>

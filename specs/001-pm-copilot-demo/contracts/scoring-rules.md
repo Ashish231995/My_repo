@@ -139,6 +139,27 @@ Equal nominal 25% weights re-normalize across eligible Measured dimensions only 
 
 ---
 
+## Demonstration Trend Rule v1.0
+
+Trend is computed from **resolved evidence dates** (`EvidenceItem.resolvedAsOfDate`), not from replacing the authoritative project snapshot used for recommendations.
+
+Per canonical signal type:
+
+1. Requires at least **two** valid, mapped, scoring-included evidence points.
+2. Points must represent the **same** canonical signal type.
+3. Points must have **distinct** valid `resolvedAsOfDate` values.
+4. Sort points chronologically by `resolvedAsOfDate`.
+5. Compare earliest vs latest mapped health values:
+   - Latest **greater** than earliest → **improving**
+   - Latest **lower** than earliest → **declining**
+   - **Equal** → **stable**
+6. At dimension level: if multiple qualifying canonical types produce trends that **disagree**, show **no trend** (`null`).
+7. Never infer trend from missing, invalid, disabled, failed-mapping, or same-date evidence.
+
+Dimension scores and composite calculations are **unchanged** by trend; trend is explanatory only.
+
+---
+
 ## Recommendations
 
 See [recommendation-rules.md](./recommendation-rules.md). No rule match → no recommendation.

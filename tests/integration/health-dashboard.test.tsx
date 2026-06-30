@@ -45,7 +45,13 @@ describe('health dashboard measurement states (AS-008–AS-012)', () => {
       return;
     }
 
-    renderWithProviders(<HealthDashboard evaluation={output.result} />);
+    renderWithProviders(
+      <HealthDashboard
+        evaluation={output.result}
+        expandedDimensionIds={new Set()}
+        onToggleDimensionExplain={() => undefined}
+      />,
+    );
 
     const deliveryCard = screen.getByTestId('dimension-card-delivery');
     expect(
@@ -57,7 +63,14 @@ describe('health dashboard measurement states (AS-008–AS-012)', () => {
   });
 
   it('shows Partial dimension provisional score, coverage, missing evidence, and excluded-from-composite label', () => {
-    render(<DimensionCard dimension={partialScheduleDimension()} />);
+    render(
+      <DimensionCard
+        dimension={partialScheduleDimension()}
+        findings={[]}
+        explainOpen={false}
+        onToggleExplain={() => undefined}
+      />,
+    );
 
     const card = screen.getByTestId('dimension-card-schedule');
     expect(within(card).getByText(/provisional score — partial evidence/i)).toBeInTheDocument();

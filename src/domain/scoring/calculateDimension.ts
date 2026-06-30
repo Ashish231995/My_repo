@@ -8,6 +8,7 @@ import type {
 import { classifyHealth } from '../utils/classifyHealth';
 import { roundHalfUp } from '../utils/roundHalfUp';
 import { aggregateCanonicalTypeHealth } from './aggregateCanonicalTypeHealth';
+import { calculateDimensionTrend } from './trend';
 
 const DIMENSION_ORDER: DimensionId[] = ['schedule', 'delivery', 'team', 'risk'];
 
@@ -23,7 +24,14 @@ export function calculateDimension(
 ): DimensionResult {
   void ruleCatalog;
   const requiredTypes = dimensionDef.requiredTypes;
-  const typeHealth = aggregateCanonicalTypeHealth(evidence, requiredTypes);
+  const scoringEvidence = evidence.filter(
+    (item) =>
+      item.validity === 'valid' &&
+      item.includedInScoring &&
+      item.mapping.status === 'mapped' &&
+      item.mapping.canonicalType,
+  );
+  const typeHealth = aggregateCanonicalTypeHealth(scoringEvidence, requiredTypes);
 
   const presentTypes = requiredTypes.filter((type) => typeHealth.has(type));
   const missingRequiredCanonicalTypes = requiredTypes.filter((type) => !typeHealth.has(type));
@@ -54,9 +62,7 @@ export function calculateDimension(
     classification = classifyHealth(displayScore);
   }
 
-  const dimensionEvidence = evidence.filter(
-    (item) => item.mapping.canonicalType && requiredTypes.includes(item.mapping.canonicalType),
-  );
+  const trend = calculateDimensionTrend(scoringEvidence, requiredTypes);
 
   return {
     dimensionId,
@@ -68,9 +74,9 @@ export function calculateDimension(
     coveragePercent,
     missingRequiredCanonicalTypes,
     missingSignalGroupIds: [],
-    trend: null,
+    trend,
     findings: [],
-    evidence: dimensionEvidence,
+    evidence,
     explanation: `${dimensionId} dimension evaluated from ${presentTypes.length} of ${requiredTypes.length} required canonical types`,
   };
 }

@@ -7,9 +7,11 @@ export interface DialogProps {
   onClose: () => void;
   children: ReactNode;
   footer?: ReactNode;
+  className?: string;
+  id?: string;
 }
 
-export function Dialog({ open, title, onClose, children, footer }: DialogProps) {
+export function Dialog({ open, title, onClose, children, footer, className, id }: DialogProps) {
   const titleId = useId();
   const dialogRef = useRef<HTMLDivElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
@@ -63,7 +65,8 @@ export function Dialog({ open, title, onClose, children, footer }: DialogProps) 
     <div className={styles.overlay} role="presentation" onMouseDown={onClose}>
       <div
         ref={dialogRef}
-        className={styles.dialog}
+        id={id}
+        className={className ? `${styles.dialog} ${className}` : styles.dialog}
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}

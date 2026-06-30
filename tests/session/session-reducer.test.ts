@@ -164,3 +164,23 @@ describe('sessionReducer (Phase 3 — TOGGLE_SIGNAL_GROUP)', () => {
     expect(toggled.phase).toBe('project-ready');
   });
 });
+
+describe('sessionReducer (Phase 4 — TOGGLE_EVIDENCE)', () => {
+  it('toggles dimension explanation keys without clearing evaluation or persona', () => {
+    const evaluated = sessionReducer(
+      sessionReducer(createInitialSession(), selectProject('sample-b')),
+      evaluate(),
+    );
+    expect(evaluated.evaluation).not.toBeNull();
+
+    const opened = sessionReducer(evaluated, { type: 'TOGGLE_EVIDENCE', evidenceId: 'delivery' });
+    expect(opened.ui.expandedEvidenceIds.has('delivery')).toBe(true);
+    expect(opened.evaluation).toBe(evaluated.evaluation);
+    expect(opened.persona).toBe(evaluated.persona);
+    expect(opened.selectedProjectId).toBe('sample-b');
+
+    const closed = sessionReducer(opened, { type: 'TOGGLE_EVIDENCE', evidenceId: 'delivery' });
+    expect(closed.ui.expandedEvidenceIds.has('delivery')).toBe(false);
+    expect(closed.evaluation).toBe(evaluated.evaluation);
+  });
+});

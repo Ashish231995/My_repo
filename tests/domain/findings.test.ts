@@ -25,6 +25,8 @@ describe('deriveFindings — deterministic FND-* IDs', () => {
           },
           snapshot: { asOfDate: '2026-06-01', label: 'test' },
           includedInScoring: true,
+          resolvedAsOfDate: '2026-06-01',
+          sourceTerm: 'Open blocker state',
           healthValue: 20,
           sourcePayload: { blockerState: 'urgent' },
         },

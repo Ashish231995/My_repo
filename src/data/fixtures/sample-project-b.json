@@ -64,6 +64,35 @@
       "payload": { "onTimePercent": 70 }
     },
     {
+      "id": "sig-b-schedule-slip-waterfall",
+      "signalGroupId": "grp-schedule",
+      "sourceTerm": "Phase slip variance days",
+      "sourceField": "phaseSlip",
+      "mappingKey": "milestone-slip-waterfall",
+      "payload": {
+        "slipDays": 8,
+        "milestoneDueDate": "2026-06-11"
+      }
+    },
+    {
+      "id": "sig-b-schedule-slip-prior",
+      "signalGroupId": "grp-schedule",
+      "sourceTerm": "Milestone slip days",
+      "sourceField": "slipDays",
+      "mappingKey": "milestone-slip",
+      "payload": { "slipDays": 8 },
+      "asOfDate": "2026-05-15"
+    },
+    {
+      "id": "sig-b-delivery-blocker-failed",
+      "signalGroupId": "grp-delivery",
+      "sourceTerm": "Open blocker state",
+      "sourceField": "blockerState",
+      "mappingKey": "blocker-open",
+      "payload": { "blockerState": "urgent" },
+      "forceMappingFailure": true
+    },
+    {
       "id": "sig-b-delivery-blocker",
       "signalGroupId": "grp-delivery",
       "sourceTerm": "Open blocker state",

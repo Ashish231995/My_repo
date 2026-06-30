@@ -28,6 +28,8 @@ function urgentBlockerEvidence(overrides: Partial<EvidenceItem> = {}): EvidenceI
     },
     snapshot: { asOfDate: snapshotDate, label: 'test' },
     includedInScoring: true,
+    resolvedAsOfDate: snapshotDate,
+    sourceTerm: 'Open blocker state',
     healthValue: 20,
     sourcePayload: { blockerState: 'urgent' },
     ...overrides,
@@ -53,6 +55,8 @@ function scopeInstabilityEvidence(overrides: Partial<EvidenceItem> = {}): Eviden
     },
     snapshot: { asOfDate: snapshotDate, label: 'test' },
     includedInScoring: true,
+    resolvedAsOfDate: snapshotDate,
+    sourceTerm: 'Scope change rate',
     healthValue: 35,
     sourcePayload: { changeRatePercent: 25 },
     ...overrides,
@@ -115,6 +119,8 @@ describe('evidence eligibility — excluded evidence must not drive FND/REC rule
       },
       snapshot: { asOfDate: snapshotDate, label: 'test' },
       includedInScoring: false,
+      resolvedAsOfDate: snapshotDate,
+      sourceTerm: 'Open blocker state',
       sourcePayload: { blockerState: 'urgent', changeRatePercent: 25 },
     };
     const evidenceIndex = new Map([[evidence.id, evidence]]);

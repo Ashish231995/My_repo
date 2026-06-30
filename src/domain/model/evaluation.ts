@@ -46,7 +46,12 @@ export interface EvidenceItem {
   exclusionReason: string | null;
   mapping: MappingResult;
   snapshot: SnapshotMetadata;
+  /** Authoritative project snapshot — not replaced by signal-level dates */
   includedInScoring: boolean;
+  /** Signal-resolved as-of date from validation (may differ from snapshot for trend) */
+  resolvedAsOfDate: string;
+  sourceTerm: string;
+  sourceField?: string;
   /** Mapped 0–100 health when valid; used for HD-07 aggregation and finding rules */
   healthValue?: number | null;
   /** Original signal payload for finding derivation (FND-*) */

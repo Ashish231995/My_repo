@@ -1,7 +1,9 @@
-import type { DimensionResult } from '../../domain/model/evaluation';
+import type { DimensionResult, Finding } from '../../domain/model/evaluation';
 import type { HealthClassification, MeasurementStatus } from '../../domain/model/enums';
+import { Button } from '../../ui/Button/Button';
 import { Card } from '../../ui/Card/Card';
 import { StatusLabel } from '../../ui/StatusLabel/StatusLabel';
+import { DimensionDetail } from '../dimension-detail/DimensionDetail';
 import { DIMENSION_DISPLAY_NAMES } from './dimensionDisplayNames';
 import styles from './DimensionCard.module.css';
 
@@ -26,9 +28,17 @@ function classificationClass(classification: HealthClassification | null): strin
 
 export interface DimensionCardProps {
   dimension: DimensionResult;
+  findings: Finding[];
+  explainOpen: boolean;
+  onToggleExplain: () => void;
 }
 
-export function DimensionCard({ dimension }: DimensionCardProps) {
+export function DimensionCard({
+  dimension,
+  findings,
+  explainOpen,
+  onToggleExplain,
+}: DimensionCardProps) {
   const measurementClass =
     dimension.measurementStatus === 'partial'
       ? styles.partial
@@ -107,6 +117,24 @@ export function DimensionCard({ dimension }: DimensionCardProps) {
       ) : null}
 
       <p className={styles.explanation}>{dimension.explanation}</p>
+
+      <Button
+        type="button"
+        className={styles.explainButton}
+        data-testid={`explain-dimension-${dimension.dimensionId}`}
+        aria-expanded={explainOpen}
+        aria-controls={`dimension-detail-${dimension.dimensionId}`}
+        onClick={onToggleExplain}
+      >
+        Explain
+      </Button>
+
+      <DimensionDetail
+        dimension={dimension}
+        findings={findings}
+        open={explainOpen}
+        onClose={onToggleExplain}
+      />
     </Card>
   );
 }
