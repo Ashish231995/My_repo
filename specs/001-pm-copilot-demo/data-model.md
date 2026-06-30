@@ -72,7 +72,7 @@ All temporal rules evaluate relative to this date, not system clock.
 
 ### SourceSignal
 
-Methodology-flavoured bundled input before normalization.
+Methodology-flavoured bundled input before normalization. Aligns with `contracts/fixture-schema.md` (`SourceSignalFixture`).
 
 | Field | Type | Notes |
 |-------|------|-------|
@@ -80,8 +80,10 @@ Methodology-flavoured bundled input before normalization.
 | `signalGroupId` | `string` | Parent group |
 | `sourceTerm` | `string` | Original field/term |
 | `sourceField` | `string` | Optional field path label |
+| `mappingKey` | `string` | Key into `MappingRegistry` |
 | `payload` | `Record<string, unknown>` | Type-specific raw values |
-| `asOfDate` | `string \| null` | Signal-level snapshot override |
+| `asOfDate` | `string \| null` | Optional signal-level snapshot override |
+| `forceMappingFailure` | `boolean` | Optional; adverse testing only |
 
 ---
 
@@ -158,7 +160,7 @@ Static catalog of four dimensions.
 | `rawScore` | `number \| null` | Pre-display rounding |
 | `displayScore` | `number \| null` | Half-up rounded when Measured/Partial |
 | `canonicalTypeHealth` | `Record<CanonicalSignalType, number>` | HD-07 intermediate values (full precision, one per present type) |
-| `classification` | `HealthClassification \| null` | Qualified or Provisional |
+| `classification` | `HealthClassification \| null` | Healthy / At Risk / Critical band on display score; Partial uses same bands — "Provisional" is a presentation qualifier only |
 | `coveragePercent` | `number` | Valid required canonical types present ÷ total required × 100 (HD-02) |
 | `missingRequiredCanonicalTypes` | `CanonicalSignalType[]` | Partial/Unmeasured disclosure |
 | `missingSignalGroupIds` | `string[]` | Optional UX cross-reference to checklist |

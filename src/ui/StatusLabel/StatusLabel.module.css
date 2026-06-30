@@ -1,0 +1,29 @@
+.label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-weight: 600;
+}
+
+.icon {
+  display: inline-flex;
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+}
+
+.healthy {
+  color: var(--colour-healthy-secondary);
+}
+
+.atRisk {
+  color: var(--colour-at-risk-secondary);
+}
+
+.critical {
+  color: var(--colour-critical-secondary);
+}
+
+.unmeasured {
+  color: var(--colour-unmeasured-secondary);
+}

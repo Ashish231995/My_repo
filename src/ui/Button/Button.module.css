@@ -1,0 +1,24 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  font: inherit;
+  font-size: var(--font-size-base);
+  color: var(--colour-text);
+  background: var(--colour-surface);
+  border: 1px solid var(--colour-border);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--colour-text);
+  outline-offset: 2px;
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

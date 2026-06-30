@@ -1,0 +1,119 @@
+{
+  "schemaVersion": "1.0",
+  "id": "sample-a",
+  "displayName": "Sample Project A — Healthy",
+  "scenario": "healthy",
+  "identity": {
+    "projectKey": "SAMPLE-A",
+    "projectName": "Healthy Delivery Initiative"
+  },
+  "snapshot": {
+    "asOfDate": "2026-06-01",
+    "label": "Snapshot as of 1 Jun 2026"
+  },
+  "signalGroups": [
+    {
+      "id": "grp-schedule",
+      "representativeSourceLabel": "Representative work-tracker (demo)",
+      "displayName": "Schedule signals",
+      "defaultEnabled": true,
+      "dimensionAffinity": ["schedule"],
+      "requiredForFullMeasurement": true
+    },
+    {
+      "id": "grp-delivery",
+      "representativeSourceLabel": "Representative work-tracker (demo)",
+      "displayName": "Delivery signals",
+      "defaultEnabled": true,
+      "dimensionAffinity": ["delivery"],
+      "requiredForFullMeasurement": true
+    },
+    {
+      "id": "grp-team",
+      "representativeSourceLabel": "Representative collaboration survey (demo)",
+      "displayName": "Team signals",
+      "defaultEnabled": true,
+      "dimensionAffinity": ["team"],
+      "requiredForFullMeasurement": true
+    },
+    {
+      "id": "grp-risk",
+      "representativeSourceLabel": "Representative risk register (demo)",
+      "displayName": "Risk signals",
+      "defaultEnabled": true,
+      "dimensionAffinity": ["risk"],
+      "requiredForFullMeasurement": true
+    }
+  ],
+  "sourceSignals": [
+    {
+      "id": "sig-a-schedule-slip",
+      "signalGroupId": "grp-schedule",
+      "sourceTerm": "Milestone slip days",
+      "mappingKey": "milestone-slip",
+      "payload": { "slipDays": 0 }
+    },
+    {
+      "id": "sig-a-schedule-baseline",
+      "signalGroupId": "grp-schedule",
+      "sourceTerm": "On-time percent",
+      "mappingKey": "baseline-health",
+      "payload": { "onTimePercent": 90 }
+    },
+    {
+      "id": "sig-a-delivery-blocker",
+      "signalGroupId": "grp-delivery",
+      "sourceTerm": "Open blocker state",
+      "mappingKey": "blocker-open",
+      "payload": { "blockerState": "none" }
+    },
+    {
+      "id": "sig-a-delivery-scope",
+      "signalGroupId": "grp-delivery",
+      "sourceTerm": "Scope change rate",
+      "mappingKey": "scope-stability",
+      "payload": { "changeRatePercent": 2 }
+    },
+    {
+      "id": "sig-a-delivery-velocity",
+      "signalGroupId": "grp-delivery",
+      "sourceTerm": "Velocity trend",
+      "mappingKey": "velocity-trend",
+      "payload": { "trendPercent": 5 }
+    },
+    {
+      "id": "sig-a-team-engagement",
+      "signalGroupId": "grp-team",
+      "sourceTerm": "Engagement score",
+      "mappingKey": "engagement-score",
+      "payload": { "engagementScore": 88 }
+    },
+    {
+      "id": "sig-a-team-comms",
+      "signalGroupId": "grp-team",
+      "sourceTerm": "Communication cadence completion",
+      "mappingKey": "communication-cadence",
+      "payload": { "completionPercent": 90 }
+    },
+    {
+      "id": "sig-a-risk-escalation",
+      "signalGroupId": "grp-risk",
+      "sourceTerm": "Issue escalation priority",
+      "mappingKey": "issue-escalation",
+      "payload": { "escalationPriority": "none" }
+    },
+    {
+      "id": "sig-a-risk-governance",
+      "signalGroupId": "grp-risk",
+      "sourceTerm": "Governance gap priority",
+      "mappingKey": "governance-gap",
+      "payload": { "gapPriority": "none" }
+    }
+  ],
+  "expectations": {
+    "minMeasuredDimensions": 4,
+    "minRecommendations": 0,
+    "expectedCompositeEligible": true,
+    "dominantClassification": "healthy"
+  }
+}

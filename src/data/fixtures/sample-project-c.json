@@ -1,0 +1,108 @@
+{
+  "schemaVersion": "1.0",
+  "id": "sample-c",
+  "displayName": "Sample Project C — Incomplete Team",
+  "scenario": "incomplete",
+  "identity": {
+    "projectKey": "SAMPLE-C",
+    "projectName": "Incomplete Team Evidence Initiative"
+  },
+  "snapshot": {
+    "asOfDate": "2026-06-01",
+    "label": "Snapshot as of 1 Jun 2026"
+  },
+  "signalGroups": [
+    {
+      "id": "grp-schedule",
+      "representativeSourceLabel": "Representative work-tracker (demo)",
+      "displayName": "Schedule signals",
+      "defaultEnabled": true,
+      "dimensionAffinity": ["schedule"],
+      "requiredForFullMeasurement": true
+    },
+    {
+      "id": "grp-delivery",
+      "representativeSourceLabel": "Representative work-tracker (demo)",
+      "displayName": "Delivery signals",
+      "defaultEnabled": true,
+      "dimensionAffinity": ["delivery"],
+      "requiredForFullMeasurement": true
+    },
+    {
+      "id": "grp-team",
+      "representativeSourceLabel": "Representative collaboration survey (demo)",
+      "displayName": "Team signals",
+      "defaultEnabled": true,
+      "dimensionAffinity": ["team"],
+      "requiredForFullMeasurement": true
+    },
+    {
+      "id": "grp-risk",
+      "representativeSourceLabel": "Representative risk register (demo)",
+      "displayName": "Risk signals",
+      "defaultEnabled": true,
+      "dimensionAffinity": ["risk"],
+      "requiredForFullMeasurement": true
+    }
+  ],
+  "sourceSignals": [
+    {
+      "id": "sig-c-schedule-slip",
+      "signalGroupId": "grp-schedule",
+      "sourceTerm": "Milestone slip days",
+      "mappingKey": "milestone-slip",
+      "payload": { "slipDays": 2 }
+    },
+    {
+      "id": "sig-c-schedule-baseline",
+      "signalGroupId": "grp-schedule",
+      "sourceTerm": "On-time percent",
+      "mappingKey": "baseline-health",
+      "payload": { "onTimePercent": 80 }
+    },
+    {
+      "id": "sig-c-delivery-blocker",
+      "signalGroupId": "grp-delivery",
+      "sourceTerm": "Open blocker state",
+      "mappingKey": "blocker-open",
+      "payload": { "blockerState": "none" }
+    },
+    {
+      "id": "sig-c-delivery-scope",
+      "signalGroupId": "grp-delivery",
+      "sourceTerm": "Scope change rate",
+      "mappingKey": "scope-stability",
+      "payload": { "changeRatePercent": 8 }
+    },
+    {
+      "id": "sig-c-delivery-velocity",
+      "signalGroupId": "grp-delivery",
+      "sourceTerm": "Velocity trend",
+      "mappingKey": "velocity-trend",
+      "payload": { "trendPercent": 5 }
+    },
+    {
+      "id": "sig-c-risk-escalation",
+      "signalGroupId": "grp-risk",
+      "sourceTerm": "Issue escalation priority",
+      "mappingKey": "issue-escalation",
+      "payload": { "escalationPriority": "advisory" }
+    },
+    {
+      "id": "sig-c-risk-governance",
+      "signalGroupId": "grp-risk",
+      "sourceTerm": "Governance gap priority",
+      "mappingKey": "governance-gap",
+      "payload": { "gapPriority": "none" }
+    }
+  ],
+  "expectations": {
+    "minMeasuredDimensions": 3,
+    "minRecommendations": 1,
+    "expectedCompositeEligible": true,
+    "dimensionStatuses": {
+      "team": "unmeasured"
+    },
+    "requiredRecommendationIds": ["REC-004-team"]
+  }
+}

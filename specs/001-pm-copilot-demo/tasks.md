@@ -44,32 +44,32 @@
 
 ### Tests (write first — expect fail)
 
-- [ ] T012 [P] Create unit test skeleton `tests/domain/round-half-up.test.ts` asserting half-up boundaries (79.5→80, 49.5→50). **Refs**: AS-032, FR-030, BR-008 | **Evidence**: tests fail (no implementation)
-- [ ] T013 [P] Create unit test skeleton `tests/domain/classify-health.test.ts` for Healthy/At Risk/Critical bands at 80, 50, 49. **Refs**: AS-013–AS-015, FR-030, BR-008 | **Evidence**: tests fail
-- [ ] T014 [P] Create session reducer test skeleton `tests/integration/session-defaults.test.tsx` expecting Intermediate persona on init. **Refs**: AS-044, FR-036, BR-014 | **Evidence**: tests fail
-- [ ] T015 [P] Create unit test skeleton `tests/domain/compare-snapshot-dates.test.ts` for calendar-day diff (REC-002 slip). **Refs**: FR-034, recommendation-rules.md REC-002 | **Evidence**: tests fail (no implementation)
-- [ ] T016 [P] Create unit test skeleton `tests/session/session-reducer.test.ts` for INIT, SET_PERSONA, REQUEST_RESET (no evaluate, no confirm reset). **Refs**: FR-007, FR-036, BR-014, BR-015 | **Evidence**: tests fail
+- [X] T012 [P] Create unit test skeleton `tests/domain/round-half-up.test.ts` asserting half-up boundaries (79.5→80, 49.5→50). **Refs**: AS-032, FR-030, BR-008 | **Evidence**: tests fail (no implementation)
+- [X] T013 [P] Create unit test skeleton `tests/domain/classify-health.test.ts` for Healthy/At Risk/Critical bands at 80, 50, 49. **Refs**: AS-013–AS-015, FR-030, BR-008 | **Evidence**: tests fail
+- [X] T014 [P] Create session reducer test skeleton `tests/integration/session-defaults.test.tsx` expecting Intermediate persona on init. **Refs**: AS-044, FR-036, BR-014 | **Evidence**: tests fail
+- [X] T015 [P] Create unit test skeleton `tests/domain/compare-snapshot-dates.test.ts` for calendar-day diff (REC-002 slip). **Refs**: FR-034, recommendation-rules.md REC-002 | **Evidence**: tests fail (no implementation)
+- [X] T016 [P] Create unit test skeleton `tests/session/session-reducer.test.ts` for INIT, SET_PERSONA, REQUEST_RESET (no evaluate, no confirm reset). **Refs**: FR-007, FR-036, BR-014, BR-015 | **Evidence**: tests fail
 
 ### Implementation
 
-- [ ] T017 [P] Define core enumerations and types in `src/domain/model/enums.ts` (`Persona`, `DimensionId`, `MeasurementStatus`, `HealthClassification`, `RecommendationPriority`, `CanonicalSignalType`). **Refs**: data-model.md | **Evidence**: exported types compile
-- [ ] T018 [P] Define `SessionState`, `SessionPhase`, `SessionUiState`, `SessionAction` in `src/domain/model/session.ts` per `contracts/session-state.md`. **Refs**: FR-006, FR-007, data-model.md | **Evidence**: types match contract
-- [ ] T019 [P] Define `SampleProjectFixture`, `SourceSignal`, `EvidenceItem`, `DimensionResult`, `CompositeHealthResult`, `EvaluationResult`, `Recommendation`, `Finding` in `src/domain/model/evaluation.ts` per `data-model.md`. **Refs**: FR-014–FR-020, data-model.md | **Evidence**: includes `canonicalTypeHealth` (HD-07)
-- [ ] T020 Implement `roundHalfUp` in `src/domain/utils/roundHalfUp.ts`. **Refs**: AS-032, FR-030, BR-008 | **Evidence**: `tests/domain/round-half-up.test.ts` passes
-- [ ] T021 Implement `classifyHealth` in `src/domain/utils/classifyHealth.ts`. **Refs**: AS-013–AS-015, FR-030, BR-008 | **Evidence**: `tests/domain/classify-health.test.ts` passes
-- [ ] T022 Implement `compareSnapshotDates` in `src/domain/utils/compareSnapshotDates.ts` (calendar-day diff). **Refs**: FR-034, recommendation-rules.md REC-002 | **Evidence**: `tests/domain/compare-snapshot-dates.test.ts` passes
-- [ ] T023 Create `src/session/sessionActions.ts` with typed action creators per `contracts/session-state.md`. **Refs**: FR-007, FR-037 | **Evidence**: all actions exported
-- [ ] T024 Create `src/session/initialSession.ts` exporting `createInitialSession()` (Intermediate persona, no project). **Refs**: AS-044, FR-036, BR-014 | **Evidence**: matches session-state contract
-- [ ] T025 Implement `src/session/sessionReducer.ts` for INIT, SET_PERSONA, REQUEST_RESET branching only (no evaluate, no confirm reset). **Refs**: FR-007, BR-015 | **Evidence**: `tests/session/session-reducer.test.ts` passes
-- [ ] T026 Create `src/session/sessionContext.tsx` provider with Context + dispatch. **Refs**: FR-006, plan.md ADR-002 | **Evidence**: provider renders children
-- [ ] T027 [P] Create `src/ui/Dialog/Dialog.tsx` accessible modal primitive (focus trap, labelled title). **Refs**: FR-028, FR-029 | **Evidence**: component exports; used by reset and detail flows
-- [ ] T028 [P] Create `src/ui/Button/Button.tsx` + `Button.module.css` accessible button primitive. **Refs**: FR-028, FR-029 | **Evidence**: keyboard focusable
-- [ ] T029 [P] Create `src/ui/Card/Card.tsx` + `Card.module.css`. **Refs**: FR-029 | **Evidence**: component exports
-- [ ] T030 [P] Create `src/ui/StatusLabel/StatusLabel.tsx` + module CSS with text + icon (no colour-only). **Refs**: AS-019, FR-027, SC-005 | **Evidence**: renders label + icon slot
-- [ ] T031 [P] Create `src/ui/PrivacyIndicator/PrivacyIndicator.tsx` local-only badge. **Refs**: FR-025, FR-026, AS-024 | **Evidence**: static text, no network
-- [ ] T032 Create `src/app/AppProviders.tsx` wrapping SessionContext. **Refs**: FR-001 | **Evidence**: composes provider
-- [ ] T033 Create `src/app/App.tsx` shell with landmark regions per `contracts/ui-states.md`. **Refs**: FR-029, FR-028 | **Evidence**: `<main>` landmark present
-- [ ] T034 Wire `src/app/main.tsx` to render App with global styles and update root `index.html` script entry from `/src/main.tsx` to `/src/app/main.tsx`. **Refs**: FR-001 | **Evidence**: `npm run dev` shows shell; `index.html` entry matches approved path
+- [X] T017 [P] Define core enumerations and types in `src/domain/model/enums.ts` (`Persona`, `DimensionId`, `MeasurementStatus`, `HealthClassification`, `RecommendationPriority`, `CanonicalSignalType`). **Refs**: data-model.md | **Evidence**: exported types compile
+- [X] T018 [P] Define `SessionState`, `SessionPhase`, `SessionUiState`, `SessionAction` in `src/domain/model/session.ts` per `contracts/session-state.md`. **Refs**: FR-006, FR-007, data-model.md | **Evidence**: types match contract
+- [X] T019 [P] Define `SampleProjectFixture`, `SourceSignal`, `EvidenceItem`, `DimensionResult`, `CompositeHealthResult`, `EvaluationResult`, `Recommendation`, `Finding` in `src/domain/model/evaluation.ts` per `data-model.md`. **Refs**: FR-014–FR-020, data-model.md | **Evidence**: includes `canonicalTypeHealth` (HD-07)
+- [X] T020 Implement `roundHalfUp` in `src/domain/utils/roundHalfUp.ts`. **Refs**: AS-032, FR-030, BR-008 | **Evidence**: `tests/domain/round-half-up.test.ts` passes
+- [X] T021 Implement `classifyHealth` in `src/domain/utils/classifyHealth.ts`. **Refs**: AS-013–AS-015, FR-030, BR-008 | **Evidence**: `tests/domain/classify-health.test.ts` passes
+- [X] T022 Implement `compareSnapshotDates` in `src/domain/utils/compareSnapshotDates.ts` (calendar-day diff). **Refs**: FR-034, recommendation-rules.md REC-002 | **Evidence**: `tests/domain/compare-snapshot-dates.test.ts` passes
+- [X] T023 Create `src/session/sessionActions.ts` with typed action creators per `contracts/session-state.md`. **Refs**: FR-007, FR-037 | **Evidence**: all actions exported
+- [X] T024 Create `src/session/initialSession.ts` exporting `createInitialSession()` (Intermediate persona, no project). **Refs**: AS-044, FR-036, BR-014 | **Evidence**: matches session-state contract
+- [X] T025 Implement `src/session/sessionReducer.ts` for INIT, SET_PERSONA, REQUEST_RESET branching only (no evaluate, no confirm reset). **Refs**: FR-007, BR-015 | **Evidence**: `tests/session/session-reducer.test.ts` passes
+- [X] T026 Create `src/session/sessionContext.tsx` provider with Context + dispatch. **Refs**: FR-006, plan.md ADR-002 | **Evidence**: provider renders children
+- [X] T027 [P] Create `src/ui/Dialog/Dialog.tsx` accessible modal primitive (focus trap, labelled title). **Refs**: FR-028, FR-029 | **Evidence**: component exports; used by reset and detail flows
+- [X] T028 [P] Create `src/ui/Button/Button.tsx` + `Button.module.css` accessible button primitive. **Refs**: FR-028, FR-029 | **Evidence**: keyboard focusable
+- [X] T029 [P] Create `src/ui/Card/Card.tsx` + `Card.module.css`. **Refs**: FR-029 | **Evidence**: component exports
+- [X] T030 [P] Create `src/ui/StatusLabel/StatusLabel.tsx` + module CSS with text + icon (no colour-only). **Refs**: AS-019, FR-027, SC-005 | **Evidence**: renders label + icon slot
+- [X] T031 [P] Create `src/ui/PrivacyIndicator/PrivacyIndicator.tsx` local-only badge. **Refs**: FR-025, FR-026, AS-024 | **Evidence**: static text, no network
+- [X] T032 Create `src/app/AppProviders.tsx` wrapping SessionContext. **Refs**: FR-001 | **Evidence**: composes provider
+- [X] T033 Create `src/app/App.tsx` shell with landmark regions per `contracts/ui-states.md`. **Refs**: FR-029, FR-028 | **Evidence**: `<main>` landmark present
+- [X] T034 Wire `src/app/main.tsx` to render App with global styles and update root `index.html` script entry from `/src/main.tsx` to `/src/app/main.tsx`. **Refs**: FR-001 | **Evidence**: `npm run dev` shows shell; `index.html` entry matches approved path
 
 **Checkpoint Phase 1**: App shell loads at `src/app/main.tsx`; session defaults to Intermediate; utils and reducer unit tests pass; no evaluation logic yet.
 
@@ -83,35 +83,35 @@
 
 ### Tests — domain rules (write first)
 
-- [ ] T035 [P] [US1] Implement `tests/domain/signal-health-mapping.test.ts` for all 9 canonical types, bands, invalid payloads per `contracts/signal-health-mapping.md`. **Refs**: FR-020, BR-001, AS-061 | **Evidence**: tests fail until T058 (`mapSignalHealth`)
-- [ ] T036 [P] [US1] Implement `tests/domain/canonical-type-aggregation.test.ts` for HD-07 duplicate-source mean and single contribution per type. **Refs**: FR-020, BR-001, AS-061, HD-07 | **Evidence**: tests fail until T059 (`aggregateCanonicalTypeHealth`)
-- [ ] T037 [P] [US1] Implement `tests/domain/measurement-status.test.ts` for Measured/Partial/Unmeasured thresholds (HD-02). **Refs**: AS-009–AS-011, FR-018, FR-019, BR-003, BR-004, BR-010 | **Evidence**: tests fail until T060 (`calculateDimension`)
-- [ ] T038 [P] [US1] Implement `tests/domain/dimension-scoring.test.ts` for equal-mean dimension raw/display scores. **Refs**: AS-009, AS-010, FR-014–FR-016, BR-001 | **Evidence**: tests fail until T060 (`calculateDimension`)
-- [ ] T039 [P] [US1] Implement `tests/domain/composite.test.ts` for re-normalized weights, min 2 Measured, raw-then-round composite (AS-033, AS-034, AS-037–AS-039). **Refs**: AS-012, AS-033–AS-039, FR-020, FR-031–FR-033, BR-009, BR-011 | **Evidence**: tests fail until T061 (`calculateComposite`)
-- [ ] T040 [P] [US1] Implement `tests/domain/recommendation-rules.test.ts` for REC-001–REC-007 conditions and FND-* emission. **Refs**: FR-021, FR-022, BR-005, AS-004 | **Evidence**: tests fail until T064 (`generateRecommendations`)
-- [ ] T041 [P] [US1] Implement `tests/domain/order-recommendations.test.ts` for priority → date → stable id (Sample B: REC-002 before REC-001). **Refs**: AS-040, AS-041, FR-034, BR-012, HD-08 | **Evidence**: tests fail until T065 (`orderRecommendations`)
-- [ ] T042 [P] [US1] Implement `tests/domain/findings.test.ts` for deterministic FND-* IDs. **Refs**: FR-021, recommendation-rules.md | **Evidence**: tests fail until T063 (`deriveFindings`)
-- [ ] T043 [P] [US1] Implement `tests/domain/determinism.test.ts` — identical inputs → deep-equal outputs (SC-002, AS-021). **Refs**: AS-021, FR-024, SC-002, BR-001 | **Evidence**: tests fail until T066 (`runEvaluation`)
+- [X] T035 [P] [US1] Implement `tests/domain/signal-health-mapping.test.ts` for all 9 canonical types, bands, invalid payloads per `contracts/signal-health-mapping.md`. **Refs**: FR-020, BR-001, AS-061 | **Evidence**: tests fail until T058 (`mapSignalHealth`)
+- [X] T036 [P] [US1] Implement `tests/domain/canonical-type-aggregation.test.ts` for HD-07 duplicate-source mean and single contribution per type. **Refs**: FR-020, BR-001, AS-061, HD-07 | **Evidence**: tests fail until T059 (`aggregateCanonicalTypeHealth`)
+- [X] T037 [P] [US1] Implement `tests/domain/measurement-status.test.ts` for Measured/Partial/Unmeasured thresholds (HD-02). **Refs**: AS-009–AS-011, FR-018, FR-019, BR-003, BR-004, BR-010 | **Evidence**: tests fail until T060 (`calculateDimension`)
+- [X] T038 [P] [US1] Implement `tests/domain/dimension-scoring.test.ts` for equal-mean dimension raw/display scores. **Refs**: AS-009, AS-010, FR-014–FR-016, BR-001 | **Evidence**: tests fail until T060 (`calculateDimension`)
+- [X] T039 [P] [US1] Implement `tests/domain/composite.test.ts` for re-normalized weights, min 2 Measured, raw-then-round composite (AS-033, AS-034, AS-037–AS-039). **Refs**: AS-012, AS-033–AS-039, FR-020, FR-031–FR-033, BR-009, BR-011 | **Evidence**: tests fail until T061 (`calculateComposite`)
+- [X] T040 [P] [US1] Implement `tests/domain/recommendation-rules.test.ts` for REC-001–REC-007 conditions and FND-* emission. **Refs**: FR-021, FR-022, BR-005, AS-004 | **Evidence**: tests fail until T064 (`generateRecommendations`)
+- [X] T041 [P] [US1] Implement `tests/domain/order-recommendations.test.ts` for priority → date → stable id (Sample B: REC-002 before REC-001). **Refs**: AS-040, AS-041, FR-034, BR-012, HD-08 | **Evidence**: tests fail until T065 (`orderRecommendations`)
+- [X] T042 [P] [US1] Implement `tests/domain/findings.test.ts` for deterministic FND-* IDs. **Refs**: FR-021, recommendation-rules.md | **Evidence**: tests fail until T063 (`deriveFindings`)
+- [X] T043 [P] [US1] Implement `tests/domain/determinism.test.ts` — identical inputs → deep-equal outputs (SC-002, AS-021). **Refs**: AS-021, FR-024, SC-002, BR-001 | **Evidence**: tests fail until T066 (`runEvaluation`)
 
 ### Tests — validation and normalization (write first)
 
-- [ ] T044 [P] [US1] Implement `tests/domain/project-validation.test.ts` for fixture schema violations and blocking rules. **Refs**: FR-038, BR-016, AS-050, AS-051 | **Evidence**: tests fail until T055 (`validateProject`)
-- [ ] T045 [P] [US1] Implement `tests/domain/signal-validation.test.ts` for signal payload and inclusion rules. **Refs**: FR-035, BR-013, AS-042, AS-043 | **Evidence**: tests fail until T056 (`validateSignal`)
-- [ ] T046 [P] [US1] Implement `tests/domain/normalization.test.ts` for methodology-neutral canonical mapping. **Refs**: FR-040, BR-002, BR-018, AS-060, AS-062 | **Evidence**: tests fail until T057 (`normalizeSignal`)
+- [X] T044 [P] [US1] Implement `tests/domain/project-validation.test.ts` for fixture schema violations and blocking rules. **Refs**: FR-038, BR-016, AS-050, AS-051 | **Evidence**: tests fail until T055 (`validateProject`)
+- [X] T045 [P] [US1] Implement `tests/domain/signal-validation.test.ts` for signal payload and inclusion rules. **Refs**: FR-035, BR-013, AS-042, AS-043 | **Evidence**: tests fail until T056 (`validateSignal`)
+- [X] T046 [P] [US1] Implement `tests/domain/normalization.test.ts` for methodology-neutral canonical mapping. **Refs**: FR-040, BR-002, BR-018, AS-060, AS-062 | **Evidence**: tests fail until T057 (`normalizeSignal`)
 
 ### Tests — fixtures and golden (write first)
 
-- [ ] T047 [P] [US1] Implement `tests/golden/sample-a.test.ts` expecting composite 94 Healthy per `contracts/golden-scenarios.md`. **Refs**: AS-003, FR-003, SC-006 | **Evidence**: fails until fixtures + pipeline (T066)
-- [ ] T048 [P] [US1] Implement `tests/golden/sample-b.test.ts` expecting composite 51, REC-001 + REC-002 ordered per HD-08. **Refs**: AS-001, AS-004, FR-004, SC-001, SC-006 | **Evidence**: fails until fixtures + pipeline (T066)
-- [ ] T049 [P] [US1] Implement `tests/golden/sample-c.test.ts` expecting 3/4 Measured, composite 86, REC-004-team. **Refs**: AS-005, FR-005, SC-006 | **Evidence**: fails until fixtures + pipeline (T066)
+- [X] T047 [P] [US1] Implement `tests/golden/sample-a.test.ts` expecting composite 94 Healthy per `contracts/golden-scenarios.md`. **Refs**: AS-003, FR-003, SC-006 | **Evidence**: fails until fixtures + pipeline (T066)
+- [X] T048 [P] [US1] Implement `tests/golden/sample-b.test.ts` expecting composite 51, REC-001 + REC-002 ordered per HD-08. **Refs**: AS-001, AS-004, FR-004, SC-001, SC-006 | **Evidence**: fails until fixtures + pipeline (T066)
+- [X] T049 [P] [US1] Implement `tests/golden/sample-c.test.ts` expecting 3/4 Measured, composite 86, REC-004-team. **Refs**: AS-005, FR-005, SC-006 | **Evidence**: fails until fixtures + pipeline (T066)
 
 ### Fixtures and mapping registry
 
-- [ ] T050 [P] [US1] Create `src/data/fixtures/mapping-registry.ts` with all `CanonicalSignalType` entries per `contracts/fixture-schema.md`. **Refs**: FR-040, BR-002, AS-060 | **Evidence**: registry keys documented
-- [ ] T051 [US1] Create `src/data/fixtures/sample-project-a.json` producing golden-scenarios.md canonical-type health values. **Refs**: FR-002, FR-003, golden-scenarios.md | **Evidence**: `tests/golden/sample-a.test.ts` fixture loads
-- [ ] T052 [US1] Create `src/data/fixtures/sample-project-b.json` with `snapshot.asOfDate` 2026-06-01, `slipDays` 8, `milestoneDueDate` 2026-06-11, urgent blocker per HD-08. **Refs**: FR-004, AS-001, AS-004, fixture-schema.md | **Evidence**: matches golden-scenarios.md §Sample B
-- [ ] T053 [US1] Create `src/data/fixtures/sample-project-c.json` with Team dimension 0% coverage. **Refs**: FR-005, AS-005, golden-scenarios.md | **Evidence**: matches golden-scenarios.md §Sample C
-- [ ] T054 [P] [US1] Create `src/data/fixtures/index.ts` exporting `SAMPLE_PROJECTS` (A/B/C only) and `MAPPING_REGISTRY`. **Refs**: FR-002, fixture-schema.md HD-04 | **Evidence**: static import, no fetch
+- [X] T050 [P] [US1] Create `src/data/fixtures/mapping-registry.ts` with all `CanonicalSignalType` entries per `contracts/fixture-schema.md`. **Refs**: FR-040, BR-002, AS-060 | **Evidence**: registry keys documented
+- [X] T051 [US1] Create `src/data/fixtures/sample-project-a.json` producing golden-scenarios.md canonical-type health values. **Refs**: FR-002, FR-003, golden-scenarios.md | **Evidence**: `tests/golden/sample-a.test.ts` fixture loads
+- [X] T052 [US1] Create `src/data/fixtures/sample-project-b.json` with `snapshot.asOfDate` 2026-06-01, `slipDays` 8, `milestoneDueDate` 2026-06-11, urgent blocker per HD-08. **Refs**: FR-004, AS-001, AS-004, fixture-schema.md | **Evidence**: matches golden-scenarios.md §Sample B
+- [X] T053 [US1] Create `src/data/fixtures/sample-project-c.json` with Team dimension 0% coverage. **Refs**: FR-005, AS-005, golden-scenarios.md | **Evidence**: matches golden-scenarios.md §Sample C
+- [X] T054 [P] [US1] Create `src/data/fixtures/index.ts` exporting `SAMPLE_PROJECTS` (A/B/C only) and `MAPPING_REGISTRY`. **Refs**: FR-002, fixture-schema.md HD-04 | **Evidence**: static import, no fetch
 
 ### Domain — validation and normalization
 
@@ -121,7 +121,7 @@
 
 ### Domain — scoring (boundaries 6)
 
-- [ ] T058 [US1] Implement `mapSignalHealth` in `src/domain/scoring/signalHealth.ts` per `contracts/signal-health-mapping.md`. **Refs**: FR-020, BR-001, AS-061 | **Evidence**: `tests/domain/signal-health-mapping.test.ts` passes
+- [ ] T058 [US1] Implement `mapSignalHealth` in `src/domain/scoring/signalHealth.ts` and create `src/domain/scoring/ruleCatalogs.ts` exposing approved static `DIMENSION_RULE_CATALOG` and `RULE_CATALOGS` (dimension + recommendation catalogs per `scoring-rules.md` and `recommendation-rules.md` — no new thresholds, weights, or rules). **Refs**: FR-020, BR-001, AS-061 | **Evidence**: `tests/domain/signal-health-mapping.test.ts` passes; `ruleCatalogs.ts` satisfies imports in `measurement-status.test.ts`, `dimension-scoring.test.ts`, `recommendation-rules.test.ts`, `evaluation-input.ts`
 - [ ] T059 [US1] Implement `aggregateCanonicalTypeHealth` in `src/domain/scoring/aggregateCanonicalTypeHealth.ts` per HD-07. **Refs**: FR-020, BR-001, AS-061, HD-07 | **Evidence**: `tests/domain/canonical-type-aggregation.test.ts` passes
 - [ ] T060 [US1] Implement `calculateDimension` in `src/domain/scoring/calculateDimension.ts` (status, raw, display, canonicalTypeHealth). **Refs**: AS-009–AS-011, FR-014–FR-019, BR-003, BR-004, BR-010 | **Evidence**: `tests/domain/dimension-scoring.test.ts`, `measurement-status.test.ts` pass
 - [ ] T061 [US1] Implement `calculateComposite` in `src/domain/scoring/calculateComposite.ts`. **Refs**: AS-012, AS-033–AS-039, FR-020, FR-031–FR-033, BR-009, BR-011 | **Evidence**: `tests/domain/composite.test.ts` passes
