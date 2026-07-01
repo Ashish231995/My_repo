@@ -27,15 +27,15 @@
 
 **Purpose**: Pin `read-excel-file@9.2.0`, scaffold import + controller boundaries, author workbook fixtures. Blocks all import work.
 
-- [ ] T201 Pin `read-excel-file@9.2.0` in `package.json` per `research.md` ADR-009. **Refs**: ADR-009, FR-009 | **Evidence**: exact version in manifest; no `latest`
-- [ ] T202 Run `npm install` after manifest update. **Refs**: ADR-009 | **Evidence**: `package-lock.json` includes `read-excel-file@9.2.0`
-- [ ] T203 [P] Create `src/import/` scaffold: `acquisition/`, `parsing/`, `validation/`, `normalization/`, `orchestration/`, `controller/` per `plan.md`. **Refs**: plan.md §Project Structure, ADR-015 | **Evidence**: directories exist
-- [ ] T204 [P] Create test folders `tests/import/`, `tests/fixtures/workbooks/` if missing. **Refs**: plan.md §Testing Strategy | **Evidence**: paths exist
-- [ ] T205 [P] Create `tests/import/fakeWorkbookParser.ts` exporting `FakeWorkbookParser` implementing `WorkbookParserPort`. **Refs**: OI-003 | **Evidence**: injectable in orchestration and controller tests
-- [ ] T206 [P] Create `tests/import/fakeWorkbookAcquisition.ts` exporting `FakeWorkbookAcquisition` implementing `WorkbookAcquisitionPort`. **Refs**: OI-002 | **Evidence**: injectable in controller and integration tests
-- [ ] T207 Author minimal `.xlsx` binaries per `tests/fixtures/workbooks/README.md` manifest (`complete-v1.xlsx`, `incomplete-team-empty-row2.xlsx`, `partial-schedule.xlsx`, `all-dimensions-empty-row2.xlsx`, `invalid-template-version.xlsx`, `missing-project-row2.xlsx`, `extra-row3-data.xlsx`, `malformed-dimension-values.xlsx`) and `invalid-not-xlsx.bin`. **Refs**: OI-001, FR-005, BR-003 | **Evidence**: files present; no runtime xlsx writer dependency
-- [ ] T208 Populate SHA-256 hashes in `tests/fixtures/workbooks/README.md` for all authored binaries (CHK024). **Refs**: workbook-contract.md | **Evidence**: manifest hashes match `Get-FileHash` output
-- [ ] T209 Run `npm run test:golden` — all 001 golden tests MUST pass unchanged. **Refs**: CHK010, plan.md | **Evidence**: exit code 0; no edits to `tests/golden/sample-*.test.ts` expectations
+- [X] T201 Pin `read-excel-file@9.2.0` in `package.json` per `research.md` ADR-009. **Refs**: ADR-009, FR-009 | **Evidence**: exact version in manifest; no `latest`
+- [X] T202 Run `npm install` after manifest update. **Refs**: ADR-009 | **Evidence**: `package-lock.json` includes `read-excel-file@9.2.0`
+- [X] T203 [P] Create `src/import/` scaffold: `acquisition/`, `parsing/`, `validation/`, `normalization/`, `orchestration/`, `controller/` per `plan.md`. **Refs**: plan.md §Project Structure, ADR-015 | **Evidence**: directories exist
+- [X] T204 [P] Create test folders `tests/import/`, `tests/fixtures/workbooks/` if missing. **Refs**: plan.md §Testing Strategy | **Evidence**: paths exist
+- [X] T205 [P] Create `tests/import/fakeWorkbookParser.ts` exporting `FakeWorkbookParser` implementing `WorkbookParserPort`. **Refs**: OI-003 | **Evidence**: injectable in orchestration and controller tests
+- [X] T206 [P] Create `tests/import/fakeWorkbookAcquisition.ts` exporting `FakeWorkbookAcquisition` implementing `WorkbookAcquisitionPort`. **Refs**: OI-002 | **Evidence**: injectable in controller and integration tests
+- [X] T207 Author minimal `.xlsx` binaries per `tests/fixtures/workbooks/README.md` manifest (`complete-v1.xlsx`, `incomplete-team-empty-row2.xlsx`, `partial-schedule.xlsx`, `all-dimensions-empty-row2.xlsx`, `invalid-template-version.xlsx`, `missing-project-row2.xlsx`, `extra-row3-data.xlsx`, `malformed-dimension-values.xlsx`) and `invalid-not-xlsx.bin`. **Refs**: OI-001, FR-005, BR-003 | **Evidence**: files present; no runtime xlsx writer dependency
+- [X] T208 Populate SHA-256 hashes in `tests/fixtures/workbooks/README.md` for all authored binaries (CHK024). **Refs**: workbook-contract.md | **Evidence**: manifest hashes match `Get-FileHash` output
+- [X] T209 Run `npm run test:golden` — all 001 golden tests MUST pass unchanged. **Refs**: CHK010, plan.md | **Evidence**: exit code 0; no edits to `tests/golden/sample-*.test.ts` expectations
 
 **Checkpoint Phase 0**: Dependency pinned; fixtures authored; 001 golden regression green.
 
@@ -44,6 +44,10 @@
 ## Phase 1: Foundational Import Pipeline (Blocking)
 
 **Purpose**: Parser-neutral workbook model, contract validation, normalization, orchestration, **pure session lifecycle reducer**, **async import controller**, `ProjectValidator` injection. **No UI.**
+
+**Progress**: **3/32** tasks complete — **29 remaining** (T222, T223, T231 type-contract tasks pulled forward in Phase 0; no Phase 1 behavior implemented).
+
+> **Early type-contract tasks (Phase 0 pull-forward)**: T222, T223, and T231 were completed during Phase 0 as prerequisites for T205/T206 (`FakeWorkbookParser` / `FakeWorkbookAcquisition`). Deliverables are parser/acquisition **types and port interfaces only** in `src/import/parsing/types.ts`, `WorkbookParserPort.ts`, and `src/import/acquisition/types.ts` — no mapping, parser adapters, acquisition implementation, validation, normalization, reducer, or controller behavior.
 
 **Independent Test**: `tests/import/*.test.ts`, `tests/session/import-reducer.test.ts`, `tests/import/import-controller.test.ts`, and `tests/golden/import-complete.test.ts` pass without any React UI.
 
@@ -56,7 +60,7 @@
 - [ ] T214 [P] Implement `tests/import/loadImportedProject.test.ts` with **injected** `FakeWorkbookParser` only. **Refs**: OI-003, FR-009 | **Evidence**: fails until T233
 - [ ] T215 [P] Implement `tests/import/acquisition.test.ts` for MIME/extension guard and refresh semantics (handle vs needs-reselect). **Refs**: FR-003, FR-006, FR-016, ADR-010, AS-007, AS-012 | **Evidence**: fails until T231–T232
 - [ ] T216 [P] Implement `tests/import/invalid-evidence-exclusion.test.ts` — malformed dimension values excluded with visible `exclusionReason` (BR-003) using `malformed-dimension-values.xlsx` or fake parser output. **Refs**: BR-003, FR-007 | **Evidence**: fails until T230
-- [ ] T217 [P] Implement `tests/import/snapshot-date-authority.test.ts` — assert `Project.asOfDate` → `snapshot.asOfDate` **and** that imported `snapshot.asOfDate` changes FND-002 / REC-002 outcome per 001 recommendation timing (`daysUntilDue = milestoneDueDate − snapshot.asOfDate`; use workbook with `slipDays ≥ 8` and valid `milestoneDueDate` at two different `asOfDate` values). **Refs**: BR-004, AS-001 | **Evidence**: fails until T230
+- [ ] T217 [P] Implement `tests/import/snapshot-date-authority.test.ts` — assert `Project.asOfDate` → `snapshot.asOfDate` **and** that imported `snapshot.asOfDate` changes FND-002 / REC-002 outcome per 001 recommendation timing (`daysUntilDue = milestoneDueDate − snapshot.asOfDate`; use **synthetic `FakeWorkbookParser` output** with `slipDays ≥ 8` and valid `milestoneDueDate` at two different `asOfDate` values — **no additional workbook binary**). **Refs**: BR-004, AS-001 | **Evidence**: fails until T230
 - [ ] T218 [P] Implement `tests/session/import-reducer.test.ts` using `createSessionReducer({ importedProjectValidator: stub })` — pure lifecycle transitions: `IMPORT_LOAD_*`, `REFRESH_*` (**fail-closed**: `REFRESH_FAILED` → `import-invalid` no scores; `RESELECT_REQUIRED` no stale evaluation), `SELECT_PROJECT`, sync `EVALUATE`; **requestId stale no-op**; **SessionAction payloads data-only**. **Refs**: ADR-015, ADR-016, AS-024, AS-025, FR-023, BR-005 | **Evidence**: fails until T238
 - [ ] T219 [P] Implement `tests/import/import-controller.test.ts` with injected `FakeWorkbookAcquisition` + `FakeWorkbookParser` — **selectWorkbook before `IMPORT_LOAD_STARTED`**; picker cancel → no dispatch; context change during picker → selection ignored; refresh fail-closed paths. **Refs**: OI-002, ADR-015, AS-024, AS-025 | **Evidence**: fails until T239
 - [ ] T220 [P] Implement `tests/golden/import-complete.test.ts` — `loadImportedProject` + `runEvaluation({ projectValidator: validateImportedProject })` only; **no UI**. **Refs**: AS-001, AS-003, SC-001, FR-011 | **Evidence**: fails until T233–T241
@@ -64,8 +68,8 @@
 
 ### Types and parser adapter
 
-- [ ] T222 [P] Define `ParsedWorkbook`, `ParsedSheet`, `ParsedCell`, `WorksheetName` in `src/import/parsing/types.ts` per `data-model.md`. **Refs**: data-model.md | **Evidence**: types compile
-- [ ] T223 [P] Define `WorkbookParserPort` in `src/import/parsing/WorkbookParserPort.ts` (`parse(bytes): Promise<ParsedWorkbook>`). **Refs**: contracts/import-functions.md | **Evidence**: interface exported
+- [X] T222 [P] Define `ParsedWorkbook`, `ParsedSheet`, `ParsedCell`, `WorksheetName` in `src/import/parsing/types.ts` per `data-model.md`. **Refs**: data-model.md | **Evidence**: types compile — **completed early (Phase 0 pull-forward for T205); type contract only**
+- [X] T223 [P] Define `WorkbookParserPort` in `src/import/parsing/WorkbookParserPort.ts` (`parse(bytes): Promise<ParsedWorkbook>`). **Refs**: contracts/import-functions.md | **Evidence**: interface exported — **completed early (Phase 0 pull-forward for T205); type contract only**
 - [ ] T224 Implement `mapSheetsToParsedWorkbook` in `src/import/parsing/mapSheetsToParsedWorkbook.ts` (single shared mapping source). **Refs**: workbook-contract.md | **Evidence**: exercised by T210 via production parser adapter
 - [ ] T225 Implement `createNodeReadExcelFileParser` in `src/import/parsing/createNodeReadExcelFileParser.ts` using `read-excel-file/node` + shared mapper. **Refs**: ADR-009 | **Evidence**: T210 passes
 - [ ] T226 Implement `createBrowserReadExcelFileParser` in `src/import/parsing/createBrowserReadExcelFileParser.ts` using `read-excel-file/browser` + shared mapper. **Refs**: ADR-009, FR-009 | **Evidence**: `npm run build` bundles browser entry; MV-008 manual smoke
@@ -79,7 +83,7 @@
 
 ### Acquisition and orchestration
 
-- [ ] T231 [P] Define acquisition types in `src/import/acquisition/types.ts` (`AcquiredWorkbook`, `RefreshWorkbookResult`, `ImportedWorkbookReference`). **Refs**: data-model.md, ADR-010 | **Evidence**: types compile
+- [X] T231 [P] Define acquisition types in `src/import/acquisition/types.ts` (`AcquiredWorkbook`, `RefreshWorkbookResult`, `ImportedWorkbookReference`). **Refs**: data-model.md, ADR-010 | **Evidence**: types compile — **completed early (Phase 0 pull-forward for T206); type contract only**
 - [ ] T232 Implement `createBrowserWorkbookAcquisition` in `src/import/acquisition/workbookAcquisition.ts` (File System Access + file-input; refresh rules per ADR-010). **Refs**: FR-003, FR-004, FR-016, ADR-010 | **Evidence**: T215 passes
 - [ ] T233 Implement `loadImportedProject` in `src/import/orchestration/loadImportedProject.ts` (parse → validate → normalize). **Refs**: FR-005, FR-009 | **Evidence**: T214, T220 pass
 
@@ -282,16 +286,19 @@ Phase 0 (Setup)
 ### Critical path (sequential spine)
 
 ```text
-T201–T209 (setup + fixtures)
+T201–T209 (setup + fixtures; T222/T223/T231 type contracts pulled forward for T205/T206)
   → T210–T221 (tests first)
   → T224 mapSheetsToParsedWorkbook → T225 node parser → T210 green
   → T227–T230 validation/normalization → T211–T217 green
+  → T232 acquisition impl (T231 types done) → T215 green
   → T233 loadImportedProject → T214, T220 green
   → T234–T235 ProjectValidator injection → 001 goldens green
   → T238 pure reducer (T218) → T239 controller (T219) → T241 checkpoint
   → T242–T250 US1 UI → MVP demo
   → T277 perf gate + T278 MV-008 → T285 release gate
 ```
+
+**Phase 1 remaining (29)**: T210–T221, T224–T230, T232–T241 (excludes T222, T223, T231 — done early).
 
 ### User Story Dependencies
 
@@ -337,7 +344,7 @@ T244 ImportProvenanceBanner.tsx
 ### MVP First (User Story 1)
 
 1. Complete Phase 0 (T201–T209)
-2. Complete Phase 1 (T210–T241)
+2. Complete Phase 1 (**29 of 32 remaining**: T210–T221, T224–T230, T232–T241; T222/T223/T231 type contracts done early)
 3. Complete Phase 2 (T242–T250)
 4. **STOP and VALIDATE**: `import-complete` golden + import-flow integration
 5. Demo complete workbook import
@@ -395,3 +402,4 @@ Do **not** modify `src/domain/scoring/**`, 001 contracts, `sample-project-*.json
 - Windows: use `--pool=threads --maxWorkers=2` for full suite stability
 - Author workbook binaries in T207 before T210 contract tests can pass
 - **Do not** claim jsdom verifies Web Worker behaviour — use MV-008 manual smoke + build verification
+- T222, T223, T231: type-contract tasks completed early in Phase 0 for T205/T206 fakes; no Phase 1 behavior implemented yet

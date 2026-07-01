@@ -17,6 +17,7 @@
     "test:perf": "vitest run tests/perf"
   },
   "dependencies": {
+    "read-excel-file": "9.2.0",
     "react": "19.2.7",
     "react-dom": "19.2.7"
   },

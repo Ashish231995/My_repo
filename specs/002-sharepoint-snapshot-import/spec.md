@@ -484,4 +484,4 @@ recovery using keyboard only.
 | AS-024 | Refresh structural failure (**REFRESH_FAILED**) is fail-closed — no health scores |
 | AS-025 | Reselect required (**RESELECT_REQUIRED**) shows no stale health results; recovery via reselect or bundled sample |
 
-*(Full Given/When/Then detail is captured in User Stories 1–7 above and MUST be expanded into numbered AS blocks during planning traceability.)*
+*Acceptance scenario detail lives in User Stories 1–7 above. The AS-001–AS-025 index and task mapping are maintained in `contracts/implementation-traceability.md`.*

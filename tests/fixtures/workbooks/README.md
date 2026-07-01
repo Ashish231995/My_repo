@@ -18,15 +18,15 @@ CI or pre-commit MAY verify hashes against this manifest during implementation.
 
 | File | SHA-256 | Status |
 |------|---------|--------|
-| `complete-v1.xlsx` | `pending` | Binary pending implementation commit |
-| `incomplete-team-empty-row2.xlsx` | `pending` | Binary pending implementation commit |
-| `partial-schedule.xlsx` | `pending` | Binary pending implementation commit |
-| `all-dimensions-empty-row2.xlsx` | `pending` | Binary pending implementation commit |
-| `invalid-template-version.xlsx` | `pending` | Binary pending implementation commit |
-| `missing-project-row2.xlsx` | `pending` | Binary pending implementation commit |
-| `extra-row3-data.xlsx` | `pending` | Binary pending implementation commit |
-| `malformed-dimension-values.xlsx` | `pending` | Binary pending implementation commit |
-| `invalid-not-xlsx.bin` | `pending` | Non-xlsx bytes for MIME/extension guard |
+| `complete-v1.xlsx` | `434588AC9E8BDD9336592F7BA9A5242D27CA93E63E5377FFD23CF9DB723FE079` | Authored; hash verified |
+| `incomplete-team-empty-row2.xlsx` | `A2779BDB0EAD9B7E75A44D13FC10756E18F58AC0C9EAC7DF5F74385D80DA4811` | Authored; hash verified |
+| `partial-schedule.xlsx` | `C72AC08FAB65DC5EEDBAA7385C93196F503012D8DC78D94F4FF79334BFF74D38` | Authored; hash verified |
+| `all-dimensions-empty-row2.xlsx` | `1FA93B436C7FD311BFA77C8A2A90F94B457ECDBC1C4284129C3BBAA19FC82F9B` | Authored; hash verified |
+| `invalid-template-version.xlsx` | `C228902DF7C423473A35D1504131D398B77F5929F1A1759D46F1B5D8C95F01D9` | Authored; hash verified |
+| `missing-project-row2.xlsx` | `5A12FD1F41702A25BD57BA8C88131BDD09AC11E92EA19FBC1862950737C686BA` | Authored; hash verified |
+| `extra-row3-data.xlsx` | `75FC1B155AC17CF459E56E21B4CBEDE06045C74FB820E2FC13AEDD663EDD0CAE` | Authored; hash verified |
+| `malformed-dimension-values.xlsx` | `8C02E36A2CC025FBFE11B4A5B40A4A56877F0EFD53B3D998A246B88F24D54E29` | Authored; hash verified |
+| `invalid-not-xlsx.bin` | `7E1C398764B976E6AACF0F97B6BE4ED1875B28B5DD4EA33787183A4BE3E2FCAD` | Authored; hash verified |
 
 ---
 
