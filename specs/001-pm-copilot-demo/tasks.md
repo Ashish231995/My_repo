@@ -263,23 +263,23 @@
 
 ### Tests
 
-- [ ] T114 [P] [US6] Implement `tests/golden/sample-invalid.test.ts` — evaluation blocked, no scores (golden-scenarios.md). **Refs**: AS-028, AS-050, AS-051, FR-038, BR-016 | **Evidence**: fails until T120–T121 (invalid fixture export and evaluation blocking)
-- [ ] T115 [P] [US6] Implement `tests/integration/invalid-project.test.tsx` for AS-053, AS-054 recovery. **Refs**: AS-053, AS-054, FR-038 | **Evidence**: fails until T122 (`InvalidSampleDataPanel` and recovery wiring)
-- [ ] T116 [P] [US6] Implement `tests/integration/evaluation-error.test.tsx` for AS-029. **Refs**: AS-029, FR-029 | **Evidence**: fails until T123 (`ErrorPanel`)
-- [ ] T117 [P] [US6] Implement `tests/a11y/keyboard-navigation.test.tsx` for AS-030 primary flows. **Refs**: AS-030, FR-028, SC-005 | **Evidence**: fails until T125 (keyboard/focus implementation)
-- [ ] T118 [P] [US6] Implement `tests/a11y/health-labels.test.tsx` for AS-019 non-colour health via StatusLabel and DimensionCard. **Refs**: AS-019, FR-027, SC-005 | **Evidence**: passes when T030 (`StatusLabel`) and T071 (`DimensionCard`) integrated in evaluated dashboard
-- [ ] T119 [P] [US6] Implement `tests/integration/responsive-layout.test.tsx` for AS-031. **Refs**: AS-031, FR-028 | **Evidence**: fails until T124 (`responsive-layout` implementation)
+- [X] T114 [P] [US6] Implement `tests/golden/sample-invalid.test.ts` — evaluation blocked, no scores (golden-scenarios.md). **Refs**: AS-028, AS-050, AS-051, FR-038, BR-016 | **Evidence**: fails until T120–T121 (invalid fixture export and evaluation blocking)
+- [X] T115 [P] [US6] Implement `tests/integration/invalid-project.test.tsx` for AS-053, AS-054 recovery. **Refs**: AS-053, AS-054, FR-038 | **Evidence**: fails until T122 (`InvalidSampleDataPanel` and recovery wiring)
+- [X] T116 [P] [US6] Implement `tests/integration/evaluation-error.test.tsx` for AS-029. **Refs**: AS-029, FR-029 | **Evidence**: fails until T123 (`ErrorPanel`)
+- [X] T117 [P] [US6] Implement `tests/a11y/keyboard-navigation.test.tsx` for AS-030 primary flows. **Refs**: AS-030, FR-028, SC-005 | **Evidence**: fails until T125 (keyboard/focus implementation)
+- [X] T118 [P] [US6] Implement `tests/a11y/health-labels.test.tsx` for AS-019 non-colour health via StatusLabel and DimensionCard. **Refs**: AS-019, FR-027, SC-005 | **Evidence**: passes when T030 (`StatusLabel`) and T071 (`DimensionCard`) integrated in evaluated dashboard
+- [X] T119 [P] [US6] Implement `tests/integration/responsive-layout.test.tsx` for AS-031. **Refs**: AS-031, FR-028 | **Evidence**: fails until T124 (`responsive-layout` implementation)
 
 ### Implementation
 
-- [ ] T120 [US6] Create `src/data/fixtures/sample-project-invalid.json` per fixture-schema (test-only, not in SAMPLE_PROJECTS). **Refs**: AS-050, AS-051, fixture-schema.md HD-04 | **Evidence**: `sample-invalid.test.ts` unblocked
-- [ ] T121 [US6] Export `INVALID_FIXTURES` from `src/data/fixtures/index.ts` for test/adverse path only. **Refs**: HD-04, fixture-schema.md | **Evidence**: `sample-invalid.test.ts` passes; not in ProjectSelector
-- [ ] T122 [US6] Create `src/features/invalid-project/InvalidSampleDataPanel.tsx` with validation category and recovery. **Refs**: AS-028, AS-053, AS-054, FR-038 | **Evidence**: `invalid-project.test.tsx` passes
-- [ ] T123 [US6] Create `src/features/health-dashboard/ErrorPanel.tsx` for AS-029 general errors. **Refs**: AS-029, FR-029 | **Evidence**: `evaluation-error.test.tsx` passes
-- [ ] T124 [US6] Implement responsive layout styles across `App.tsx`, `HealthDashboard.tsx`, and feature panels per AS-031 (supported viewport breakpoints). **Refs**: AS-031, FR-028 | **Evidence**: `responsive-layout.test.tsx` passes
-- [ ] T125 [US6] Add keyboard handlers and focus order across ProjectSelector, EvaluateButton, PersonaSelector, ResetButton. **Refs**: AS-030, FR-028 | **Evidence**: `keyboard-navigation.test.tsx` passes
-- [ ] T126 [US6] Configure `npm run test:a11y` with vitest-axe on StatusLabel, DimensionCard, Dialog. **Refs**: SC-005, FR-027 | **Evidence**: test:a11y passes
-- [ ] T127 [US6] Implement `tests/integration/ui-states.test.tsx` covering FR-029 explicit states table. **Refs**: AS-002, AS-008, AS-012, AS-023, FR-029 | **Evidence**: all listed states reachable
+- [X] T120 [US6] Create `src/data/fixtures/sample-project-invalid.json` per fixture-schema (test-only, not in SAMPLE_PROJECTS). **Refs**: AS-050, AS-051, fixture-schema.md HD-04 | **Evidence**: `sample-invalid.test.ts` unblocked
+- [X] T121 [US6] Export `INVALID_FIXTURES` from `src/data/fixtures/index.ts` for test/adverse path only. **Refs**: HD-04, fixture-schema.md | **Evidence**: `sample-invalid.test.ts` passes; not in ProjectSelector
+- [X] T122 [US6] Create `src/features/invalid-project/InvalidSampleDataPanel.tsx` with validation category and recovery. **Refs**: AS-028, AS-053, AS-054, FR-038 | **Evidence**: `invalid-project.test.tsx` passes
+- [X] T123 [US6] Create `src/features/health-dashboard/ErrorPanel.tsx` for AS-029 general errors. **Refs**: AS-029, FR-029 | **Evidence**: `evaluation-error.test.tsx` passes
+- [X] T124 [US6] Implement responsive layout styles across `App.tsx`, `HealthDashboard.tsx`, and feature panels per AS-031 (supported viewport breakpoints). **Refs**: AS-031, FR-028 | **Evidence**: `responsive-layout.test.tsx` passes
+- [X] T125 [US6] Add keyboard handlers and focus order across ProjectSelector, EvaluateButton, PersonaSelector, ResetButton. **Refs**: AS-030, FR-028 | **Evidence**: `keyboard-navigation.test.tsx` passes
+- [X] T126 [US6] Configure `npm run test:a11y` with vitest-axe on StatusLabel, DimensionCard, Dialog. **Refs**: SC-005, FR-027 | **Evidence**: test:a11y passes
+- [X] T127 [US6] Implement `tests/integration/ui-states.test.tsx` covering FR-029 explicit states table. **Refs**: AS-002, AS-008, AS-012, AS-023, FR-029 | **Evidence**: all listed states reachable
 
 **Checkpoint Phase 7 (US6)**: Invalid fixture shows Invalid sample data panel; keyboard can complete P1; axe smoke passes.
 

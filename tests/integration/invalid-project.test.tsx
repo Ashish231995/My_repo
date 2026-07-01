@@ -1,6 +1,7 @@
 import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
+import { openDemoControlsDisclosure } from '../helpers/demo-controls';
 import { renderApp } from '../helpers/render-app';
 
 describe('invalid project recovery (AS-028, AS-053, AS-054)', () => {
@@ -8,6 +9,8 @@ describe('invalid project recovery (AS-028, AS-053, AS-054)', () => {
     const user = userEvent.setup();
     renderApp();
 
+    expect(screen.getByTestId('adverse-condition-path')).not.toHaveAttribute('open');
+    await openDemoControlsDisclosure(user);
     await user.click(screen.getByTestId('load-invalid-fixture'));
 
     const panel = screen.getByTestId('invalid-sample-data-panel');
@@ -26,6 +29,7 @@ describe('invalid project recovery (AS-028, AS-053, AS-054)', () => {
     const user = userEvent.setup();
     renderApp();
 
+    await openDemoControlsDisclosure(user);
     await user.click(screen.getByTestId('load-invalid-fixture'));
     expect(screen.getByTestId('invalid-sample-data-panel')).toBeInTheDocument();
 
@@ -42,6 +46,7 @@ describe('invalid project recovery (AS-028, AS-053, AS-054)', () => {
     const user = userEvent.setup();
     renderApp();
 
+    await openDemoControlsDisclosure(user);
     await user.click(screen.getByTestId('load-invalid-fixture'));
     expect(screen.getByTestId('invalid-sample-data-panel')).toBeInTheDocument();
 

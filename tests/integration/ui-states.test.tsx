@@ -2,6 +2,7 @@ import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import * as runEvaluationModule from '../../src/domain/evaluation/runEvaluation';
+import { openDemoControlsDisclosure } from '../helpers/demo-controls';
 import { renderApp } from '../helpers/render-app';
 
 describe('explicit UI states (FR-029)', () => {
@@ -39,6 +40,7 @@ describe('explicit UI states (FR-029)', () => {
       within(screen.getByTestId('composite-health')).getByText(/insufficient composite coverage/i),
     ).toBeInTheDocument();
 
+    await openDemoControlsDisclosure(user);
     await user.click(screen.getByTestId('load-invalid-fixture'));
     expect(screen.getByTestId('invalid-sample-data-panel')).toBeInTheDocument();
 

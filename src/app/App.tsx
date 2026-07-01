@@ -51,9 +51,9 @@ export default function App() {
               Project context
             </h2>
             <ProjectSelector />
-            <AdverseConditionPath />
             {state.selectedProjectId ? <IntegrationChecklist /> : null}
             <EvaluateButton />
+            <AdverseConditionPath />
           </section>
 
           {state.phase === 'invalid-project' && state.invalidProject ? (

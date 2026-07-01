@@ -1,17 +1,40 @@
-import { screen } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, expect, it, vi } from 'vitest';
-import { runEvaluation } from '../../src/domain/evaluation/runEvaluation';
-import * as runEvaluationModule from '../../src/domain/evaluation/runEvaluation';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { buildEvaluationInput } from '../helpers/evaluation-input';
 import { renderApp } from '../helpers/render-app';
 
+vi.mock('../../src/domain/evaluation/runEvaluation', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('../../src/domain/evaluation/runEvaluation')>();
+  return {
+    ...actual,
+    runEvaluation: vi.fn(actual.runEvaluation),
+  };
+});
+
+import { runEvaluation } from '../../src/domain/evaluation/runEvaluation';
+
+const mockedRunEvaluation = vi.mocked(runEvaluation);
+
 describe('evaluation error recovery (AS-029)', () => {
+  beforeEach(async () => {
+    const { runEvaluation: realRun } = await vi.importActual<
+      typeof import('../../src/domain/evaluation/runEvaluation')
+    >('../../src/domain/evaluation/runEvaluation');
+    mockedRunEvaluation.mockImplementation(realRun);
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('shows ErrorPanel with retry and safe reset when evaluation fails', async () => {
     const user = userEvent.setup();
-    const successOutput = runEvaluation(buildEvaluationInput('sample-a'));
-    const spy = vi
-      .spyOn(runEvaluationModule, 'runEvaluation')
+    const { runEvaluation: realRun } = await vi.importActual<
+      typeof import('../../src/domain/evaluation/runEvaluation')
+    >('../../src/domain/evaluation/runEvaluation');
+    const successOutput = realRun(buildEvaluationInput('sample-a'));
+    mockedRunEvaluation
       .mockReturnValueOnce({
         ok: false,
         error: { message: 'Health evaluation could not complete for this session.' },
@@ -25,19 +48,17 @@ describe('evaluation error recovery (AS-029)', () => {
 
     const panel = screen.getByTestId('error-panel');
     expect(panel).toBeInTheDocument();
-    expect(screen.getByText(/could not complete/i)).toBeInTheDocument();
+    expect(within(panel).getByText(/health evaluation could not complete/i)).toBeInTheDocument();
     expect(screen.queryByTestId('health-dashboard')).toBeNull();
     expect(screen.queryByTestId('composite-health')).toBeNull();
 
     await user.click(screen.getByTestId('error-retry-button'));
     expect(screen.getByTestId('health-dashboard')).toBeInTheDocument();
-
-    spy.mockRestore();
   });
 
   it('returns to safe session via reset from ErrorPanel', async () => {
     const user = userEvent.setup();
-    const spy = vi.spyOn(runEvaluationModule, 'runEvaluation').mockReturnValue({
+    mockedRunEvaluation.mockReturnValue({
       ok: false,
       error: { message: 'Unexpected evaluation failure.' },
     });
@@ -52,7 +73,5 @@ describe('evaluation error recovery (AS-029)', () => {
     expect(screen.queryByTestId('error-panel')).toBeNull();
     expect(screen.getByTestId('project-select-prompt')).toBeInTheDocument();
     expect(screen.getByTestId('persona-option-intermediate')).toBeChecked();
-
-    spy.mockRestore();
   });
 });
