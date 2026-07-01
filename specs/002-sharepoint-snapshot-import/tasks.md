@@ -45,7 +45,7 @@
 
 **Purpose**: Parser-neutral workbook model, contract validation, normalization, orchestration, **pure session lifecycle reducer**, **async import controller**, `ProjectValidator` injection. **No UI.**
 
-**Progress**: **3/32** tasks complete — **29 remaining** (T222, T223, T231 type-contract tasks pulled forward in Phase 0; no Phase 1 behavior implemented).
+**Progress**: **15/32** tasks complete — **17 remaining** (T210–T221 test-first suite authored; T222, T223, T231 type-contract tasks pulled forward in Phase 0).
 
 > **Early type-contract tasks (Phase 0 pull-forward)**: T222, T223, and T231 were completed during Phase 0 as prerequisites for T205/T206 (`FakeWorkbookParser` / `FakeWorkbookAcquisition`). Deliverables are parser/acquisition **types and port interfaces only** in `src/import/parsing/types.ts`, `WorkbookParserPort.ts`, and `src/import/acquisition/types.ts` — no mapping, parser adapters, acquisition implementation, validation, normalization, reducer, or controller behavior.
 
@@ -53,18 +53,18 @@
 
 ### Tests (write first — expect fail)
 
-- [ ] T210 [P] Implement `tests/import/readExcelFileParser.contract.test.ts` using production `createNodeReadExcelFileParser()` + authored fixtures — **must not duplicate** `mapSheetsToParsedWorkbook` logic in the test file. **Refs**: OI-003 | **Evidence**: fails until T224–T225
-- [ ] T211 [P] Implement `tests/import/validateWorkbookContract.test.ts` for structural categories (template, Project row 2, headers, rows 3+, missing worksheet). **No UI dependency.** **Refs**: FR-005–FR-008, AS-008, AS-022 | **Evidence**: fails until T227
-- [ ] T212 [P] Implement `tests/import/normalizeImportedWorkbook.test.ts` for column→`mappingKey` mapping and provenance fields. **Refs**: FR-013, BR-001 | **Evidence**: fails until T229–T230
-- [ ] T213 [P] Implement `tests/import/all-dimensions-unmeasured.test.ts` for `all-dimensions-empty-row2.xlsx` → zero `sourceSignals`. **Refs**: ADR-011, AS-004 | **Evidence**: fails until T228, T230
-- [ ] T214 [P] Implement `tests/import/loadImportedProject.test.ts` with **injected** `FakeWorkbookParser` only. **Refs**: OI-003, FR-009 | **Evidence**: fails until T233
-- [ ] T215 [P] Implement `tests/import/acquisition.test.ts` for MIME/extension guard and refresh semantics (handle vs needs-reselect). **Refs**: FR-003, FR-006, FR-016, ADR-010, AS-007, AS-012 | **Evidence**: fails until T231–T232
-- [ ] T216 [P] Implement `tests/import/invalid-evidence-exclusion.test.ts` — malformed dimension values excluded with visible `exclusionReason` (BR-003) using `malformed-dimension-values.xlsx` or fake parser output. **Refs**: BR-003, FR-007 | **Evidence**: fails until T230
-- [ ] T217 [P] Implement `tests/import/snapshot-date-authority.test.ts` — assert `Project.asOfDate` → `snapshot.asOfDate` **and** that imported `snapshot.asOfDate` changes FND-002 / REC-002 outcome per 001 recommendation timing (`daysUntilDue = milestoneDueDate − snapshot.asOfDate`; use **synthetic `FakeWorkbookParser` output** with `slipDays ≥ 8` and valid `milestoneDueDate` at two different `asOfDate` values — **no additional workbook binary**). **Refs**: BR-004, AS-001 | **Evidence**: fails until T230
-- [ ] T218 [P] Implement `tests/session/import-reducer.test.ts` using `createSessionReducer({ importedProjectValidator: stub })` — pure lifecycle transitions: `IMPORT_LOAD_*`, `REFRESH_*` (**fail-closed**: `REFRESH_FAILED` → `import-invalid` no scores; `RESELECT_REQUIRED` no stale evaluation), `SELECT_PROJECT`, sync `EVALUATE`; **requestId stale no-op**; **SessionAction payloads data-only**. **Refs**: ADR-015, ADR-016, AS-024, AS-025, FR-023, BR-005 | **Evidence**: fails until T238
-- [ ] T219 [P] Implement `tests/import/import-controller.test.ts` with injected `FakeWorkbookAcquisition` + `FakeWorkbookParser` — **selectWorkbook before `IMPORT_LOAD_STARTED`**; picker cancel → no dispatch; context change during picker → selection ignored; refresh fail-closed paths. **Refs**: OI-002, ADR-015, AS-024, AS-025 | **Evidence**: fails until T239
-- [ ] T220 [P] Implement `tests/golden/import-complete.test.ts` — `loadImportedProject` + `runEvaluation({ projectValidator: validateImportedProject })` only; **no UI**. **Refs**: AS-001, AS-003, SC-001, FR-011 | **Evidence**: fails until T233–T241
-- [ ] T221 [P] Implement `tests/import/evidence-privacy.test.ts` — evidence/drilldown mapping metadata does not expose raw workbook cell payloads (FR-014). **Refs**: FR-014 | **Evidence**: fails until T230; may extend in US1 UI task
+- [X] T210 [P] Implement `tests/import/readExcelFileParser.contract.test.ts` using production `createNodeReadExcelFileParser()` + authored fixtures — **must not duplicate** `mapSheetsToParsedWorkbook` logic in the test file. **Refs**: OI-003 | **Evidence**: fails until T224–T225
+- [X] T211 [P] Implement `tests/import/validateWorkbookContract.test.ts` for structural categories (template, Project row 2, headers, rows 3+, missing worksheet). **No UI dependency.** **Refs**: FR-005–FR-008, AS-008, AS-022 | **Evidence**: fails until T227
+- [X] T212 [P] Implement `tests/import/normalizeImportedWorkbook.test.ts` for column→`mappingKey` mapping and provenance fields. **Refs**: FR-013, BR-001 | **Evidence**: fails until T229–T230
+- [X] T213 [P] Implement `tests/import/all-dimensions-unmeasured.test.ts` for `all-dimensions-empty-row2.xlsx` → zero `sourceSignals`. **Refs**: ADR-011, AS-004 | **Evidence**: fails until T228, T230
+- [X] T214 [P] Implement `tests/import/loadImportedProject.test.ts` with **injected** `FakeWorkbookParser` only. **Refs**: OI-003, FR-009 | **Evidence**: fails until T233
+- [X] T215 [P] Implement `tests/import/acquisition.test.ts` for MIME/extension guard and refresh semantics (handle vs needs-reselect). **Refs**: FR-003, FR-006, FR-016, ADR-010, AS-007, AS-012 | **Evidence**: fails until T231–T232
+- [X] T216 [P] Implement `tests/import/invalid-evidence-exclusion.test.ts` — malformed dimension values excluded with visible `exclusionReason` (BR-003) using `malformed-dimension-values.xlsx` or fake parser output. **Refs**: BR-003, FR-007 | **Evidence**: fails until T230
+- [X] T217 [P] Implement `tests/import/snapshot-date-authority.test.ts` — assert `Project.asOfDate` → `snapshot.asOfDate` **and** that imported `snapshot.asOfDate` changes FND-002 / REC-002 outcome per 001 recommendation timing (`daysUntilDue = milestoneDueDate − snapshot.asOfDate`; use **synthetic `FakeWorkbookParser` output** with `slipDays ≥ 8` and valid `milestoneDueDate` at two different `asOfDate` values — **no additional workbook binary**). **Refs**: BR-004, AS-001 | **Evidence**: fails until T230
+- [X] T218 [P] Implement `tests/session/import-reducer.test.ts` using `createSessionReducer({ importedProjectValidator: stub })` — pure lifecycle transitions: `IMPORT_LOAD_*`, `REFRESH_*` (**fail-closed**: `REFRESH_FAILED` → `import-invalid` no scores; `RESELECT_REQUIRED` no stale evaluation), `SELECT_PROJECT`, sync `EVALUATE`; **requestId stale no-op**; **SessionAction payloads data-only**. **Refs**: ADR-015, ADR-016, AS-024, AS-025, FR-023, BR-005 | **Evidence**: fails until T238
+- [X] T219 [P] Implement `tests/import/import-controller.test.ts` with injected `FakeWorkbookAcquisition` + `FakeWorkbookParser` — **selectWorkbook before `IMPORT_LOAD_STARTED`**; picker cancel → no dispatch; context change during picker → selection ignored; refresh fail-closed paths. **Refs**: OI-002, ADR-015, AS-024, AS-025 | **Evidence**: fails until T239
+- [X] T220 [P] Implement `tests/golden/import-complete.test.ts` — `loadImportedProject` + `runEvaluation({ projectValidator: validateImportedProject })` only; **no UI**. **Refs**: AS-001, AS-003, SC-001, FR-011 | **Evidence**: fails until T233–T241
+- [X] T221 [P] Implement `tests/import/evidence-privacy.test.ts` — evidence/drilldown mapping metadata does not expose raw workbook cell payloads (FR-014). **Refs**: FR-014 | **Evidence**: fails until T230; may extend in US1 UI task
 
 ### Types and parser adapter
 
@@ -298,7 +298,7 @@ T201–T209 (setup + fixtures; T222/T223/T231 type contracts pulled forward for 
   → T277 perf gate + T278 MV-008 → T285 release gate
 ```
 
-**Phase 1 remaining (29)**: T210–T221, T224–T230, T232–T241 (excludes T222, T223, T231 — done early).
+**Phase 1 remaining (17)**: T224–T230, T232–T241 (excludes T222, T223, T231 — done early; T210–T221 tests authored red).
 
 ### User Story Dependencies
 
@@ -344,7 +344,7 @@ T244 ImportProvenanceBanner.tsx
 ### MVP First (User Story 1)
 
 1. Complete Phase 0 (T201–T209)
-2. Complete Phase 1 (**29 of 32 remaining**: T210–T221, T224–T230, T232–T241; T222/T223/T231 type contracts done early)
+2. Complete Phase 1 (**17 of 32 remaining**: T224–T230, T232–T241; T210–T221 tests red; T222/T223/T231 type contracts done early)
 3. Complete Phase 2 (T242–T250)
 4. **STOP and VALIDATE**: `import-complete` golden + import-flow integration
 5. Demo complete workbook import
