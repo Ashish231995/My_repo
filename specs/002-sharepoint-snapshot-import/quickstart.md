@@ -90,6 +90,14 @@ Open `http://localhost:5173` (or Vite-reported port). Confirm Sample B still eva
 2. Complete import + evaluate + reset using keyboard only.
 3. **Expect**: All controls reachable without pointer.
 
+### MV-008 — Production browser parser smoke (required)
+
+1. Run `npm run build` then `npm run preview` (or `npm run dev`).
+2. Open in **Microsoft Edge** or **Chrome** (not jsdom).
+3. Import `tests/fixtures/workbooks/complete-v1.xlsx` via the app UI using the production `createBrowserReadExcelFileParser` path.
+4. **Expect**: Parse succeeds; four Measured dimensions after evaluate; DevTools Network shows no external fetch for parser.
+5. **Note**: Web Worker behaviour is **not** verified by Vitest/jsdom — this manual step is the production-adapter gate (OI-003).
+
 ---
 
 ## Automated validation (post-implementation)
@@ -98,13 +106,14 @@ Open `http://localhost:5173` (or Vite-reported port). Confirm Sample B still eva
 # Full suite including 001 regression
 npm run test -- --pool=threads --maxWorkers=2
 
-# Import-focused (parser contract uses read-excel-file/node)
+# Import-focused (parser contract uses production createNodeReadExcelFileParser)
 npm run test -- tests/import/readExcelFileParser.contract.test.ts
 npm run test -- tests/import
+npm run test -- tests/session/import-reducer.test.ts tests/session/import-stale-async.test.ts
 npm run test -- tests/golden/import
-npm run test -- tests/browser/import-parser.smoke.test.ts
 npm run test -- tests/integration/import-flow.test.tsx
 npm run test -- tests/integration/mode-switch.test.tsx
+npm run test -- tests/perf/import-bench.test.ts
 
 # Privacy + a11y extensions
 npm run test:privacy
@@ -129,14 +138,15 @@ npm run build
 | G-004 | `npm run test:privacy` | No storage; no fetch; reset clears import |
 | G-005 | `npm run test:a11y` | Import controls axe-clean |
 | G-006 | `npm run build` | Bundle includes parser; no runtime CDN |
-| G-007 | Manual MV-001–MV-007 | Demonstration script ready |
+| G-007 | Manual MV-001–MV-008 | Demonstration script ready |
 | G-008 | Traceability spot-check | `contracts/implementation-traceability.md` coverage |
+| G-009 | `tests/perf/import-bench.test.ts` | Median parse+validate+normalize &lt;500 ms on committed `complete-v1.xlsx` (&lt;2 MB); **SC-009**; warm-cache optional discard; report median of ≥5 runs |
 
 ---
 
 ## Architecture review packet
 
-Before `/speckit-tasks`, reviewers should read:
+Before `/speckit-implement`, reviewers should read:
 
 1. `plan.md` — boundaries and constitution gate
 2. `research.md` — ADR-009 parser choice

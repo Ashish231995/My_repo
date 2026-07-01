@@ -1,19 +1,55 @@
 # Import Functions Contract
 
 **Feature**: `002-sharepoint-snapshot-import`  
-**Layer**: Pure TypeScript under `src/import/` — no React imports
+**Layers**: Pure `src/import/` modules + `src/import/controller/` (async) — no React in import core
 
 ## Boundary map
 
 | Stage | Module | Primary exports |
 |-------|--------|-----------------|
 | Acquisition | `src/import/acquisition/` | `WorkbookAcquisitionPort`, `createBrowserWorkbookAcquisition` |
-| Parsing | `src/import/parsing/` | `WorkbookParserPort`, `createReadExcelFileParser` |
-| Validation | `src/import/validation/` | `validateWorkbookContract` |
-| Normalization | `src/import/normalization/` | `normalizeImportedWorkbook`, `validateImportedProject` |
-| Handoff | `src/import/orchestration/` | `loadImportedProject` |
+| Parsing | `src/import/parsing/` | `WorkbookParserPort`, `mapSheetsToParsedWorkbook`, `createNodeReadExcelFileParser`, `createBrowserReadExcelFileParser` |
+| Validation | `src/import/validation/` | `validateWorkbookContract`, **`validateImportedProject`** |
+| Normalization | `src/import/normalization/` | `normalizeImportedWorkbook`, `workbookColumnRegistry` |
+| Orchestration | `src/import/orchestration/` | `loadImportedProject` |
+| Controller | `src/import/controller/` | `createImportController` |
+| Evaluation | `src/domain/evaluation/runEvaluation.ts` | Injects `ProjectValidator`; **no `src/import` imports** |
 
-Evaluation after handoff: **`runEvaluation`** from `src/domain/evaluation/runEvaluation.ts` (001, unchanged).
+---
+
+## Dependency direction (mandatory)
+
+```text
+features/import-snapshot → import/controller → import/orchestration
+import/orchestration → validation, normalization, parsing
+import/validation → domain/model types, mapping-registry (data only)
+import/normalization → domain/model types, mapping-registry
+
+src/domain/** → MUST NOT import src/import/**
+session/sessionReducer.ts → domain, session types only; MUST NOT import src/import/**
+session/createSessionReducer({ importedProjectValidator }) → closes over validator; no src/import import in reducer module
+SessionProvider / AppProviders → imports validateImportedProject; passes to createSessionReducer
+SessionAction payloads → data-only (no functions, ports, File, ArrayBuffer)
+```
+
+```typescript
+// src/domain/validation/projectValidator.ts (or evaluation.ts)
+type ProjectValidator = (
+  project: SampleProjectFixture,
+  registry: MappingRegistry,
+) => ProjectLoadResult;
+
+interface EvaluationInput {
+  project: SampleProjectFixture;
+  enabledSignalGroupIds: ReadonlySet<string>;
+  mappingRegistry: MappingRegistry;
+  ruleCatalogs: RuleCatalogs;
+  projectValidator?: ProjectValidator; // default: validateProject (001 bundled)
+}
+```
+
+- **Bundled callers**: omit `projectValidator` → `validateProject` (001 behaviour unchanged).
+- **Imported `EVALUATE`**: `createSessionReducer({ importedProjectValidator })` where `SessionProvider` / `AppProviders` passes `validateImportedProject` from `src/import/validation/`.
 
 ---
 
@@ -21,35 +57,14 @@ Evaluation after handoff: **`runEvaluation`** from `src/domain/evaluation/runEva
 
 ```typescript
 interface WorkbookAcquisitionPort {
-  /** Open picker; returns null if user cancels */
   selectWorkbook(): Promise<AcquiredWorkbook | null>;
-  /** Re-read bytes per acquisition method (see refresh rules) */
   refresh(acquired: AcquiredWorkbook): Promise<RefreshWorkbookResult>;
 }
-
-interface AcquiredWorkbook {
-  reference: ImportedWorkbookReference;
-  bytes: ArrayBuffer;
-}
-
-type RefreshWorkbookResult =
-  | { status: 'ok'; bytes: ArrayBuffer; lastModifiedMs: number }
-  | { status: 'needs-reselect'; reason: string };
 ```
 
-### Refresh rules (ADR-010)
+Refresh rules per ADR-010: file-picker `getFile()` latest bytes; file-input always `needs-reselect`.
 
-| `acquisitionMethod` | `refresh()` behaviour |
-|---------------------|----------------------|
-| `'file-picker'` (File System Access handle present) | `await fileHandle.getFile()` → read **latest** bytes and `lastModified` |
-| `'file-input'` | **Always** `{ status: 'needs-reselect' }` — user must reselect synchronized workbook via file input |
-
-**Rules**:
-
-- `accept` restricts to `.xlsx` / OOXML MIME.
-- No path strings stored or displayed.
-- Cancellation → no session mutation.
-- File-input tier MUST NOT silently reuse a stale `File` for refresh.
+**Test doubles**: `tests/import/fakeWorkbookAcquisition.ts` (OI-002 closed).
 
 ---
 
@@ -59,62 +74,47 @@ type RefreshWorkbookResult =
 interface WorkbookParserPort {
   parse(bytes: ArrayBuffer): Promise<ParsedWorkbook>;
 }
-
-interface ParsedWorkbook {
-  sheets: Partial<Record<WorksheetName, ParsedSheet>>;
-  parseWarnings: string[];
-}
 ```
 
-**Implementation** — `createReadExcelFileParser()` in `readExcelFileParser.ts`:
+### Shared mapping (single source of truth)
 
 ```typescript
-import readExcelFile from 'read-excel-file/browser';
-
-export function createReadExcelFileParser(): WorkbookParserPort {
-  return {
-    async parse(bytes: ArrayBuffer): Promise<ParsedWorkbook> {
-      const blob = new Blob([bytes], {
-        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-      });
-      const sheetResults = await readExcelFile(blob);
-      return mapSheetsToParsedWorkbook(sheetResults);
-    },
-  };
-}
+// src/import/parsing/mapSheetsToParsedWorkbook.ts
+export function mapSheetsToParsedWorkbook(
+  sheets: ReadonlyArray<{ sheet: string; data: unknown[][] }>,
+): ParsedWorkbook;
 ```
 
-`mapSheetsToParsedWorkbook` converts `{ sheet: string; data: unknown[][] }[]` to 1-based row-indexed `ParsedWorkbook`.
+### Production adapters (both call shared mapper)
 
-**Pinned dependency**: `read-excel-file@9.2.0` — **only** imported in `readExcelFileParser.ts`.
+```typescript
+// src/import/parsing/createNodeReadExcelFileParser.ts
+import readExcelFile from 'read-excel-file/node';
 
-**Test strategy (OI-003)**:
+// src/import/parsing/createBrowserReadExcelFileParser.ts
+import readExcelFile from 'read-excel-file/browser';
+```
 
-| Test | Parser source |
-|------|---------------|
-| `readExcelFileParser.contract.test.ts` | `read-excel-file/node` + `tests/fixtures/workbooks/*.xlsx` |
-| `loadImportedProject.test.ts` | Injected `FakeWorkbookParser` |
-| `import-parser.smoke.test.ts` | `read-excel-file/browser` (one fixture) |
+**Contract test** (`readExcelFileParser.contract.test.ts`) MUST use `createNodeReadExcelFileParser()` from production — **not** duplicate mapping logic in the test file.
 
-**Invariants**:
+**Browser Web Worker behaviour**: verified by **manual** Edge/Chrome smoke (quickstart MV-008) + `npm run build` bundle check — **not** claimed in jsdom/Vitest.
 
-- Parse is async (library API).
-- Parser MUST NOT call scoring, validation categories, or React.
-- Domain/orchestration tests inject `FakeWorkbookParser` — no Web Workers.
+**Test double**: `tests/import/fakeWorkbookParser.ts`.
 
 ---
 
 ## Validation
 
 ```typescript
-function validateWorkbookContract(
-  workbook: ParsedWorkbook,
-): WorkbookValidationResult;
+function validateWorkbookContract(workbook: ParsedWorkbook): WorkbookValidationResult;
+
+function validateImportedProject(
+  project: ImportedSnapshotProject,
+  registry: MappingRegistry,
+): ProjectLoadResult;
 ```
 
-**Input**: Parser-neutral model only.  
-**Output**: Deterministic category + messages per `workbook-contract.md`.  
-**Side effects**: None.
+`validateImportedProject` lives in **`src/import/validation/`** (import policy). Allows zero `sourceSignals`. Does **not** modify `validateProject`.
 
 ---
 
@@ -127,91 +127,89 @@ function normalizeImportedWorkbook(
 ): ImportedSnapshotProject;
 ```
 
-**Behaviour**:
-
-- Reads `Project` row 2 for identity and snapshot.
-- Emits `ImportedSourceSignal` per populated dimension cell on row 2.
-- Attaches `ImportProvenance` on each signal.
-- Empty dimension row 2 → no signals for that dimension.
-- Uses existing `mappingKey` values from `MAPPING_REGISTRY` — no new keys.
-
-```typescript
-function validateImportedProject(
-  project: ImportedSnapshotProject,
-  registry: MappingRegistry,
-): ProjectLoadResult;
-```
-
-**Import-only profile (ADR-011)**:
-
-- Allows `sourceSignals.length === 0` (all dimensions **Unmeasured** after evaluation).
-- Requires identity + snapshot.
-- **Does not modify** bundled `validateProject` in `src/domain/validation/validateProject.ts`.
+- `Project.asOfDate` from workbook row 2 → `snapshot.asOfDate` (BR-004).
+- Malformed dimension cell values become signals excluded at `validateSignal` (BR-003) with visible `exclusionReason` in evidence.
 
 ---
 
-## Orchestration
+## Orchestration (pure async function)
 
 ```typescript
 async function loadImportedProject(
   bytes: ArrayBuffer,
   meta: ImportedWorkbookReference,
-  deps: {
-    parser: WorkbookParserPort;
-    registry: MappingRegistry;
-  },
+  deps: { parser: WorkbookParserPort; registry: MappingRegistry },
 ): Promise<ImportLoadResult>;
-
-type ImportLoadResult =
-  | { ok: true; project: ImportedSnapshotProject }
-  | { ok: false; validation: WorkbookValidationResult };
 ```
 
-Session reducer awaits `loadImportedProject` on `IMPORT_WORKBOOK_SELECTED` and successful `REFRESH_SNAPSHOT`.
+No React, no dispatch.
 
 ---
 
-## Evaluation handoff
+## Import controller (async side effects)
 
 ```typescript
-// Session reducer EVALUATE branch when projectMode === 'imported'
+interface ImportController {
+  requestImport(): Promise<void>;
+  requestRefresh(): Promise<void>;
+  requestReselect(): Promise<void>;
+}
+
+function createImportController(deps: {
+  dispatch: Dispatch<SessionAction>;
+  getState: () => SessionState;
+  acquisition: WorkbookAcquisitionPort;
+  parser: WorkbookParserPort;
+  load: typeof loadImportedProject;
+}): ImportController;
+```
+
+**Flow (import)**:
+
+1. Capture `contextToken` from `getState()` (`importRequestId` + `projectMode`).
+2. `acquired = await acquisition.selectWorkbook()`.
+3. If `acquired === null` (picker cancelled) → **return; no lifecycle dispatch**.
+4. If `contextToken` ≠ current state → **discard `acquired`; no dispatch**.
+5. `dispatch({ type: 'IMPORT_LOAD_STARTED', requestId: nextId })`.
+6. `result = await loadImportedProject(acquired.bytes, acquired.reference, { parser })`.
+7. `dispatch(IMPORT_LOAD_SUCCEEDED | IMPORT_LOAD_FAILED)` with same `requestId` (ignored if stale).
+
+**Flow (refresh)** — fail-closed:
+
+1. `dispatch(REFRESH_STARTED { requestId })` — clears displayed evaluation in reducer.
+2. `acquisition.refresh` → on file-input tier: `RESELECT_REQUIRED` (no scores).
+3. On reload: `REFRESH_SUCCEEDED | REFRESH_FAILED` — **`REFRESH_FAILED` → `import-invalid`, no scores**; recovery via reselect or bundled sample.
+
+Controller tests use `FakeWorkbookAcquisition` + `FakeWorkbookParser`.
+
+---
+
+## Evaluation handoff (sync, in reducer)
+
+```typescript
+// Inside createSessionReducer closure — importedProjectValidator supplied by AppProviders
 runEvaluation({
-  project: importContext.normalizedProject,
-  projectOrigin: 'imported',
+  project: state.importContext.normalizedProject,
   enabledSignalGroupIds: new Set(['import-workbook']),
   mappingRegistry: MAPPING_REGISTRY,
   ruleCatalogs: RULE_CATALOGS,
+  projectValidator: importedProjectValidator,
 });
 ```
 
-**001 change surface** (minimal, planned):
-
-- Add optional `projectOrigin` to `EvaluationInput` (default `'bundled'`).
-- When `projectOrigin === 'imported'`, call `validateImportedProject`; otherwise **`validateProject` unchanged**.
-- **No changes** to dimension scoring, composite, recommendations, or persona projection.
+001 `runEvaluation` default path unchanged for bundled fixtures.
 
 ---
 
 ## Error handling
 
-| Layer | Failure | UI phase |
-|-------|---------|----------|
-| Acquisition | Cancel | No change |
-| Acquisition | Wrong type | `import-invalid` before parse |
-| Parse | Exception | `import-invalid` / `parse-failure` |
-| Validate | Structural | `import-invalid` — no scores (FR-008) |
-| Normalize | Internal | `error` phase (unexpected) |
-| Evaluate | Import project invalid | Should not occur post-validation |
-
----
-
-## Dependency direction
-
-```text
-features/import-snapshot → session → import/orchestration
-import/orchestration → validation, normalization, parsing
-import/normalization → domain/model, data/fixtures/mapping-registry
-domain/evaluation → validateImportedProject | validateProject (001) — NOT import/parsing
-```
-
-React features MUST NOT import `read-excel-file` directly.
+| Layer | Failure | Reducer phase |
+|-------|---------|---------------|
+| Picker cancel (`acquired === null`) | — | **No lifecycle action**; context unchanged |
+| Context changed while picker open | — | **No lifecycle action**; selection discarded |
+| Load structural fail | `IMPORT_LOAD_FAILED` | `import-invalid`; no scores |
+| Load success | `IMPORT_LOAD_SUCCEEDED` | `project-ready` |
+| Refresh fail | `REFRESH_FAILED` | `import-invalid`; no scores |
+| Reselect required (file-input) | `RESELECT_REQUIRED` | no scores; needs-reselect |
+| Stale lifecycle action | ignored | unchanged |
+| Evaluate | `error` | unexpected post-validation |

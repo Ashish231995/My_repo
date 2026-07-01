@@ -121,6 +121,7 @@ Committed binaries and manifest: **`tests/fixtures/workbooks/README.md`** (cell 
 | `invalid-template-version.xlsx` | AS-022 |
 | `missing-project-row2.xlsx` | AS-008 |
 | `extra-row3-data.xlsx` | AS-008 rows 3+ |
+| `malformed-dimension-values.xlsx` | BR-003 — invalid dimension evidence excluded |
 | `invalid-not-xlsx.bin` | AS-007 (extension/MIME check) |
 
 Binary files are committed during implementation; manifest is authoritative for cell content. No runtime workbook-writing dependency.

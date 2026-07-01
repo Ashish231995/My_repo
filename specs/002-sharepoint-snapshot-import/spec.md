@@ -245,7 +245,10 @@ updated results replace prior in-memory evaluation.
 
 1. **Given** an evaluated imported workbook, **When** the user selects **Refresh snapshot** and the browser still permits reading the same file, **Then** the application rereads the workbook, replaces prior parsed data, and recalculates results.
 2. **Given** a refreshed workbook with changed evidence values, **When** evaluation completes, **Then** prior in-memory snapshot data is fully replaced — not merged with stale values.
-3. **Given** browser file permission is no longer available on refresh, **When** the user attempts refresh, **Then** the application prompts the user to reselect the workbook through file selection.
+3. **Given** browser file permission is no longer available on refresh, **When** the user attempts refresh, **Then** the application prompts the user to reselect the workbook through file selection (**RESELECT_REQUIRED**); no composite, dimension, finding, or recommendation scores are displayed.
+4. **Given** an evaluated imported workbook, **When** refresh rereads a structurally invalid workbook and **REFRESH_FAILED** is dispatched, **Then** the session enters fail-closed **import-invalid** state with no composite, dimension, finding, or recommendation scores displayed.
+5. **Given** **RESELECT_REQUIRED** or **REFRESH_FAILED**, **When** the user recovers, **Then** recovery is available only via **Reselect workbook** or selecting a bundled Sample Project A, B, or C — prior evaluation scores MUST NOT remain visible.
+6. **Given** **REFRESH_STARTED** has been dispatched, **When** the reducer applies the action, **Then** any prior evaluation and presentation are cleared immediately so stale health results cannot persist during refresh.
 
 ---
 
@@ -319,6 +322,8 @@ recovery using keyboard only.
 - User imports workbook then switches to a sample project — imported state and prior evaluation cleared; bundled path active; integration checklist shown
 - User selects bundled sample then imports — prior bundled evaluation cleared; integration checklist hidden for import mode
 - User imports while a sample project evaluation is visible — prior evaluation cleared per session rules
+- Refresh rereads a structurally invalid workbook — **REFRESH_FAILED** fail-closed: no health scores; recovery via reselect or bundled sample
+- Refresh on file-input tier without permission — **RESELECT_REQUIRED**: no stale health results until user reselects or chooses a bundled sample
 
 ## Requirements
 
@@ -416,6 +421,7 @@ recovery using keyboard only.
 - **SC-006**: Sample Project B bundled evaluation remains available and successful after any import failure or successful import in the same build.
 - **SC-007**: Primary import, evaluate, refresh, and recovery flows are completable using keyboard input only.
 - **SC-008**: Refresh after a locally changed workbook updates evaluation results to reflect new cell values.
+- **SC-009**: For the committed `complete-v1.xlsx` fixture (under 2 MB), median parse + validate + normalize time MUST be below 500 ms when measured by `tests/perf/import-bench.test.ts` using the benchmark procedure defined in `quickstart.md` G-009.
 
 ## Assumptions
 
@@ -475,5 +481,7 @@ recovery using keyboard only.
 | AS-021 | Supported template version (`1.0`) passes validation gate |
 | AS-022 | Unsupported template version blocks import with recovery |
 | AS-023 | Mode switch clears evaluation and toggles checklist visibility |
+| AS-024 | Refresh structural failure (**REFRESH_FAILED**) is fail-closed — no health scores |
+| AS-025 | Reselect required (**RESELECT_REQUIRED**) shows no stale health results; recovery via reselect or bundled sample |
 
 *(Full Given/When/Then detail is captured in User Stories 1–7 above and MUST be expanded into numbered AS blocks during planning traceability.)*

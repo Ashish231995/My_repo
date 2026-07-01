@@ -163,10 +163,10 @@ Mapped into `EvidenceItem.mapping` / drilldown per 001 patterns.
 | Field | Type | Notes |
 |-------|------|-------|
 | `workbookRef` | `ImportedWorkbookReference \| null` | |
-| `parsedWorkbook` | `ParsedWorkbook \| null` | Cleared on mode switch away from import |
 | `validation` | `WorkbookValidationResult \| null` | Last validation outcome |
-| `normalizedProject` | `ImportedSnapshotProject \| null` | Ready for evaluation |
+| `normalizedProject` | `ImportedSnapshotProject \| null` | Ready for sync `EVALUATE` |
 | `refreshState` | `'idle' \| 'refreshing' \| 'needs-reselect'` | UI driver |
+| `loadState` | `'idle' \| 'loading'` | During async controller load |
 
 ---
 
@@ -176,9 +176,10 @@ Extends `SessionState` from 001 (`contracts/import-session-state.md`):
 
 | New / changed field | Type | Notes |
 |---------------------|------|-------|
-| `projectMode` | `'none' \| 'bundled' \| 'imported'` | Orchestration |
+| `projectMode` | `'none' \| 'bundled' \| 'imported'` | Mutual exclusion (BR-005) |
 | `importContext` | `ImportSessionContext \| null` | Null when not imported |
-| `phase` | extended | Adds `import-invalid` for structural workbook failure |
+| `importRequestId` | `number` | Monotonic; stale async lifecycle actions ignored |
+| `phase` | extended | Adds `import-loading`, `import-invalid` |
 
 **Unchanged from 001 when `projectMode === 'bundled'`**: `selectedProjectId`, `enabledSignalGroupIds`, checklist behaviour, golden-compatible paths.
 
@@ -186,23 +187,34 @@ Extends `SessionState` from 001 (`contracts/import-session-state.md`):
 
 ## State Transitions
 
+Async acquisition/parse/load run in **`importController`**. The **sync** `sessionReducer` (from `createSessionReducer`) applies lifecycle result actions only.
+
+**Picker rule**: file selection completes **before** `IMPORT_LOAD_STARTED`. Picker cancel or context change during picker → no lifecycle dispatch.
+
 ```text
 none
-  ├─ SELECT_PROJECT → bundled / project-ready | invalid-project
-  └─ IMPORT_WORKBOOK_SELECTED → parse → validate
-        ├─ fail → import-invalid
-        └─ ok → imported / project-ready
+  ├─ SELECT_PROJECT → bundled / project-ready | invalid-project (increments importRequestId; clears import)
+  └─ importController.requestImport()
+        → selectWorkbook() first; cancel/context-change → no-op
+        → IMPORT_LOAD_STARTED { requestId }
+        → (async) loadImportedProject
+        ├─ IMPORT_LOAD_FAILED → import-invalid (no scores)
+        └─ IMPORT_LOAD_SUCCEEDED → imported / project-ready
 
 imported / project-ready
-  ├─ EVALUATE → evaluated
-  ├─ REFRESH_SNAPSHOT (file-picker) → getFile() → parse → validate → normalize → project-ready | import-invalid
-  ├─ REFRESH_SNAPSHOT (file-input) → needs-reselect → user reselects → parse → …
-  └─ SELECT_PROJECT → bundled (clear import) → project-ready
+  ├─ EVALUATE (sync; importedProjectValidator from reducer factory) → evaluated
+  ├─ requestRefresh() → REFRESH_STARTED (clears evaluation)
+        ├─ file-picker reload → REFRESH_SUCCEEDED | REFRESH_FAILED (fail-closed: import-invalid, no scores)
+        └─ file-input → RESELECT_REQUIRED (no stale health results)
+  └─ SELECT_PROJECT → bundled (importRequestId++; clear import) → project-ready
 
 evaluated (any mode)
   ├─ SET_PERSONA → re-project only
   ├─ mode switch → clear evaluation
-  └─ RESET → none / initial
+  └─ RESET → none / initial (importRequestId++)
+
+Stale protection: lifecycle action with requestId ≠ state.importRequestId → no-op (BR-005, late async)
+Refresh recovery: reselect workbook or choose bundled sample — never show stale scores after REFRESH_FAILED / RESELECT_REQUIRED
 ```
 
 ---
@@ -235,7 +247,9 @@ evaluated (any mode)
 
 ### Import-only validation (`validateImportedProject`)
 
-Invoked **only** when `projectOrigin === 'imported'` after successful `validateWorkbookContract`.
+Location: **`src/import/validation/validateImportedProject.ts`** — import policy only.
+
+Invoked via **`createSessionReducer({ importedProjectValidator })`**. `SessionProvider` / `AppProviders` supplies `validateImportedProject`; **`sessionReducer.ts` does not import `src/import/**`**.
 
 | Condition | Import profile | Bundled `validateProject` |
 |-----------|----------------|---------------------------|

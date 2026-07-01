@@ -75,7 +75,7 @@ interface WorkbookParserPort {
 }
 ```
 
-`createReadExcelFileParser()` returns an object implementing this port using the **browser** entry in app code; tests use **node** entry directly in contract tests OR inject `FakeWorkbookParser` for orchestration.
+`createBrowserReadExcelFileParser()` and `createNodeReadExcelFileParser()` both call shared `mapSheetsToParsedWorkbook`. Contract tests use the **production** node factory — no duplicated mapping in test files. Orchestration/controller tests inject `FakeWorkbookParser`.
 
 **Rows 3+ detection**: `toParsedWorkbook` assigns **1-based row indices** from each sheet's `data` array. Non-empty contract-column cells at row index ≥ 3 fail structural validation.
 
@@ -119,16 +119,16 @@ interface WorkbookParserPort {
 
 ## ADR-011: Import-Only Evaluation Profile
 
-**Decision**: `validateImportedProject` / `projectOrigin: 'imported'` applies **only** to workbooks that passed `validateWorkbookContract`.
+**Decision**: `validateImportedProject` in `src/import/validation/` applies **only** to workbooks that passed `validateWorkbookContract`. It is passed into `runEvaluation` via optional **`ProjectValidator`** injection at the call site — **not** by importing `src/import` inside `src/domain`.
 
 | Rule | Import profile | Bundled `validateProject` (001) |
 |------|----------------|----------------------------------|
 | Zero `sourceSignals` after valid workbook | **Allowed** → all dimensions **Unmeasured** | **Rejected** (`empty-file`) — unchanged |
 | Empty `signalGroups` | N/A — synthetic `import-workbook` group | Must have fixture groups — unchanged |
 | Identity + snapshot | Required | Required — unchanged |
-| `runEvaluation` scoring path | Same pipeline when `projectOrigin === 'imported'` | Default bundled path |
+| `runEvaluation` scoring path | Same pipeline; `importedProjectValidator` from `createSessionReducer` closure | Default `validateProject` when validator omitted |
 
-**001 guarantee**: `validateProject` implementation and **all 001 golden tests remain unmodified**. Import profile is a **separate function** invoked only from `runEvaluation` when `projectOrigin === 'imported'`.
+**001 guarantee**: `validateProject` implementation and **all 001 golden tests remain unmodified**. Import profile is a **separate function** injected at evaluate time for imported mode only.
 
 **Test fixture**: `tests/fixtures/workbooks/all-dimensions-empty-row2.xlsx` (see manifest).
 
@@ -141,7 +141,17 @@ interface WorkbookParserPort {
 
 ## ADR-012: Architectural Layering (Import Extension)
 
-Unchanged — Acquire → Parse → ValidateContract → Normalize → `runEvaluation`.
+Acquire → Parse → ValidateContract → Normalize → (lifecycle dispatch) → sync `EVALUATE` → `runEvaluation`.
+
+Async acquisition/parse/load in **`importController`**; **sync pure** `sessionReducer` applies lifecycle actions with `requestId` stale protection (ADR-015).
+
+---
+
+## ADR-015: Synchronous Pure Session Reducer + Async Import Controller
+
+**Decision**: `sessionReducer` remains synchronous and pure, created via **`createSessionReducer({ importedProjectValidator })`**. `SessionProvider` / `AppProviders` supplies `validateImportedProject`; **`sessionReducer.ts` must not import `src/import/**`**. UI calls `importController.requestImport|requestRefresh|requestReselect`. Controller selects workbook **before** `IMPORT_LOAD_STARTED`; picker cancel or context change → no lifecycle dispatch. Controller dispatches `IMPORT_LOAD_*`, `REFRESH_*`, `RESELECT_REQUIRED` with monotonic `requestId`. Refresh is **fail-closed** — no stale health scores after `REFRESH_FAILED` or `RESELECT_REQUIRED`.
+
+**Rationale**: Keeps 001 reducer testability; isolates I/O; enables stale-result protection when user selects bundled sample during in-flight import.
 
 ---
 
@@ -155,7 +165,7 @@ Unchanged — parser bundled; no runtime network; no persistence.
 
 | ID | Resolution |
 |----|------------|
-| **OI-001** | Committed fixtures under `tests/fixtures/workbooks/` + manifest README with cells, outcomes, SHA-256 column |
-| **OI-003** | Node contract tests on real binaries; orchestration uses injected port; one browser parser smoke test |
-| **OI-002** | Mock `WorkbookAcquisitionPort` in integration tests (unchanged) |
-| **OI-004** | `EvaluationInput.projectOrigin` optional (default `bundled`) |
+| **OI-001** | Authored fixtures under `tests/fixtures/workbooks/` + manifest README with cells, outcomes, SHA-256 column |
+| **OI-003** | Node contract tests via production `createNodeReadExcelFileParser` + shared mapper; MV-008 manual Edge/Chrome smoke (not jsdom Web Worker claims) |
+| **OI-002** | `FakeWorkbookAcquisition` + `FakeWorkbookParser` in `tests/import/`; used in controller and integration tests |
+| **OI-004** | `ProjectValidator` optional on `EvaluationInput`; default `validateProject`; import wiring passes `validateImportedProject` |

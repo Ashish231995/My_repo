@@ -25,6 +25,7 @@ CI or pre-commit MAY verify hashes against this manifest during implementation.
 | `invalid-template-version.xlsx` | `pending` | Binary pending implementation commit |
 | `missing-project-row2.xlsx` | `pending` | Binary pending implementation commit |
 | `extra-row3-data.xlsx` | `pending` | Binary pending implementation commit |
+| `malformed-dimension-values.xlsx` | `pending` | Binary pending implementation commit |
 | `invalid-not-xlsx.bin` | `pending` | Non-xlsx bytes for MIME/extension guard |
 
 ---
@@ -145,6 +146,37 @@ Same as `complete-v1.xlsx` plus **Schedule** row 3 cell `slipDays` = `99`.
 
 ---
 
+## `malformed-dimension-values.xlsx`
+
+**Purpose**: BR-003, AS-006 — structurally valid workbook with invalid dimension evidence on row 2.
+
+Same as `complete-v1.xlsx` except:
+
+### Team (row 2) — malformed numeric
+
+| Column | Value | Issue |
+|--------|-------|-------|
+| engagementScore | `150` | Out of range (valid: 0–100) |
+| completionPercent | `90` | Valid |
+
+### Delivery (row 2) — malformed enum
+
+| Column | Value | Issue |
+|--------|-------|-------|
+| blockerState | `not-a-valid-state` | Not in enum (`none`, `closed`, `advisory`, `important`, `urgent`) |
+| changeRatePercent | `12` | Valid |
+| trendPercent | `-3` | Valid |
+
+**Expected outcome**:
+
+- Structural validation **passes** (Project row 2 valid).
+- Normalize produces signals where malformed cells map to excluded evidence per 001 Signal Validity policy.
+- `engagement-score` and/or `blocker-open` signals excluded with visible `exclusionReason` in evidence metadata (BR-003).
+- Team and/or Delivery dimensions may be **Partial** or **Unmeasured** — never fabricated scores for excluded cells.
+- No structural `import-invalid` solely due to dimension malformed values.
+
+---
+
 ## `invalid-not-xlsx.bin`
 
 **Purpose**: AS-007.
@@ -157,10 +189,12 @@ Arbitrary non-OOXML bytes (e.g. text `not an xlsx file`).
 
 ## Parser contract test usage
 
-| Test file | Fixtures read |
-|-----------|---------------|
-| `tests/import/readExcelFileParser.contract.test.ts` | All `.xlsx` files via `read-excel-file/node` |
-| `tests/import/loadImportedProject.test.ts` | Injected `FakeWorkbookParser` + one integration path with real parser |
-| `tests/browser/import-parser.smoke.test.ts` | `complete-v1.xlsx` via `read-excel-file/browser` (single smoke) |
+| Test / verification | Coverage |
+|---------------------|----------|
+| `tests/import/readExcelFileParser.contract.test.ts` | All `.xlsx` files via production `createNodeReadExcelFileParser()` + `read-excel-file/node` |
+| `tests/import/loadImportedProject.test.ts` | Injected `FakeWorkbookParser`; optional integration path with real parser |
+| Manual **MV-008** (`quickstart.md`) | `complete-v1.xlsx` via production `createBrowserReadExcelFileParser` in Edge/Chrome + `npm run build` bundle check |
+
+Browser Web Worker behaviour is **not** verified by Vitest/jsdom — use MV-008 only.
 
 See `specs/002-sharepoint-snapshot-import/plan.md` §Testing Strategy for layering rules.
