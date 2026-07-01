@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { MAPPING_REGISTRY, RULE_CATALOGS } from '../../src/data/fixtures';
+import { MAPPING_REGISTRY } from '../../src/data/fixtures';
+import { RULE_CATALOGS } from '../../src/domain/scoring/ruleCatalogs';
 import { runEvaluation } from '../../src/domain/evaluation/runEvaluation';
 import { validateImportedProject } from '../../src/import/validation/validateImportedProject';
 import { normalizeImportedWorkbook } from '../../src/import/normalization/normalizeImportedWorkbook';
@@ -29,7 +30,7 @@ describe('snapshot.asOfDate authority (BR-004) and REC-002 timing', () => {
     expect(load.project.snapshot.asOfDate).toBe(asOfDate);
 
     return runEvaluation({
-      project: load.project as never,
+      project: load.project,
       enabledSignalGroupIds: new Set(['import-workbook']),
       mappingRegistry: MAPPING_REGISTRY,
       ruleCatalogs: RULE_CATALOGS,

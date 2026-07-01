@@ -16,12 +16,14 @@ import { calculateComposite } from '../scoring/calculateComposite';
 import { calculateDimension } from '../scoring/calculateDimension';
 import { mapSignalHealth } from '../scoring/signalHealth';
 import { validateProject } from '../validation/validateProject';
+import type { ProjectValidator } from '../validation/projectValidator';
 import { validateSignal } from '../validation/validateSignal';
 
 const DIMENSION_IDS: DimensionId[] = ['schedule', 'delivery', 'team', 'risk'];
 
 export function runEvaluation(input: EvaluationInput): EvaluationOutput {
-  const load = validateProject(input.project as SampleProjectFixture, input.mappingRegistry);
+  const validate: ProjectValidator = input.projectValidator ?? validateProject;
+  const load = validate(input.project, input.mappingRegistry);
   if (!load.ok) {
     return { ok: false, error: { message: load.invalid.message } };
   }

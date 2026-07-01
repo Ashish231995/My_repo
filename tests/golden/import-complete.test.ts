@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { MAPPING_REGISTRY, RULE_CATALOGS } from '../../src/data/fixtures';
+import { MAPPING_REGISTRY } from '../../src/data/fixtures';
+import { RULE_CATALOGS } from '../../src/domain/scoring/ruleCatalogs';
 import { runEvaluation } from '../../src/domain/evaluation/runEvaluation';
 import { loadImportedProject } from '../../src/import/orchestration/loadImportedProject';
 import { validateImportedProject } from '../../src/import/validation/validateImportedProject';
@@ -26,7 +27,7 @@ describe('golden import-complete (AS-001, AS-003)', () => {
     if (!load.ok) return;
 
     const output = runEvaluation({
-      project: load.project as never,
+      project: load.project,
       enabledSignalGroupIds: new Set(['import-workbook']),
       mappingRegistry: MAPPING_REGISTRY,
       ruleCatalogs: RULE_CATALOGS,

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { MAPPING_REGISTRY, RULE_CATALOGS } from '../../src/data/fixtures';
+import { MAPPING_REGISTRY } from '../../src/data/fixtures';
+import { RULE_CATALOGS } from '../../src/domain/scoring/ruleCatalogs';
 import { runEvaluation } from '../../src/domain/evaluation/runEvaluation';
 import { validateImportedProject } from '../../src/import/validation/validateImportedProject';
 import { normalizeImportedWorkbook } from '../../src/import/normalization/normalizeImportedWorkbook';
@@ -36,7 +37,7 @@ describe('all-dimensions-empty-row2.xlsx (ADR-011)', () => {
     const project = normalizeImportedWorkbook(workbook, meta);
 
     const output = runEvaluation({
-      project: project as never,
+      project,
       enabledSignalGroupIds: new Set(['import-workbook']),
       mappingRegistry: MAPPING_REGISTRY,
       ruleCatalogs: RULE_CATALOGS,

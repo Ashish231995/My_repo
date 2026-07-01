@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { MAPPING_REGISTRY, RULE_CATALOGS } from '../../src/data/fixtures';
+import { MAPPING_REGISTRY } from '../../src/data/fixtures';
+import { RULE_CATALOGS } from '../../src/domain/scoring/ruleCatalogs';
 import { runEvaluation } from '../../src/domain/evaluation/runEvaluation';
 import { validateImportedProject } from '../../src/import/validation/validateImportedProject';
 import { normalizeImportedWorkbook } from '../../src/import/normalization/normalizeImportedWorkbook';
@@ -43,7 +44,7 @@ describe('invalid evidence exclusion (BR-003)', () => {
     const project = normalizeImportedWorkbook(workbook, meta);
 
     const output = runEvaluation({
-      project: project as never,
+      project,
       enabledSignalGroupIds: new Set(['import-workbook']),
       mappingRegistry: MAPPING_REGISTRY,
       ruleCatalogs: RULE_CATALOGS,
@@ -52,8 +53,8 @@ describe('invalid evidence exclusion (BR-003)', () => {
 
     expect(output.ok).toBe(true);
     if (output.ok) {
-      const team = output.result.dimensions.find((d) => d.id === 'team');
-      const delivery = output.result.dimensions.find((d) => d.id === 'delivery');
+      const team = output.result.dimensions.find((d) => d.dimensionId === 'team');
+      const delivery = output.result.dimensions.find((d) => d.dimensionId === 'delivery');
       expect(team?.measurementStatus).not.toBe('measured');
       expect(delivery?.measurementStatus).not.toBe('measured');
     }

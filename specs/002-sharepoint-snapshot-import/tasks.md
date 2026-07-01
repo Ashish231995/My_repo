@@ -45,7 +45,7 @@
 
 **Purpose**: Parser-neutral workbook model, contract validation, normalization, orchestration, **pure session lifecycle reducer**, **async import controller**, `ProjectValidator` injection. **No UI.**
 
-**Progress**: **15/32** tasks complete — **17 remaining** (T210–T221 test-first suite authored; T222, T223, T231 type-contract tasks pulled forward in Phase 0).
+**Progress**: **28/32** tasks complete — **4 remaining** (T236–T241 session reducer/controller; T210–T221 + T224–T235 pipeline green).
 
 > **Early type-contract tasks (Phase 0 pull-forward)**: T222, T223, and T231 were completed during Phase 0 as prerequisites for T205/T206 (`FakeWorkbookParser` / `FakeWorkbookAcquisition`). Deliverables are parser/acquisition **types and port interfaces only** in `src/import/parsing/types.ts`, `WorkbookParserPort.ts`, and `src/import/acquisition/types.ts` — no mapping, parser adapters, acquisition implementation, validation, normalization, reducer, or controller behavior.
 
@@ -70,27 +70,27 @@
 
 - [X] T222 [P] Define `ParsedWorkbook`, `ParsedSheet`, `ParsedCell`, `WorksheetName` in `src/import/parsing/types.ts` per `data-model.md`. **Refs**: data-model.md | **Evidence**: types compile — **completed early (Phase 0 pull-forward for T205); type contract only**
 - [X] T223 [P] Define `WorkbookParserPort` in `src/import/parsing/WorkbookParserPort.ts` (`parse(bytes): Promise<ParsedWorkbook>`). **Refs**: contracts/import-functions.md | **Evidence**: interface exported — **completed early (Phase 0 pull-forward for T205); type contract only**
-- [ ] T224 Implement `mapSheetsToParsedWorkbook` in `src/import/parsing/mapSheetsToParsedWorkbook.ts` (single shared mapping source). **Refs**: workbook-contract.md | **Evidence**: exercised by T210 via production parser adapter
-- [ ] T225 Implement `createNodeReadExcelFileParser` in `src/import/parsing/createNodeReadExcelFileParser.ts` using `read-excel-file/node` + shared mapper. **Refs**: ADR-009 | **Evidence**: T210 passes
-- [ ] T226 Implement `createBrowserReadExcelFileParser` in `src/import/parsing/createBrowserReadExcelFileParser.ts` using `read-excel-file/browser` + shared mapper. **Refs**: ADR-009, FR-009 | **Evidence**: `npm run build` bundles browser entry; MV-008 manual smoke
+- [X] T224 Implement `mapSheetsToParsedWorkbook` in `src/import/parsing/mapSheetsToParsedWorkbook.ts` (single shared mapping source). **Refs**: workbook-contract.md | **Evidence**: exercised by T210 via production parser adapter
+- [X] T225 Implement `createNodeReadExcelFileParser` in `src/import/parsing/createNodeReadExcelFileParser.ts` using `read-excel-file/node` + shared mapper. **Refs**: ADR-009 | **Evidence**: T210 passes
+- [X] T226 Implement `createBrowserReadExcelFileParser` in `src/import/parsing/createBrowserReadExcelFileParser.ts` using `read-excel-file/browser` + shared mapper. **Refs**: ADR-009, FR-009 | **Evidence**: `npm run build` bundles browser entry; MV-008 manual smoke
 
 ### Validation and normalization
 
-- [ ] T227 [P] Implement `validationCategories.ts` and `validateWorkbookContract` in `src/import/validation/`. **Refs**: FR-005–FR-008, workbook-contract.md | **Evidence**: T211 passes
-- [ ] T228 Implement `validateImportedProject` in `src/import/validation/validateImportedProject.ts` (**import-only**; allows zero signals). **Refs**: ADR-011, FR-012 | **Evidence**: T213 passes; `validateProject` untouched
-- [ ] T229 [P] Implement `workbookColumnRegistry.ts` in `src/import/normalization/` per `contracts/workbook-contract.md`. **Refs**: BR-001, FR-013 | **Evidence**: registry covers all contract columns
-- [ ] T230 Implement `normalizeImportedWorkbook` in `src/import/normalization/normalizeImportedWorkbook.ts`. **Refs**: FR-009, FR-012, FR-013, BR-003, BR-004 | **Evidence**: T212, T216, T217 pass
+- [X] T227 [P] Implement `validationCategories.ts` and `validateWorkbookContract` in `src/import/validation/`. **Refs**: FR-005–FR-008, workbook-contract.md | **Evidence**: T211 passes
+- [X] T228 Implement `validateImportedProject` in `src/import/validation/validateImportedProject.ts` (**import-only**; allows zero signals). **Refs**: ADR-011, FR-012 | **Evidence**: T213 passes; `validateProject` untouched
+- [X] T229 [P] Implement `workbookColumnRegistry.ts` in `src/import/normalization/` per `contracts/workbook-contract.md`. **Refs**: BR-001, FR-013 | **Evidence**: registry covers all contract columns
+- [X] T230 Implement `normalizeImportedWorkbook` in `src/import/normalization/normalizeImportedWorkbook.ts`. **Refs**: FR-009, FR-012, FR-013, BR-003, BR-004 | **Evidence**: T212, T216, T217 pass
 
 ### Acquisition and orchestration
 
 - [X] T231 [P] Define acquisition types in `src/import/acquisition/types.ts` (`AcquiredWorkbook`, `RefreshWorkbookResult`, `ImportedWorkbookReference`). **Refs**: data-model.md, ADR-010 | **Evidence**: types compile — **completed early (Phase 0 pull-forward for T206); type contract only**
-- [ ] T232 Implement `createBrowserWorkbookAcquisition` in `src/import/acquisition/workbookAcquisition.ts` (File System Access + file-input; refresh rules per ADR-010). **Refs**: FR-003, FR-004, FR-016, ADR-010 | **Evidence**: T215 passes
-- [ ] T233 Implement `loadImportedProject` in `src/import/orchestration/loadImportedProject.ts` (parse → validate → normalize). **Refs**: FR-005, FR-009 | **Evidence**: T214, T220 pass
+- [X] T232 Implement `createBrowserWorkbookAcquisition` in `src/import/acquisition/workbookAcquisition.ts` (File System Access + file-input; refresh rules per ADR-010). **Refs**: FR-003, FR-004, FR-016, ADR-010 | **Evidence**: T215 passes
+- [X] T233 Implement `loadImportedProject` in `src/import/orchestration/loadImportedProject.ts` (parse → validate → normalize). **Refs**: FR-005, FR-009 | **Evidence**: T214, T220 pass
 
 ### Evaluation injection (domain — no `src/import` imports)
 
-- [ ] T234 Define `ProjectValidator` type in `src/domain/validation/projectValidator.ts` (or `evaluation.ts`) and add optional `projectValidator?: ProjectValidator` to `EvaluationInput`. **Refs**: ADR-011, OI-004 | **Evidence**: typecheck passes; default `validateProject` when omitted
-- [ ] T235 Update `runEvaluation` in `src/domain/evaluation/runEvaluation.ts` to call `input.projectValidator ?? validateProject` — **no import from `src/import/**`**. **Refs**: FR-010, ADR-011 | **Evidence**: 001 golden tests still pass
+- [X] T234 Define `ProjectValidator` type in `src/domain/validation/projectValidator.ts` (or `evaluation.ts`) and add optional `projectValidator?: ProjectValidator` to `EvaluationInput`. **Refs**: ADR-011, OI-004 | **Evidence**: typecheck passes; default `validateProject` when omitted
+- [X] T235 Update `runEvaluation` in `src/domain/evaluation/runEvaluation.ts` to call `input.projectValidator ?? validateProject` — **no import from `src/import/**`**. **Refs**: FR-010, ADR-011 | **Evidence**: 001 golden tests still pass
 
 ### Session core (pure reducer + async controller)
 
@@ -298,7 +298,7 @@ T201–T209 (setup + fixtures; T222/T223/T231 type contracts pulled forward for 
   → T277 perf gate + T278 MV-008 → T285 release gate
 ```
 
-**Phase 1 remaining (17)**: T224–T230, T232–T241 (excludes T222, T223, T231 — done early; T210–T221 tests authored red).
+**Phase 1 remaining (4)**: T236–T241 (session reducer/controller; T224–T235 pipeline green).
 
 ### User Story Dependencies
 
@@ -344,7 +344,7 @@ T244 ImportProvenanceBanner.tsx
 ### MVP First (User Story 1)
 
 1. Complete Phase 0 (T201–T209)
-2. Complete Phase 1 (**17 of 32 remaining**: T224–T230, T232–T241; T210–T221 tests red; T222/T223/T231 type contracts done early)
+2. Complete Phase 1 (**4 of 32 remaining**: T236–T241 session reducer/controller; T224–T235 pipeline green)
 3. Complete Phase 2 (T242–T250)
 4. **STOP and VALIDATE**: `import-complete` golden + import-flow integration
 5. Demo complete workbook import

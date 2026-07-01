@@ -1,4 +1,5 @@
 import type { MappingRegistry } from '../../data/fixtures/mapping-registry';
+import type { ProjectValidator } from '../validation/projectValidator';
 import type {
   CanonicalSignalType,
   DimensionId,
@@ -23,6 +24,16 @@ export interface SourceSignal {
   asOfDate?: string | null;
   /** For adverse testing only */
   forceMappingFailure?: boolean;
+  /** Import workbook provenance (Feature 002); absent on bundled fixtures */
+  provenance?: {
+    workbookFilename: string;
+    worksheet: string;
+    row: number;
+    column: string;
+    mappingOutcome: 'mapped' | 'failed' | 'unsupported';
+    scoringIncluded: boolean;
+    exclusionReason: string | null;
+  };
 }
 
 export interface MappingProvenance {
@@ -140,7 +151,8 @@ export interface SampleProjectFixture {
   schemaVersion: '1.0';
   id: string;
   displayName: string;
-  scenario: 'healthy' | 'at-risk' | 'incomplete' | 'invalid';
+  scenario: 'healthy' | 'at-risk' | 'incomplete' | 'invalid' | 'imported';
+  origin?: 'imported';
   identity: {
     projectKey: string;
     projectName: string;
@@ -151,6 +163,12 @@ export interface SampleProjectFixture {
   };
   signalGroups: SignalGroupFixture[];
   sourceSignals: SourceSignal[];
+  importMeta?: {
+    filename: string;
+    workbookAsOfDate: string;
+    localLastModifiedMs: number;
+    trustLabel: string;
+  };
   expectations?: Record<string, unknown>;
 }
 
@@ -267,13 +285,14 @@ export interface RecommendationRuleCatalog {
 }
 
 export interface EvaluationInput {
-  project: ValidatedProject;
+  project: SampleProjectFixture;
   enabledSignalGroupIds: ReadonlySet<string>;
   mappingRegistry: MappingRegistry;
   ruleCatalogs: {
     dimension: DimensionRuleCatalog;
     recommendation: RecommendationRuleCatalog;
   };
+  projectValidator?: ProjectValidator;
 }
 
 export interface EvaluationError {
