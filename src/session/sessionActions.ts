@@ -9,6 +9,10 @@ export function selectProject(projectId: string): SessionAction {
   return { type: 'SELECT_PROJECT', projectId };
 }
 
+export function loadInvalidProject(fixtureId: string): SessionAction {
+  return { type: 'LOAD_INVALID_PROJECT', fixtureId };
+}
+
 export function toggleSignalGroup(groupId: string): SessionAction {
   return { type: 'TOGGLE_SIGNAL_GROUP', groupId };
 }

@@ -7,7 +7,8 @@ export function EvaluateButton() {
   const { state, dispatch } = useSession();
   const canEvaluate =
     state.phase === 'project-ready' ||
-    state.phase === 'evaluated';
+    state.phase === 'evaluated' ||
+    state.phase === 'error';
 
   return (
     <div className={styles.wrapper}>

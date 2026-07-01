@@ -1,14 +1,28 @@
 import { PrivacyIndicator } from '../ui/PrivacyIndicator/PrivacyIndicator';
+import { ErrorPanel } from '../features/health-dashboard/ErrorPanel';
 import { EvaluateButton } from '../features/health-dashboard/EvaluateButton';
 import { HealthDashboard } from '../features/health-dashboard/HealthDashboard';
+import { AdverseConditionPath } from '../features/invalid-project/AdverseConditionPath';
+import { InvalidSampleDataPanel } from '../features/invalid-project/InvalidSampleDataPanel';
 import { IntegrationChecklist } from '../features/integration-checklist/IntegrationChecklist';
 import { PersonaSelector } from '../features/persona-selector/PersonaSelector';
 import { ProjectSelector } from '../features/project-select/ProjectSelector';
 import { ResetButton } from '../features/reset-confirm/ResetButton';
 import { ResetConfirmDialog } from '../features/reset-confirm/ResetConfirmDialog';
 import { useSession } from '../session/sessionContext';
-import { cancelReset, confirmReset, toggleCoachSection, toggleEvidence } from '../session/sessionActions';
+import {
+  cancelReset,
+  confirmReset,
+  evaluate,
+  requestReset,
+  toggleCoachSection,
+  toggleEvidence,
+} from '../session/sessionActions';
 import styles from './App.module.css';
+
+function focusProjectSelector() {
+  document.querySelector<HTMLElement>('[data-testid^="project-option-"]')?.focus();
+}
 
 export default function App() {
   const { state, dispatch } = useSession();
@@ -23,9 +37,11 @@ export default function App() {
               Leadership health view from bundled representative signals — methodology-neutral and local only.
             </p>
           </div>
-          <PrivacyIndicator />
-          <PersonaSelector />
-          <ResetButton />
+          <div className={styles.headerControls}>
+            <PrivacyIndicator />
+            <PersonaSelector />
+            <ResetButton />
+          </div>
         </div>
       </header>
       <main className={styles.main} id="main-content">
@@ -35,11 +51,24 @@ export default function App() {
               Project context
             </h2>
             <ProjectSelector />
+            <AdverseConditionPath />
             {state.selectedProjectId ? <IntegrationChecklist /> : null}
             <EvaluateButton />
           </section>
 
-          {state.phase === 'evaluated' && state.evaluation && state.presentation ? (
+          {state.phase === 'invalid-project' && state.invalidProject ? (
+            <InvalidSampleDataPanel
+              context={state.invalidProject}
+              onSelectAnother={focusProjectSelector}
+              onResetSession={() => dispatch(requestReset())}
+            />
+          ) : state.phase === 'error' && state.ui.errorMessage ? (
+            <ErrorPanel
+              message={state.ui.errorMessage}
+              onRetry={() => dispatch(evaluate())}
+              onReset={() => dispatch(requestReset())}
+            />
+          ) : state.phase === 'evaluated' && state.evaluation && state.presentation ? (
             <HealthDashboard
               evaluation={state.evaluation}
               presentation={state.presentation}

@@ -22,6 +22,14 @@ export interface ProjectLoadResult {
   message?: string;
 }
 
+export interface InvalidProjectContext {
+  fixtureId: string;
+  displayName: string;
+  projectKey: string | null;
+  category: string;
+  message: string;
+}
+
 export interface SessionState {
   sessionId: string;
   persona: Persona;
@@ -29,6 +37,7 @@ export interface SessionState {
   selectedProjectId: string | null;
   enabledSignalGroupIds: string[];
   projectLoad: ProjectLoadResult | null;
+  invalidProject: InvalidProjectContext | null;
   evaluation: EvaluationResult | null;
   presentation: PersonaPresentation | null;
   ui: SessionUiState;
@@ -37,6 +46,7 @@ export interface SessionState {
 export type SessionAction =
   | { type: 'INIT' }
   | { type: 'SELECT_PROJECT'; projectId: string }
+  | { type: 'LOAD_INVALID_PROJECT'; fixtureId: string }
   | { type: 'TOGGLE_SIGNAL_GROUP'; groupId: string }
   | { type: 'SET_PERSONA'; persona: Persona }
   | { type: 'EVALUATE' }

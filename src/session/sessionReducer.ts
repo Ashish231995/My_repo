@@ -1,4 +1,4 @@
-import { MAPPING_REGISTRY, SAMPLE_PROJECTS } from '../data/fixtures';
+import { INVALID_FIXTURES, MAPPING_REGISTRY, SAMPLE_PROJECTS } from '../data/fixtures';
 import { runEvaluation } from '../domain/evaluation/runEvaluation';
 import { projectForPersona } from '../domain/persona/projectForPersona';
 import { RULE_CATALOGS } from '../domain/scoring/ruleCatalogs';
@@ -27,6 +27,13 @@ export function sessionReducer(state: SessionState, action: SessionAction): Sess
           phase: 'invalid-project',
           selectedProjectId: null,
           enabledSignalGroupIds: [],
+          invalidProject: {
+            fixtureId: action.projectId,
+            displayName: action.projectId,
+            projectKey: null,
+            category: 'malformed-structure',
+            message: `Unknown project: ${action.projectId}`,
+          },
           projectLoad: { ok: false, message: `Unknown project: ${action.projectId}` },
           evaluation: null,
           presentation: null,
@@ -41,6 +48,13 @@ export function sessionReducer(state: SessionState, action: SessionAction): Sess
           phase: 'invalid-project',
           selectedProjectId: null,
           enabledSignalGroupIds: [],
+          invalidProject: {
+            fixtureId: action.projectId,
+            displayName: project.displayName,
+            projectKey: project.identity.projectKey?.trim() ? project.identity.projectKey : null,
+            category: load.category,
+            message: load.message,
+          },
           projectLoad: { ok: false, message: load.message },
           evaluation: null,
           presentation: null,
@@ -53,6 +67,7 @@ export function sessionReducer(state: SessionState, action: SessionAction): Sess
         phase: 'project-ready',
         selectedProjectId: action.projectId,
         enabledSignalGroupIds: defaultEnabledGroupIds(action.projectId),
+        invalidProject: null,
         projectLoad: { ok: true, projectId: action.projectId },
         evaluation: null,
         presentation: null,
@@ -60,8 +75,58 @@ export function sessionReducer(state: SessionState, action: SessionAction): Sess
       };
     }
 
+    case 'LOAD_INVALID_PROJECT': {
+      const project = INVALID_FIXTURES[action.fixtureId];
+      if (!project) {
+        return {
+          ...state,
+          phase: 'invalid-project',
+          selectedProjectId: null,
+          enabledSignalGroupIds: [],
+          invalidProject: {
+            fixtureId: action.fixtureId,
+            displayName: action.fixtureId,
+            projectKey: null,
+            category: 'malformed-structure',
+            message: `Unknown invalid fixture: ${action.fixtureId}`,
+          },
+          projectLoad: { ok: false, message: `Unknown invalid fixture: ${action.fixtureId}` },
+          evaluation: null,
+          presentation: null,
+          ui: { ...state.ui, errorMessage: null },
+        };
+      }
+
+      const validation = validateProject(project, MAPPING_REGISTRY);
+      if (validation.ok) {
+        return state;
+      }
+
+      return {
+        ...state,
+        phase: 'invalid-project',
+        selectedProjectId: null,
+        enabledSignalGroupIds: [],
+        invalidProject: {
+          fixtureId: action.fixtureId,
+          displayName: project.displayName,
+          projectKey: project.identity.projectKey?.trim() ? project.identity.projectKey : null,
+          category: validation.invalid.category,
+          message: validation.invalid.message,
+        },
+        projectLoad: { ok: false, message: validation.invalid.message },
+        evaluation: null,
+        presentation: null,
+        ui: { ...state.ui, errorMessage: null },
+      };
+    }
+
     case 'EVALUATE': {
-      if (!state.selectedProjectId || state.phase === 'initial' || state.phase === 'invalid-project') {
+      if (
+        !state.selectedProjectId ||
+        state.phase === 'initial' ||
+        state.phase === 'invalid-project'
+      ) {
         return state;
       }
 
@@ -157,6 +222,18 @@ export function sessionReducer(state: SessionState, action: SessionAction): Sess
         },
       };
 
+    case 'SET_ERROR':
+      return {
+        ...state,
+        phase: 'error',
+        evaluation: null,
+        presentation: null,
+        ui: {
+          ...state.ui,
+          errorMessage: action.message,
+        },
+      };
+
     case 'TOGGLE_EVIDENCE': {
       const expanded = new Set(state.ui.expandedEvidenceIds);
       if (expanded.has(action.evidenceId)) {
@@ -194,14 +271,24 @@ export function sessionReducer(state: SessionState, action: SessionAction): Sess
   }
 }
 
-function validateProjectSelection(projectId: string): { ok: true } | { ok: false; message: string } {
+function validateProjectSelection(
+  projectId: string,
+): { ok: true } | { ok: false; message: string; category: string } {
   const project = SAMPLE_PROJECTS[projectId];
   if (!project) {
-    return { ok: false, message: `Unknown project: ${projectId}` };
+    return {
+      ok: false,
+      message: `Unknown project: ${projectId}`,
+      category: 'malformed-structure',
+    };
   }
   const load = validateProject(project, MAPPING_REGISTRY);
   if (!load.ok) {
-    return { ok: false, message: load.invalid.message };
+    return {
+      ok: false,
+      message: load.invalid.message,
+      category: load.invalid.category,
+    };
   }
   return { ok: true };
 }

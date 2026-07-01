@@ -12,13 +12,21 @@
 
 .headerInner {
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: stretch;
   gap: var(--space-md);
   width: 100%;
   max-width: 72rem;
   margin: 0 auto;
   padding: var(--space-md) var(--space-md);
+}
+
+.headerControls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--space-md);
+  min-width: 0;
 }
 
 .headerBrand {
@@ -91,7 +99,15 @@
 
 @media (min-width: 768px) {
   .headerInner {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
     padding: var(--space-lg) var(--space-lg);
+  }
+
+  .headerControls {
+    justify-content: flex-end;
+    max-width: 28rem;
   }
 
   .main {

@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "1.0",
+  "id": "sample-invalid",
+  "displayName": "Sample Project Invalid — Adverse Data",
+  "scenario": "invalid",
+  "identity": {
+    "projectKey": "",
+    "projectName": "Invalid Adverse Fixture"
+  },
+  "snapshot": {
+    "asOfDate": "2026-06-01",
+    "label": "Snapshot as of 1 Jun 2026"
+  },
+  "signalGroups": [
+    {
+      "id": "grp-schedule",
+      "representativeSourceLabel": "Representative work-tracker (demo)",
+      "displayName": "Schedule signals",
+      "defaultEnabled": true,
+      "dimensionAffinity": ["schedule"],
+      "requiredForFullMeasurement": true
+    }
+  ],
+  "sourceSignals": [
+    {
+      "id": "sig-invalid-schedule-slip",
+      "signalGroupId": "grp-schedule",
+      "sourceTerm": "Milestone slip days",
+      "mappingKey": "milestone-slip",
+      "payload": { "slipDays": 0 }
+    }
+  ],
+  "expectations": {
+    "invalidCategory": "missing-identity"
+  }
+}

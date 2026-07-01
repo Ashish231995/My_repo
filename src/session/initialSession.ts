@@ -18,6 +18,7 @@ export function createInitialSession(): SessionState {
     selectedProjectId: null,
     enabledSignalGroupIds: [],
     projectLoad: null,
+    invalidProject: null,
     evaluation: null,
     presentation: null,
     ui: createEmptyUiState(),
