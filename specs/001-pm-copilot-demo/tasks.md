@@ -289,14 +289,14 @@
 
 **Purpose**: Final gates before leadership demo.
 
-- [ ] T128 [P] Implement `tests/perf/evaluation-bench.test.ts` asserting evaluation <200ms on Sample B. **Refs**: plan.md Performance, FR-020 | **Evidence**: bench under threshold
-- [ ] T129 Run full `npm test` suite — all unit, domain, golden, integration tests green. **Refs**: Constitution VII, SC-001–SC-006 | **Evidence**: exit code 0
-- [ ] T130 Run `npm run test:a11y` and `npm run test:privacy` — all green. **Refs**: SC-004, SC-005, Constitution II, VIII | **Evidence**: exit code 0
-- [ ] T131 Run `npm run typecheck` and `npm run build` — production build succeeds. **Refs**: Constitution VII | **Evidence**: `dist/` clean build
-- [ ] T132 Run `npm audit` and verify dependency versions match ADR-001 manifest. **Refs**: HD-05, plan.md Quality Gates | **Evidence**: audit report archived
-- [ ] T133 Cross-check `contracts/implementation-traceability.md` — confirm every FR-001–FR-040, BR-001–BR-018, AS-001–AS-063, SC-001–SC-006 has passing test evidence. **Refs**: Constitution I, FR-001–FR-040 | **Evidence**: traceability checklist completed
-- [ ] T134 Execute constitution compliance checklist from `.specify/memory/constitution.md` Principles I–VIII against built app. **Refs**: Constitution I–VIII | **Evidence**: signed checklist in PR or demo packet
-- [ ] T135 Re-run architecture gate CHK067–CHK125 from `checklists/architecture-plan-readiness.md` — confirm zero Fail. **Refs**: plan.md Constitution Check | **Evidence**: gate record updated
+- [X] T128 [P] Implement `tests/perf/evaluation-bench.test.ts` asserting evaluation <200ms on Sample B. **Refs**: plan.md Performance, FR-020 | **Evidence**: bench under threshold
+- [X] T129 Run full `npm test` suite — all unit, domain, golden, integration tests green. **Refs**: Constitution VII, SC-001–SC-006 | **Evidence**: exit code 0
+- [X] T130 Run `npm run test:a11y` and `npm run test:privacy` — all green. **Refs**: SC-004, SC-005, Constitution II, VIII | **Evidence**: exit code 0
+- [X] T131 Run `npm run typecheck` and `npm run build` — production build succeeds. **Refs**: Constitution VII | **Evidence**: `dist/` clean build
+- [X] T132 Run `npm audit` and verify dependency versions match ADR-001 manifest. **Refs**: HD-05, plan.md Quality Gates | **Evidence**: audit report archived
+- [X] T133 Cross-check `contracts/implementation-traceability.md` — confirm every FR-001–FR-040, BR-001–BR-018, AS-001–AS-063, SC-001–SC-006 has passing test evidence. **Refs**: Constitution I, FR-001–FR-040 | **Evidence**: traceability checklist completed
+- [X] T134 Execute constitution compliance checklist from `.specify/memory/constitution.md` Principles I–VIII against built app. **Refs**: Constitution I–VIII | **Evidence**: signed checklist in PR or demo packet
+- [X] T135 Re-run architecture gate CHK067–CHK125 from `checklists/architecture-plan-readiness.md` — confirm zero Fail. **Refs**: plan.md Constitution Check | **Evidence**: gate record updated
 - [ ] T136 **Human**: Manual Microsoft Edge verification per `quickstart.md` on Windows corporate laptop. **Refs**: ADR-007, SC-005 | **Evidence**: signed Edge checklist (requires human)
 - [ ] T137 **Human**: Leadership demo rehearsal using Sample Project B P1 path per `quickstart.md` Scenario 1. **Refs**: SC-001, plan.md Items Requiring Human Approval | **Evidence**: timed rehearsal ≤5 min (requires human sponsor)
 - [ ] T138 Run `quickstart.md` quality gates table end-to-end and document results. **Refs**: quickstart.md | **Evidence**: gate log attached

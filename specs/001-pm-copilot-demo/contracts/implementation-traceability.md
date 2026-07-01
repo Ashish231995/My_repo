@@ -45,7 +45,7 @@
 | FR-017 | `src/domain/scoring/` | Unit | `tests/domain/trend.test.ts` | `domain-functions.md` | P4, P10 |
 | FR-018 | `src/domain/scoring/` | Unit | `tests/domain/measurement-status.test.ts` | `scoring-rules.md` | P4, P10 |
 | FR-019 | `src/domain/scoring/` | Unit | `tests/domain/measurement-status.test.ts` | `scoring-rules.md`, `data-model.md` | P4, P10 |
-| FR-020 | `src/domain/scoring/` | Golden + Unit | `tests/domain/composite.test.ts`; `tests/domain/canonical-type-aggregation.test.ts`; `tests/golden/*.test.ts` | `scoring-rules.md` (HD-07), `golden-scenarios.md` | P4, P10 |
+| FR-020 | `src/domain/scoring/` | Golden + Unit + Perf | `tests/domain/composite.test.ts`; `tests/domain/canonical-type-aggregation.test.ts`; `tests/golden/*.test.ts`; `tests/perf/evaluation-bench.test.ts` | `scoring-rules.md` (HD-07), `golden-scenarios.md`, `plan.md` §Performance | P4, P10 |
 | FR-021 | `src/domain/recommendations/` | Golden + Unit | `tests/domain/recommendation-rules.test.ts`; `tests/golden/sample-b.test.ts` | `recommendation-rules.md` | P5, P10 |
 | FR-022 | `src/domain/recommendations/`, `src/features/recommendations/` | Unit + Integration | `tests/domain/recommendation-rules.test.ts`; `tests/integration/recommendations.test.tsx` | `recommendation-rules.md`, `ui-states.md` | P5, P9, P10 |
 | FR-023 | `src/domain/persona/` | Integration | `tests/integration/persona-coaching.test.tsx` | `ui-states.md` | P8, P10 |

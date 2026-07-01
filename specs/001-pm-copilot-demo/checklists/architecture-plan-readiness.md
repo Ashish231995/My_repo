@@ -1071,4 +1071,50 @@ The implementation plan and design artifacts are **constitution-compliant**, **t
 
 ---
 
+## Phase 8A Final Re-Evaluation (T135) — 2026-07-01
+
+**Evaluator**: Automated release gate (T128–T135)
+
+**Scope**: CHK067–CHK125 against **implemented** application and passing test evidence
+
+**Prior audit history**: Pre-remediation CHK001–CHK066 and post-remediation planning gate above are **unchanged**.
+
+### Runtime evidence summary
+
+| Gate | Result |
+|------|--------|
+| Golden scenarios A/B/C + invalid | `npm run test:golden` — 10/10 pass (composite 94 / 51 / 86; invalid blocked) |
+| Full automated suite | `npm test -- --pool=threads --maxWorkers=2` — 210/210 pass, exit 0 |
+| Performance smoke | `tests/perf/evaluation-bench.test.ts` — median 0.20 ms, max 0.33 ms (<200 ms) |
+| Privacy / a11y | `test:privacy` 3/3; `test:a11y` 7/7 |
+| Build | `typecheck` pass; `vite build` → `dist/` clean |
+| Dependency pin (ADR-001) | `package.json` matches ADR-001 target versions (T001 complete) |
+| `npm audit` | 0 vulnerabilities (`npm-audit-2026-07-01.json`) |
+
+### CHK067–CHK125 status (implementation re-run)
+
+| Status | Count | Notes |
+|--------|------:|-------|
+| **Pass** | 57 | Includes runtime upgrades: CHK073 (gates executed), CHK086 (pins applied), CHK109 (perf bench green), CHK120 (golden runtime proven) |
+| **Fail** | **0** | Required for T135 |
+| **Needs Decision** | 2 | CHK122 (duplicate canonical aggregation — resolved in code via HD-07 mean-within-type; doc ambiguity only), CHK125 (`milestoneDueDate` documented in fixtures; REC-002 fires in Sample B golden) |
+| **Total** | 59 | |
+
+**CHK106** (plan.md table formatting): **Pass (non-blocking doc)** — quality gates executed successfully; markdown defect does not affect runtime.
+
+### Automated vs human gates
+
+| Gate | Status |
+|------|--------|
+| T128–T135 (automated) | **Approved** |
+| T136 Edge manual verification | **Pending human** |
+| T137 Leadership demo rehearsal | **Pending human** |
+| T138 Quickstart gate log | **Pending human** |
+
+### T135 verdict
+
+**Approved** — zero **Fail** items in CHK067–CHK125 at implementation time. Residual **Needs Decision** items are documentation-precision only and do not block automated release readiness.
+
+---
+
 *Post-remediation evaluation CHK067–CHK125. Pre-remediation items CHK001–CHK066 retained for audit history.*
