@@ -6,17 +6,20 @@ alwaysApply: true
 For additional context about technologies, project structure, shell commands, and
 implementation constraints, read:
 
-**Plan**: `specs/001-pm-copilot-demo/plan.md`
+**Plan**: `specs/002-sharepoint-snapshot-import/plan.md`
 
 **Supporting design artifacts**:
-- `specs/001-pm-copilot-demo/research.md` — ADRs, pinned versions, baseline validation
-- `specs/001-pm-copilot-demo/data-model.md` — domain entities and session lifecycle
-- `specs/001-pm-copilot-demo/contracts/` — **Demonstration Rule Catalog v1.0 (APPROVED)**, traceability, fixtures, scoring
-- `specs/001-pm-copilot-demo/contracts/implementation-traceability.md` — FR/BR/AS/SC → module → test mapping
-- `specs/001-pm-copilot-demo/quickstart.md` — validation scenarios and quality gates
-- `specs/001-pm-copilot-demo/spec.md` — requirements and Demonstration Policy v1.0
+- `specs/002-sharepoint-snapshot-import/research.md` — ADR-009 (`read-excel-file@9.2.0`), ADR-010 acquisition, ADR-011 import-only profile
+- `specs/002-sharepoint-snapshot-import/data-model.md` — import entities and session modes
+- `specs/002-sharepoint-snapshot-import/contracts/` — workbook contract, import functions, session state, traceability
+- `specs/002-sharepoint-snapshot-import/quickstart.md` — validation scenarios and quality gates
+- `specs/002-sharepoint-snapshot-import/spec.md` — FR-001–FR-026, Workbook Contract v1.0
 
-**Stack**: React 19.2.7, TypeScript 6.0.3, Vite 8.1.0 — local SPA only; no backend/API/persistence/external runtime network.
+**Baseline (001 — scoring unchanged)**:
+- `specs/001-pm-copilot-demo/contracts/demonstration-rule-catalog.md` — Demonstration Rule Catalog v1.0 (APPROVED)
+- `specs/001-pm-copilot-demo/contracts/evaluation-pipeline.md` — `runEvaluation` pipeline
 
-**Architecture**: Pure TypeScript domain in `src/domain/` (scoring includes composite; findings includes evidence assembly); React Context + useReducer session; CSS Modules + design tokens; Vitest + RTL for tests.
+**Stack**: React 19.2.7, TypeScript 6.0.3, Vite 8.1.0, `read-excel-file@9.2.0` (import, implementation phase) — local SPA only; no backend/API/persistence/external runtime network.
+
+**Architecture**: Extend with `src/import/` (acquisition → parse → validate → normalize) then reuse `src/domain/evaluation/runEvaluation`; session `projectMode` bundled|imported; 001 golden tests must remain green.
 <!-- SPECKIT END -->

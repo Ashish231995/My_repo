@@ -39,4 +39,4 @@
 
 - **Validation iteration 1 (2026-07-01)**: Specification passes content, scope, and baseline-extension checks. Three workbook-contract clarifications (UD-001 row layout, UD-002 integration checklist, UD-003 template version) are intentionally deferred for a focused `/speckit-clarify` pass.
 - **Validation iteration 2 (2026-07-01)**: UD-001–UD-003 resolved in spec clarifications session; all `[NEEDS CLARIFICATION]` markers removed. Ready for `/speckit-plan`.
-- **Validation iteration 3 (2026-07-01)**: Project vs dimension row-2 rules aligned — only missing/empty **Project** row 2 or missing worksheets/headers block structurally; dimension headers-only or empty row 2 → Unmeasured (not structural failure).
+- **Validation iteration 3 (2026-07-01)**: Pre-task remediation — parser pinned to `read-excel-file@9.2.0`; fixture manifest at `tests/fixtures/workbooks/README.md`; OI-001/OI-003 resolved. Ready for `/speckit-tasks`.
