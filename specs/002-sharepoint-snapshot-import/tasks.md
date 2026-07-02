@@ -138,13 +138,13 @@
 
 ### Tests (write first)
 
-- [ ] T251 [P] [US2] Implement `tests/golden/import-incomplete-team.test.ts` using `incomplete-team-empty-row2.xlsx` → Team Unmeasured. **Refs**: AS-004, FR-012, SC-001 | **Evidence**: fails until normalization verified
-- [ ] T252 [P] [US2] Implement `tests/golden/import-partial-schedule.test.ts` using `partial-schedule.xlsx` → Schedule Partial. **Refs**: AS-005, FR-012 | **Evidence**: fails until normalization verified
+- [X] T251 [P] [US2] Implement `tests/golden/import-incomplete-team.test.ts` using `incomplete-team-empty-row2.xlsx` → Team Unmeasured. **Refs**: AS-004, FR-012, SC-001 | **Evidence**: fails until normalization verified
+- [X] T252 [P] [US2] Implement `tests/golden/import-partial-schedule.test.ts` using `partial-schedule.xlsx` → Schedule Partial. **Refs**: AS-005, FR-012 | **Evidence**: fails until normalization verified
 
 ### Implementation
 
-- [ ] T253 [US2] Verify `normalizeImportedWorkbook` skips empty canonical cells without imputation; fix edge cases if golden tests expose gaps. **Refs**: BR-002, AS-006 | **Evidence**: T251–T252 pass without scoring changes
-- [ ] T254 [US2] Verify composite rules for import with Unmeasured/Partial dimensions match 001 policy in golden assertions. **Refs**: FR-012, BR-001 | **Evidence**: golden tests pass
+- [X] T253 [US2] Verify `normalizeImportedWorkbook` skips empty canonical cells without imputation; fix edge cases if golden tests expose gaps. **Refs**: BR-002, AS-006 | **Evidence**: T251–T252 pass without scoring changes
+- [X] T254 [US2] Verify composite rules for import with Unmeasured/Partial dimensions match 001 policy in golden assertions. **Refs**: FR-012, BR-001 | **Evidence**: golden tests pass
 
 **Checkpoint Phase 3**: Incomplete import semantics match Sample C-style behaviour.
 

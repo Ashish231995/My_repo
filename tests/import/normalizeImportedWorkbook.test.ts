@@ -54,4 +54,42 @@ describe('normalizeImportedWorkbook', () => {
     expect(project.snapshot.asOfDate).toBe('2026-06-15');
     expect(project.importMeta.workbookAsOfDate).toBe('2026-06-15');
   });
+
+  it('skips empty Team row 2 without imputing engagement or completion signals (BR-002)', async () => {
+    const bytes = await readWorkbookFixture('incomplete-team-empty-row2.xlsx');
+    const workbook = await parser.parse(bytes);
+    const project = normalizeImportedWorkbook(workbook, {
+      filename: 'incomplete-team-empty-row2.xlsx',
+      lastModifiedMs: meta.lastModifiedMs,
+    });
+
+    expect(project.sourceSignals.filter((signal) => signal.provenance.worksheet === 'Team')).toEqual(
+      [],
+    );
+    expect(project.sourceSignals.some((signal) => signal.mappingKey === 'engagement-score')).toBe(
+      false,
+    );
+    expect(project.sourceSignals.some((signal) => signal.mappingKey === 'completion-rate')).toBe(
+      false,
+    );
+  });
+
+  it('skips empty Schedule onTimePercent without defaulting baseline-health (BR-002)', async () => {
+    const bytes = await readWorkbookFixture('partial-schedule.xlsx');
+    const workbook = await parser.parse(bytes);
+    const project = normalizeImportedWorkbook(workbook, {
+      filename: 'partial-schedule.xlsx',
+      lastModifiedMs: meta.lastModifiedMs,
+    });
+
+    const scheduleSignals = project.sourceSignals.filter(
+      (signal) => signal.provenance.worksheet === 'Schedule',
+    );
+    expect(scheduleSignals).toHaveLength(1);
+    expect(scheduleSignals[0]?.mappingKey).toBe('milestone-slip');
+    expect(scheduleSignals[0]?.payload).toEqual({ slipDays: 8 });
+    expect(
+      scheduleSignals.some((signal) => signal.mappingKey === 'baseline-health'),
+    ).toBe(false);
+  });
 });
