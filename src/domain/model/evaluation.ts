@@ -50,6 +50,12 @@ export interface MappingResult {
   provenance: MappingProvenance;
 }
 
+export interface WorkbookEvidenceProvenance {
+  worksheet: string;
+  row: number;
+  column: string;
+}
+
 export interface EvidenceItem {
   id: string;
   canonicalSignalId: string | null;
@@ -67,6 +73,8 @@ export interface EvidenceItem {
   healthValue?: number | null;
   /** Original signal payload for finding derivation (FND-*) */
   sourcePayload?: Record<string, unknown>;
+  /** Import workbook cell location (Feature 002); absent on bundled fixtures */
+  workbookProvenance?: WorkbookEvidenceProvenance;
 }
 
 export interface TrendResult {

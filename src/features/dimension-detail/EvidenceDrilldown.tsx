@@ -60,6 +60,21 @@ export function EvidenceDrilldown({ evidence }: EvidenceDrilldownProps) {
                   <span className={styles.label}>Exclusion reason:</span> {item.exclusionReason}
                 </p>
               ) : null}
+              {item.workbookProvenance ? (
+                <>
+                  <p>
+                    <span className={styles.label}>Worksheet:</span>{' '}
+                    {item.workbookProvenance.worksheet}
+                  </p>
+                  <p>
+                    <span className={styles.label}>Row:</span> {item.workbookProvenance.row}
+                  </p>
+                  <p>
+                    <span className={styles.label}>Column:</span>{' '}
+                    {item.workbookProvenance.column}
+                  </p>
+                </>
+              ) : null}
               <p>
                 <span className={styles.label}>Resolved evidence date:</span> {item.resolvedAsOfDate}
               </p>

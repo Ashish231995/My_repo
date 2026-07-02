@@ -9,7 +9,7 @@ import { validateWorkbookContract } from '../validation/validateWorkbookContract
 
 export type ImportLoadResult =
   | { ok: true; project: ImportedSnapshotProject }
-  | { ok: false; validation: WorkbookValidationResult };
+  | { ok: false; validation: Extract<WorkbookValidationResult, { ok: false }> };
 
 export async function loadImportedProject(
   bytes: ArrayBuffer,

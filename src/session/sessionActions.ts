@@ -1,5 +1,10 @@
 import type { Persona } from '../domain/model/enums';
-import type { SessionAction } from '../domain/model/session';
+import type {
+  ImportedWorkbookReference,
+  SessionAction,
+  WorkbookValidationSnapshot,
+} from '../domain/model/session';
+import type { SampleProjectFixture } from '../domain/model/evaluation';
 
 export function init(): SessionAction {
   return { type: 'INIT' };
@@ -47,4 +52,46 @@ export function toggleEvidence(evidenceId: string): SessionAction {
 
 export function toggleCoachSection(sectionId: string): SessionAction {
   return { type: 'TOGGLE_COACH_SECTION', sectionId };
+}
+
+export function importLoadStarted(requestId: number): SessionAction {
+  return { type: 'IMPORT_LOAD_STARTED', requestId };
+}
+
+export function importLoadSucceeded(
+  requestId: number,
+  workbookRef: ImportedWorkbookReference | null,
+  normalizedProject: SampleProjectFixture | null,
+): SessionAction {
+  return { type: 'IMPORT_LOAD_SUCCEEDED', requestId, workbookRef, normalizedProject };
+}
+
+export function importLoadFailed(
+  requestId: number,
+  validation: Extract<WorkbookValidationSnapshot, { ok: false }>,
+): SessionAction {
+  return { type: 'IMPORT_LOAD_FAILED', requestId, validation };
+}
+
+export function refreshStarted(requestId: number): SessionAction {
+  return { type: 'REFRESH_STARTED', requestId };
+}
+
+export function refreshSucceeded(
+  requestId: number,
+  workbookRef: ImportedWorkbookReference | null,
+  normalizedProject: SampleProjectFixture | null,
+): SessionAction {
+  return { type: 'REFRESH_SUCCEEDED', requestId, workbookRef, normalizedProject };
+}
+
+export function refreshFailed(
+  requestId: number,
+  validation: Extract<WorkbookValidationSnapshot, { ok: false }>,
+): SessionAction {
+  return { type: 'REFRESH_FAILED', requestId, validation };
+}
+
+export function reselectRequired(requestId: number, reason: string): SessionAction {
+  return { type: 'RESELECT_REQUIRED', requestId, reason };
 }

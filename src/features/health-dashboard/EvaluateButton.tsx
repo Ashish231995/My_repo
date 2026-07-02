@@ -5,10 +5,12 @@ import styles from './EvaluateButton.module.css';
 
 export function EvaluateButton() {
   const { state, dispatch } = useSession();
+  const isImportLoading = state.phase === 'import-loading';
   const canEvaluate =
-    state.phase === 'project-ready' ||
-    state.phase === 'evaluated' ||
-    state.phase === 'error';
+    !isImportLoading &&
+    (state.phase === 'project-ready' ||
+      state.phase === 'evaluated' ||
+      state.phase === 'error');
 
   return (
     <div className={styles.wrapper}>

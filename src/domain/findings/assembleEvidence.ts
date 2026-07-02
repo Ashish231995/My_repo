@@ -26,5 +26,12 @@ export function assembleEvidence(
     sourceField: source.sourceField,
     healthValue,
     sourcePayload: source.payload,
+    workbookProvenance: source.provenance
+      ? {
+          worksheet: source.provenance.worksheet,
+          row: source.provenance.row,
+          column: source.provenance.column,
+        }
+      : undefined,
   };
 }

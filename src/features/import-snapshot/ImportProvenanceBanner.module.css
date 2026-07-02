@@ -1,0 +1,29 @@
+.banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm) var(--space-md);
+  padding: var(--space-md);
+  margin-bottom: var(--space-md);
+  border: 1px solid var(--colour-border);
+  border-radius: 6px;
+  background: var(--colour-surface);
+}
+
+.label {
+  font-weight: 600;
+}
+
+.field {
+  font-size: var(--font-size-sm);
+}
+
+.fieldLabel {
+  font-weight: 600;
+}
+
+.trust {
+  flex-basis: 100%;
+  font-size: var(--font-size-sm);
+  color: var(--colour-unmeasured-secondary);
+}

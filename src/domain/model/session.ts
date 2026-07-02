@@ -1,11 +1,15 @@
 import type { Persona } from './enums';
-import type { EvaluationResult, PersonaPresentation } from './evaluation';
+import type { EvaluationResult, PersonaPresentation, SampleProjectFixture } from './evaluation';
+
+export type ProjectMode = 'none' | 'bundled' | 'imported';
 
 export type SessionPhase =
   | 'initial'
   | 'project-ready'
   | 'evaluated'
   | 'invalid-project'
+  | 'import-invalid'
+  | 'import-loading'
   | 'error';
 
 export interface SessionUiState {
@@ -30,6 +34,30 @@ export interface InvalidProjectContext {
   message: string;
 }
 
+export interface ImportedWorkbookReference {
+  filename: string;
+  lastModifiedMs: number;
+  acquisitionMethod: 'file-picker' | 'file-input';
+  fileHandle: FileSystemFileHandle | null;
+  lastKnownFile: File | null;
+}
+
+export type WorkbookValidationSnapshot =
+  | { ok: true }
+  | {
+      ok: false;
+      category: string;
+      messages: string[];
+    };
+
+export interface ImportSessionContext {
+  workbookRef: ImportedWorkbookReference | null;
+  validation: WorkbookValidationSnapshot | null;
+  normalizedProject: SampleProjectFixture | null;
+  refreshState: 'idle' | 'refreshing' | 'needs-reselect';
+  loadState: 'idle' | 'loading';
+}
+
 export interface SessionState {
   sessionId: string;
   persona: Persona;
@@ -41,6 +69,9 @@ export interface SessionState {
   evaluation: EvaluationResult | null;
   presentation: PersonaPresentation | null;
   ui: SessionUiState;
+  projectMode: ProjectMode;
+  importContext: ImportSessionContext | null;
+  importRequestId: number;
 }
 
 export type SessionAction =
@@ -55,4 +86,29 @@ export type SessionAction =
   | { type: 'CANCEL_RESET' }
   | { type: 'SET_ERROR'; message: string }
   | { type: 'TOGGLE_EVIDENCE'; evidenceId: string }
-  | { type: 'TOGGLE_COACH_SECTION'; sectionId: string };
+  | { type: 'TOGGLE_COACH_SECTION'; sectionId: string }
+  | { type: 'IMPORT_LOAD_STARTED'; requestId: number }
+  | {
+      type: 'IMPORT_LOAD_SUCCEEDED';
+      requestId: number;
+      workbookRef: ImportedWorkbookReference | null;
+      normalizedProject: SampleProjectFixture | null;
+    }
+  | {
+      type: 'IMPORT_LOAD_FAILED';
+      requestId: number;
+      validation: Extract<WorkbookValidationSnapshot, { ok: false }>;
+    }
+  | { type: 'REFRESH_STARTED'; requestId: number }
+  | {
+      type: 'REFRESH_SUCCEEDED';
+      requestId: number;
+      workbookRef: ImportedWorkbookReference | null;
+      normalizedProject: SampleProjectFixture | null;
+    }
+  | {
+      type: 'REFRESH_FAILED';
+      requestId: number;
+      validation: Extract<WorkbookValidationSnapshot, { ok: false }>;
+    }
+  | { type: 'RESELECT_REQUIRED'; requestId: number; reason: string };

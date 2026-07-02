@@ -1,4 +1,5 @@
 import { SAMPLE_PROJECT_IDS, SAMPLE_PROJECTS } from '../../data/fixtures';
+import { ImportSnapshotButton } from '../import-snapshot/ImportSnapshotButton';
 import { selectProject } from '../../session/sessionActions';
 import { useSession } from '../../session/sessionContext';
 import styles from './ProjectSelector.module.css';
@@ -34,7 +35,8 @@ export function ProjectSelector() {
             );
           })}
         </div>
-        {state.selectedProjectId === null && (
+        <ImportSnapshotButton />
+        {state.selectedProjectId === null && state.projectMode !== 'imported' && (
           <p className={styles.prompt} data-testid="project-select-prompt">
             Select a bundled sample project to continue.
           </p>

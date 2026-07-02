@@ -45,7 +45,7 @@
 
 **Purpose**: Parser-neutral workbook model, contract validation, normalization, orchestration, **pure session lifecycle reducer**, **async import controller**, `ProjectValidator` injection. **No UI.**
 
-**Progress**: **28/32** tasks complete — **4 remaining** (T236–T241 session reducer/controller; T210–T221 + T224–T235 pipeline green).
+**Progress**: **32/32** tasks complete — Phase 1 checkpoint green (pipeline + reducer + controller; no UI).
 
 > **Early type-contract tasks (Phase 0 pull-forward)**: T222, T223, and T231 were completed during Phase 0 as prerequisites for T205/T206 (`FakeWorkbookParser` / `FakeWorkbookAcquisition`). Deliverables are parser/acquisition **types and port interfaces only** in `src/import/parsing/types.ts`, `WorkbookParserPort.ts`, and `src/import/acquisition/types.ts` — no mapping, parser adapters, acquisition implementation, validation, normalization, reducer, or controller behavior.
 
@@ -94,12 +94,12 @@
 
 ### Session core (pure reducer + async controller)
 
-- [ ] T236 Extend `SessionState` with `projectMode`, `importContext`, `importRequestId` in `src/domain/model/session.ts`; add `import-loading` and `import-invalid` phases. **Refs**: FR-023, contracts/import-session-state.md | **Evidence**: types match contract
-- [ ] T237 Add lifecycle actions in `src/session/sessionActions.ts` (`IMPORT_LOAD_STARTED`, `IMPORT_LOAD_SUCCEEDED`, `IMPORT_LOAD_FAILED`, `REFRESH_STARTED`, `REFRESH_SUCCEEDED`, `REFRESH_FAILED`, `RESELECT_REQUIRED`). **No `IMPORT_CANCELLED`** — picker cancel is no-dispatch. **Refs**: ADR-015, import-session-state.md | **Evidence**: actions exported
-- [ ] T238 Implement `createSessionReducer({ importedProjectValidator })`, `createInitialSession`, and **synchronous** lifecycle handlers + sync `EVALUATE` in `src/session/sessionReducer.ts`. **`sessionReducer.ts` MUST NOT import `src/import/**`**; `AppProviders` supplies `validateImportedProject`. **Refs**: ADR-015, ADR-016, FR-010, FR-023, BR-005 | **Evidence**: T218 passes
-- [ ] T239 Implement `createImportController` in `src/import/controller/importController.ts` — **must**: (1) `selectWorkbook` before `IMPORT_LOAD_STARTED`; (2) picker cancel → no lifecycle dispatch / no state change; (3) discard selection when active context changed during picker; (4) refresh fail-closed (`REFRESH_FAILED` → `import-invalid`, `RESELECT_REQUIRED` → no stale scores). Dispatches lifecycle actions with `requestId`. **Refs**: ADR-015, AS-024, AS-025, contracts/import-functions.md | **Evidence**: T219 passes
-- [ ] T240 Wire `SessionProvider` / `AppProviders` to pass `validateImportedProject` into `createSessionReducer` and connect `importController` to dispatch/getState. **Refs**: ADR-015, ADR-016 | **Evidence**: controller testable from integration layer
-- [ ] T241 Run Phase 1 checkpoint suite: `tests/import`, `tests/session/import-reducer.test.ts`, `tests/import/import-controller.test.ts`, `tests/golden/import-complete.test.ts`. **Refs**: SC-001 | **Evidence**: all pass; 001 goldens green
+- [X] T236 Extend `SessionState` with `projectMode`, `importContext`, `importRequestId` in `src/domain/model/session.ts`; add `import-loading` and `import-invalid` phases. **Refs**: FR-023, contracts/import-session-state.md | **Evidence**: types match contract
+- [X] T237 Add lifecycle actions in `src/session/sessionActions.ts` (`IMPORT_LOAD_STARTED`, `IMPORT_LOAD_SUCCEEDED`, `IMPORT_LOAD_FAILED`, `REFRESH_STARTED`, `REFRESH_SUCCEEDED`, `REFRESH_FAILED`, `RESELECT_REQUIRED`). **No `IMPORT_CANCELLED`** — picker cancel is no-dispatch. **Refs**: ADR-015, import-session-state.md | **Evidence**: actions exported
+- [X] T238 Implement `createSessionReducer({ importedProjectValidator })`, `createInitialSession`, and **synchronous** lifecycle handlers + sync `EVALUATE` in `src/session/sessionReducer.ts`. **`sessionReducer.ts` MUST NOT import `src/import/**`**; `AppProviders` supplies `validateImportedProject`. **Refs**: ADR-015, ADR-016, FR-010, FR-023, BR-005 | **Evidence**: T218 passes
+- [X] T239 Implement `createImportController` in `src/import/controller/importController.ts` — **must**: (1) `selectWorkbook` before `IMPORT_LOAD_STARTED`; (2) picker cancel → no lifecycle dispatch / no state change; (3) discard selection when active context changed during picker; (4) refresh fail-closed (`REFRESH_FAILED` → `import-invalid`, `RESELECT_REQUIRED` → no stale scores). Dispatches lifecycle actions with `requestId`. **Refs**: ADR-015, AS-024, AS-025, contracts/import-functions.md | **Evidence**: T219 passes
+- [X] T240 Wire `SessionProvider` / `AppProviders` to pass `validateImportedProject` into `createSessionReducer` and connect `importController` to dispatch/getState. **Refs**: ADR-015, ADR-016 | **Evidence**: controller testable from integration layer
+- [X] T241 Run Phase 1 checkpoint suite: `tests/import`, `tests/session/import-reducer.test.ts`, `tests/import/import-controller.test.ts`, `tests/golden/import-complete.test.ts`. **Refs**: SC-001 | **Evidence**: all pass; 001 goldens green
 
 **Checkpoint Phase 1**: Full import pipeline + pure reducer + controller work in isolation; golden import-complete passes; no UI.
 
@@ -113,18 +113,18 @@
 
 ### Tests (write first)
 
-- [ ] T242 [P] [US1] Implement `tests/integration/import-flow.test.tsx` using configured `createSessionReducer` + `importController` with `FakeWorkbookAcquisition` + `FakeWorkbookParser` — after `IMPORT_LOAD_SUCCEEDED`, dispatch sync `EVALUATE` through reducer (not direct `runEvaluation`); assert provenance banner. **Refs**: AS-001, AS-002, AS-020, FR-010, FR-015, FR-026, OI-002 | **Evidence**: fails until T244–T250
+- [X] T242 [P] [US1] Implement `tests/integration/import-flow.test.tsx` using configured `createSessionReducer` + `importController` with `FakeWorkbookAcquisition` + `FakeWorkbookParser` — after `IMPORT_LOAD_SUCCEEDED`, dispatch sync `EVALUATE` through reducer (not direct `runEvaluation`); assert provenance banner. **Refs**: AS-001, AS-002, AS-020, FR-010, FR-015, FR-026, OI-002 | **Evidence**: fails until T244–T250
 
 ### Implementation
 
-- [ ] T243 [P] [US1] Create `src/features/import-snapshot/ImportSnapshotButton.tsx` + CSS module — calls `importController.requestImport()`, **not** async reducer. **Refs**: FR-002, FR-003 | **Evidence**: triggers controller
-- [ ] T244 [P] [US1] Create `src/features/import-snapshot/ImportProvenanceBanner.tsx` + CSS module (filename, as-of, last modified, trust copy). **Refs**: FR-015, FR-026, AS-002, AS-019 | **Evidence**: renders when `projectMode === 'imported'`
-- [ ] T245 [US1] Wire `ImportSnapshotButton` into project selection area in `src/app/App.tsx` (or `ProjectSelector` feature). **Refs**: FR-001, FR-002 | **Evidence**: import action visible alongside samples A–C
-- [ ] T246 [US1] Render `ImportProvenanceBanner` and imported health dashboard when `phase === 'evaluated'` and `projectMode === 'imported'`. **Refs**: FR-015, SC-001 | **Evidence**: T242 passes
-- [ ] T247 [US1] Hide `IntegrationChecklist` when `projectMode !== 'bundled'` in `src/app/App.tsx`. **Refs**: FR-023, AS-023, BR-005 | **Evidence**: checklist hidden on import
-- [ ] T248 [US1] Extend `src/features/dimension-detail/EvidenceDrilldown.tsx` to show workbook provenance (worksheet, row 2, column) — **no raw cell payload** (FR-014). **Refs**: FR-013, FR-014 | **Evidence**: T221 + integration pass
-- [ ] T249 [US1] Ensure `EvaluateButton` dispatches sync `EVALUATE` when `projectMode === 'imported'`. **Refs**: FR-010 | **Evidence**: golden + integration pass
-- [ ] T250 [US1] Run `npm run test -- tests/golden/import-complete.test.ts tests/integration/import-flow.test.tsx`. **Refs**: SC-001 | **Evidence**: both pass
+- [X] T243 [P] [US1] Create `src/features/import-snapshot/ImportSnapshotButton.tsx` + CSS module — calls `importController.requestImport()`, **not** async reducer. **Refs**: FR-002, FR-003 | **Evidence**: triggers controller
+- [X] T244 [P] [US1] Create `src/features/import-snapshot/ImportProvenanceBanner.tsx` + CSS module (filename, as-of, last modified, trust copy). **Refs**: FR-015, FR-026, AS-002, AS-019 | **Evidence**: renders when `projectMode === 'imported'`
+- [X] T245 [US1] Wire `ImportSnapshotButton` into project selection area in `src/app/App.tsx` (or `ProjectSelector` feature). **Refs**: FR-001, FR-002 | **Evidence**: import action visible alongside samples A–C
+- [X] T246 [US1] Render `ImportProvenanceBanner` and imported health dashboard when `phase === 'evaluated'` and `projectMode === 'imported'`. **Refs**: FR-015, SC-001 | **Evidence**: T242 passes
+- [X] T247 [US1] Hide `IntegrationChecklist` when `projectMode !== 'bundled'` in `src/app/App.tsx`. **Refs**: FR-023, AS-023, BR-005 | **Evidence**: checklist hidden on import
+- [X] T248 [US1] Extend `src/features/dimension-detail/EvidenceDrilldown.tsx` to show workbook provenance (worksheet, row 2, column) — **no raw cell payload** (FR-014). **Refs**: FR-013, FR-014 | **Evidence**: T221 + integration pass
+- [X] T249 [US1] Ensure `EvaluateButton` dispatches sync `EVALUATE` when `projectMode === 'imported'`. **Refs**: FR-010 | **Evidence**: golden + integration pass
+- [X] T250 [US1] Run `npm run test -- tests/golden/import-complete.test.ts tests/integration/import-flow.test.tsx`. **Refs**: SC-001 | **Evidence**: both pass
 
 **Checkpoint Phase 2 (MVP)**: Complete workbook import and evaluation demo-ready.
 
@@ -298,7 +298,7 @@ T201–T209 (setup + fixtures; T222/T223/T231 type contracts pulled forward for 
   → T277 perf gate + T278 MV-008 → T285 release gate
 ```
 
-**Phase 1 remaining (4)**: T236–T241 (session reducer/controller; T224–T235 pipeline green).
+**Phase 1 remaining (0)**: Phase 1 complete — proceed to Phase 2 UI (T242–T250).
 
 ### User Story Dependencies
 
@@ -344,7 +344,7 @@ T244 ImportProvenanceBanner.tsx
 ### MVP First (User Story 1)
 
 1. Complete Phase 0 (T201–T209)
-2. Complete Phase 1 (**4 of 32 remaining**: T236–T241 session reducer/controller; T224–T235 pipeline green)
+2. Complete Phase 2 UI (**MVP**: T242–T250; Phase 1 complete)
 3. Complete Phase 2 (T242–T250)
 4. **STOP and VALIDATE**: `import-complete` golden + import-flow integration
 5. Demo complete workbook import

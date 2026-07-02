@@ -1,6 +1,5 @@
 import type { MappingRegistry } from '../../data/fixtures/mapping-registry.js';
 import type { ProjectLoadResult, SampleProjectFixture } from '../../domain/model/evaluation.js';
-import type { ImportedSnapshotProject } from '../types.js';
 
 const ISO_DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 
@@ -18,9 +17,16 @@ function isValidIsoDate(value: string): boolean {
 }
 
 export function validateImportedProject(
-  project: ImportedSnapshotProject,
+  project: SampleProjectFixture,
   _registry: MappingRegistry,
 ): ProjectLoadResult {
+  if (project.scenario !== 'imported') {
+    return {
+      ok: false,
+      invalid: { category: 'malformed-structure', message: 'Not an imported project' },
+    };
+  }
+
   if (project.schemaVersion !== '1.0') {
     return {
       ok: false,

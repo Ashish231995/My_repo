@@ -30,7 +30,7 @@ export interface ImportedSnapshotProject {
   origin: 'imported';
   identity: {
     projectKey: string;
-    projectName?: string;
+    projectName: string;
   };
   snapshot: {
     asOfDate: string;

@@ -31,9 +31,18 @@ function normalizedProject(asOfDate: string) {
     displayName: 'Import Demo',
     scenario: 'imported',
     origin: 'imported',
-    identity: { projectKey: 'IMPORT-DEMO-001' },
+    identity: { projectKey: 'IMPORT-DEMO-001', projectName: 'Import Demo' },
     snapshot: { asOfDate, label: `Snapshot ${asOfDate}` },
-    signalGroups: [{ id: 'import-workbook', label: 'Import workbook', defaultEnabled: true }],
+    signalGroups: [
+      {
+        id: 'import-workbook',
+        representativeSourceLabel: 'Import workbook',
+        displayName: 'Import workbook',
+        defaultEnabled: true,
+        dimensionAffinity: ['schedule', 'delivery', 'team', 'risk'],
+        requiredForFullMeasurement: false,
+      },
+    ],
     sourceSignals: [],
     importMeta: {
       filename: 'complete-v1.xlsx',
@@ -208,5 +217,71 @@ describe('createSessionReducer import lifecycle (pure)', () => {
     state = reducer(state, { type: 'EVALUATE' });
     expect(state.phase).toBe('evaluated');
     expect(state.evaluation).not.toBeNull();
+  });
+
+  it('REFRESH_STARTED adopts the new requestId (monotonic)', () => {
+    let state = importLoadSucceededState(1);
+    expect(state.importRequestId).toBe(1);
+    state = reducer(state, { type: 'REFRESH_STARTED', requestId: 2 });
+    expect(state.importRequestId).toBe(2);
+    expect(state.importContext?.refreshState).toBe('refreshing');
+  });
+
+  it('overlapping refreshes: the older REFRESH_SUCCEEDED is ignored after a newer REFRESH_STARTED', () => {
+    let state = importLoadSucceededState(1, '2026-06-15');
+
+    // refresh A adopts requestId 2
+    state = reducer(state, { type: 'REFRESH_STARTED', requestId: 2 });
+    expect(state.importRequestId).toBe(2);
+
+    // refresh B adopts requestId 3 before A completes
+    state = reducer(state, { type: 'REFRESH_STARTED', requestId: 3 });
+    expect(state.importRequestId).toBe(3);
+
+    // A completes late → stale → strict no-op
+    const beforeStale = state;
+    const afterStale = reducer(state, {
+      type: 'REFRESH_SUCCEEDED',
+      requestId: 2,
+      workbookRef,
+      normalizedProject: normalizedProject('2026-07-01'),
+    });
+    expect(afterStale).toBe(beforeStale);
+
+    // B completes → applied
+    const afterFresh = reducer(afterStale, {
+      type: 'REFRESH_SUCCEEDED',
+      requestId: 3,
+      workbookRef,
+      normalizedProject: normalizedProject('2026-08-01'),
+    });
+    expect(afterFresh.importContext?.normalizedProject?.snapshot.asOfDate).toBe('2026-08-01');
+  });
+
+  it('reset advances importRequestId (never zero) and ignores pre-reset completions', () => {
+    let state = createInitialSession();
+    state = { ...state, importRequestId: 4 };
+    state = reducer(state, { type: 'IMPORT_LOAD_STARTED', requestId: 5 });
+    expect(state.importRequestId).toBe(5);
+    expect(state.phase).toBe('import-loading');
+
+    // Reset while a load is in-flight: advance the counter, do not zero it.
+    state = reducer(state, { type: 'CONFIRM_RESET' });
+    expect(state.importRequestId).toBe(6);
+    expect(state.phase).toBe('initial');
+
+    // A fresh import starts.
+    state = reducer(state, { type: 'IMPORT_LOAD_STARTED', requestId: 7 });
+    expect(state.importRequestId).toBe(7);
+
+    // The pre-reset load completes late — its requestId can never match again.
+    const before = state;
+    state = reducer(state, {
+      type: 'IMPORT_LOAD_SUCCEEDED',
+      requestId: 5,
+      workbookRef: null,
+      normalizedProject: null,
+    });
+    expect(state).toBe(before);
   });
 });

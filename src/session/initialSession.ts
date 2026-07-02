@@ -22,9 +22,20 @@ export function createInitialSession(): SessionState {
     evaluation: null,
     presentation: null,
     ui: createEmptyUiState(),
+    projectMode: 'none',
+    importContext: null,
+    importRequestId: 0,
   };
 }
 
-export function applyReset(): SessionState {
-  return createInitialSession();
+/**
+ * Reset the session while invalidating any outstanding import/refresh operations.
+ * The monotonic `importRequestId` is advanced (never reset to zero) so that late
+ * completions from before the reset can never match a post-reset operation.
+ */
+export function applyReset(previousImportRequestId = 0): SessionState {
+  return {
+    ...createInitialSession(),
+    importRequestId: previousImportRequestId + 1,
+  };
 }
