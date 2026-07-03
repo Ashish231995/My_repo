@@ -3,6 +3,8 @@ import { ErrorPanel } from '../features/health-dashboard/ErrorPanel';
 import { EvaluateButton } from '../features/health-dashboard/EvaluateButton';
 import { HealthDashboard } from '../features/health-dashboard/HealthDashboard';
 import { ImportProvenanceBanner } from '../features/import-snapshot/ImportProvenanceBanner';
+import { RefreshSnapshotButton } from '../features/import-snapshot/RefreshSnapshotButton';
+import { ReselectWorkbookButton } from '../features/import-snapshot/ReselectWorkbookButton';
 import { AdverseConditionPath } from '../features/invalid-project/AdverseConditionPath';
 import { InvalidSampleDataPanel } from '../features/invalid-project/InvalidSampleDataPanel';
 import { IntegrationChecklist } from '../features/integration-checklist/IntegrationChecklist';
@@ -28,6 +30,9 @@ function focusProjectSelector() {
 function resultsPlaceholder(state: ReturnType<typeof useSession>['state']): string {
   if (state.phase === 'import-loading') {
     return 'Importing workbook snapshot. Evaluation will be available when loading completes.';
+  }
+  if (state.projectMode === 'imported' && state.phase === 'import-invalid') {
+    return 'Imported workbook could not be refreshed. Select a bundled sample or re-import a valid workbook.';
   }
   if (state.projectMode === 'imported' && state.phase === 'project-ready') {
     return 'Imported workbook ready. Run evaluation to view composite health, dimensions, and recommendations.';
@@ -84,6 +89,30 @@ export default function App() {
               </p>
             ) : null}
             <EvaluateButton />
+            <RefreshSnapshotButton />
+            <ReselectWorkbookButton />
+            {state.projectMode === 'imported' &&
+            state.importContext?.refreshState === 'needs-reselect' &&
+            state.ui.errorMessage ? (
+              <p
+                className={styles.importReselectNotice}
+                role="status"
+                aria-live="polite"
+                data-testid="import-reselect-status"
+              >
+                {state.ui.errorMessage}
+              </p>
+            ) : null}
+            {state.phase === 'import-invalid' && state.projectMode === 'imported' ? (
+              <p
+                className={styles.importInvalidNotice}
+                role="alert"
+                data-testid="import-invalid-status"
+              >
+                Refresh failed. Health results were cleared. Select a bundled sample project or
+                import a valid workbook to continue.
+              </p>
+            ) : null}
             <AdverseConditionPath />
           </section>
 

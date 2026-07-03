@@ -6,8 +6,13 @@ import styles from './EvaluateButton.module.css';
 export function EvaluateButton() {
   const { state, dispatch } = useSession();
   const isImportLoading = state.phase === 'import-loading';
+  const isRefreshing = state.importContext?.refreshState === 'refreshing';
+  const needsReselect = state.importContext?.refreshState === 'needs-reselect';
   const canEvaluate =
     !isImportLoading &&
+    !isRefreshing &&
+    !needsReselect &&
+    state.phase !== 'import-invalid' &&
     (state.phase === 'project-ready' ||
       state.phase === 'evaluated' ||
       state.phase === 'error');

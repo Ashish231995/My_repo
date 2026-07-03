@@ -179,13 +179,13 @@
 
 ### Tests (write first)
 
-- [ ] T260 [P] [US4] Implement `tests/integration/import-refresh.test.tsx` for handle refresh (mock `getFile`), file-input `needs-reselect`, and **`REFRESH_FAILED` / `RESELECT_REQUIRED` fail-closed** (no composite/dimension/finding/recommendation scores; recovery via reselect or bundled sample) via controller. **Refs**: AS-010, AS-011, AS-012, AS-024, AS-025, FR-017, SC-008, OI-002 | **Evidence**: fails until T261–T263
+- [X] T260 [P] [US4] Implement `tests/integration/import-refresh.test.tsx` for handle refresh (mock `getFile`), file-input `needs-reselect`, and **`REFRESH_FAILED` / `RESELECT_REQUIRED` fail-closed** (no composite/dimension/finding/recommendation scores; recovery via reselect or bundled sample) via controller. **Refs**: AS-010, AS-011, AS-012, AS-024, AS-025, FR-017, SC-008, OI-002 | **Evidence**: fails until T261–T263
 
 ### Implementation
 
-- [ ] T261 [P] [US4] Create `src/features/import-snapshot/RefreshSnapshotButton.tsx` + CSS module — calls `importController.requestRefresh()`. **Refs**: FR-016 | **Evidence**: triggers controller
-- [ ] T262 [P] [US4] Create `src/features/import-snapshot/ReselectWorkbookButton.tsx` + CSS module (visible when `refreshState === 'needs-reselect'`). **Refs**: AS-012, ADR-010 | **Evidence**: calls `importController.requestReselect()`
-- [ ] T263 [US4] Wire refresh/reselect controls in `src/app/App.tsx` for imported mode only. **Refs**: FR-016, FR-017, SC-008 | **Evidence**: T260 passes; manual MV-004 paths work
+- [X] T261 [P] [US4] Create `src/features/import-snapshot/RefreshSnapshotButton.tsx` + CSS module — calls `importController.requestRefresh()`. **Refs**: FR-016 | **Evidence**: triggers controller
+- [X] T262 [P] [US4] Create `src/features/import-snapshot/ReselectWorkbookButton.tsx` + CSS module (visible when `refreshState === 'needs-reselect'`). **Refs**: AS-012, ADR-010 | **Evidence**: calls `importController.requestReselect()`
+- [X] T263 [US4] Wire refresh/reselect controls in `src/app/App.tsx` for imported mode only. **Refs**: FR-016, FR-017, SC-008 | **Evidence**: T260 passes; manual MV-004 paths work
 
 **Checkpoint Phase 5**: Refresh semantics match ADR-010.
 

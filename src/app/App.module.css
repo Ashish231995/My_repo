@@ -104,6 +104,25 @@
   color: var(--colour-unmeasured-secondary);
 }
 
+.importReselectNotice,
+.importInvalidNotice {
+  margin: 0;
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--font-size-sm);
+  border-radius: 6px;
+}
+
+.importReselectNotice {
+  color: var(--colour-unmeasured-secondary);
+  border: 1px dashed var(--colour-border);
+}
+
+.importInvalidNotice {
+  color: var(--colour-at-risk-secondary);
+  border: 1px solid var(--colour-at-risk-secondary);
+  background: rgb(0 0 0 / 2%);
+}
+
 @media (min-width: 768px) {
   .headerInner {
     flex-direction: row;
